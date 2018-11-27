@@ -1,0 +1,811 @@
+{
+    "@context": {
+        "pm": "http://planetmicrobe.org/rdf/"
+    },
+    "profile": "tabular-data-package",
+    "name": "OSD",
+    "title": "Registry of samples and environmental context from the Ocean Sampling Day 2014",
+    "homepage": "https://doi.pangaea.de/10.1594/PANGAEA.854419",
+    "licenses": [{
+        "id": "CC BY 3.0",
+        "title": "Attribution 3.0 Unported",
+        "url": "https://creativecommons.org/licenses/by/3.0/",
+    }],
+    "resources": [{
+        "profile": "tabular-data-resource",
+        "name": "OSD",
+        "title": "Registry of samples and environmental context from the Ocean Sampling Day 2014",
+        "path": "https://doi.pangaea.de/10.1594/PANGAEA.854419?format=textfile",
+        "dialect": {
+            "delimiter": "\t",
+            "header": true,
+            "caseSensitiveHeader": true
+        },
+        "format": "csv",
+        "mediatype": "text/tab-separated-values",
+        "encoding": "UTF-8",
+        "schema": {
+            "fields": [
+                {
+                    "name": "Sample ID",
+                    "title": "Sample ID",
+                    "type": "string",
+                    "format": "default",
+                    "description": "Site_Date_Depth_Protocol",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/IAO_0000578",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Sample label (BioSample)",
+                    "title": "Sample code/label (BioSample)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "INSDC biosample accession number, registered at the European Nucleotides Archive (ENA)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Sample label (BioArchive)",
+                    "title": "Sample code/label (BioArchive)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "INSDC bioarchive accession number, registered at the European Nucleotides Archive (ENA)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Sample label (ENA)",
+                    "title": "Sample code/label (ENA)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "INSDC sample accession number(s), registered at the European Nucleotides Archive (ENA)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "URL file",
+                    "title": "Uniform resource locator/link to file",
+                    "type": "string",
+                    "format": "default",
+                    "description": "related to the INSDC sample accession number(s), published at the European Nucleotides Archive",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Campaign",
+                    "title": "Campaign of event",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Site label",
+                    "title": "Site label",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Site number",
+                    "title": "Site number",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Event",
+                    "title": "Event label",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Device",
+                    "title": "Device of event",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Comment",
+                    "title": "Comment of event",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "URI",
+                    "title": "URI of event",
+                    "type": "string",
+                    "format": "uri",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Date/Time",
+                    "title": "Date/Time of event",
+                    "type": "datetime",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Latitude",
+                    "title": "Latitude of event",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true,
+                        "minimum": -90,
+                        "maximum": 90
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
+                    "pm:unitOfMeasure": "degree"
+                },
+                {
+                    "name": "Longitude",
+                    "title": "Longitude of event",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true,
+                        "minimum": -180,
+                        "maximum": 180
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
+                    "pm:unitOfMeasure": "degree"
+                },
+                {
+                    "name": "Date/Time 2",
+                    "title": "Date/Time of event 2",
+                    "type": "datetime",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Latitude 2",
+                    "title": "Latitude of event 2",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true,
+                        "minimum": -90,
+                        "maximum": 90
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Longitude 2",
+                    "title": "Longitude of event 2",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true,
+                        "minimum": -180,
+                        "maximum": 180
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Depth",
+                    "title": "Depth, water",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "m"
+                },
+                {
+                    "name": "TZ",
+                    "title": "Time zone",
+                    "type": "string",
+                    "format": "default",
+                    "description": "of OSD site",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Local time",
+                    "title": "Local time",
+                    "type": "datetime",
+                    "format": "default",
+                    "description": "of sampling at OSD site",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Country, closest",
+                    "title": "Country, closest",
+                    "type": "string",
+                    "format": "default",
+                    "description": "closest coast (iso3 code)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Country, distance",
+                    "title": "Country, distance",
+                    "type": "string",
+                    "format": "default",
+                    "description": "distance between site and closest coast (metre)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "m"
+                },
+                {
+                    "name": "BG province, closest, abbrev",
+                    "title": "Biogeographical province, closest, abbreviation",
+                    "type": "string",
+                    "format": "default",
+                    "description": "closest to sampling site (abbreviation), Longhurst (2007) registered at marineregions.org",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "BG province, closest, desc",
+                    "title": "Biogeographical province, closest, description",
+                    "type": "string",
+                    "format": "default",
+                    "description": "closest to sampling site (description), Longhurst (2007) registered at marineregions.org",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "BG province, distance",
+                    "title": "Biogeographical province, distance",
+                    "type": "number",
+                    "format": "default",
+                    "description": "distance between sampling site and the closest biogeographical province (decimal degrees), Longhurst (2007) registered at marineregions.org",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "degree"
+                },
+                {
+                    "name": "LME, closest, desc",
+                    "title": "Large Marine ecosystem, closest, description",
+                    "type": "string",
+                    "format": "default",
+                    "description": "closest to sampling site (description)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "LME, distance",
+                    "title": "Large Marine ecosystem, distance",
+                    "type": "number",
+                    "format": "default",
+                    "description": "distance between site and the closets LME (metre)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "m"
+                },
+                {
+                    "name": "Locality, site",
+                    "title": "Geographic name/locality of site",
+                    "type": "string",
+                    "format": "default",
+                    "description": "of OSD site",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Locality, region",
+                    "title": "Geographic name/locality of region",
+                    "type": "string",
+                    "format": "default",
+                    "description": "of ocean and sea regions, IHO General Sea Areas (1953) registered at www.marineregions.org",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "URL ref",
+                    "title": "Uniform resource locator/link to reference",
+                    "type": "string",
+                    "format": "uri",
+                    "description": "of ocean and sea regions, IHO General Sea Areas (1953) registered at www.marineregions.org",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Biome",
+                    "title": "Biome",
+                    "type": "string",
+                    "format": "default",
+                    "description": "full name (ENVO:ID)",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/ENVO_00000428",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Env feature",
+                    "title": "Environmental feature",
+                    "type": "string",
+                    "format": "default",
+                    "description": "full name (ENVO:ID), terms registered at EnvO, the Environmental Ontology",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Material",
+                    "title": "Material",
+                    "type": "string",
+                    "format": "default",
+                    "description": "full name (ENVO:ID), terms registered at EnvO, the Environmental Ontology",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/ENVO_00010483",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Protocol Label",
+                    "title": "Sample method (Protocol Label)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Quantity",
+                    "title": "Sample method (Quantity)",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "liter"
+                },
+                {
+                    "name": "Container",
+                    "title": "Sample method (Container)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Content",
+                    "title": "Sample method (Content)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Size fraction, upper thresh",
+                    "title": "Sample method (Size fraction, upper threshold)",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μm"
+                },
+                {
+                    "name": "Size fraction, lower threshold",
+                    "title": "Sample method (Size fraction, lower threshold)",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μm"
+                },
+                {
+                    "name": "Treatment, chemicals",
+                    "title": "Sample method (Treatment, chemicals)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Treatment, storage",
+                    "title": "Sample method (Treatment, storage)",
+                    "type": "string",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "Temp",
+                    "title": "Temperature, water",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200014",
+                    "pm:unitOfMeasure": "deg_c"
+                },
+                {
+                    "name": "Sal",
+                    "title": "Salinity",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "pH",
+                    "title": "pH",
+                    "type": "number",
+                    "format": "default",
+                    "description": "unknown scale",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": ""
+                },
+                {
+                    "name": "[PO4]3-",
+                    "title": "Phosphate",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "[NO3]-",
+                    "title": "Nitrate",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "POC",
+                    "title": "Carbon, organic, particulate",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μg/L"
+                },
+                {
+                    "name": "[NO2]-",
+                    "title": "Nitrite",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "DOC",
+                    "title": "Carbon, organic, dissolved",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "Plank nano/micro",
+                    "title": "Plankton abundance",
+                    "type": "number",
+                    "format": "default",
+                    "description": "of nano and microplankton",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "/m^3"
+                },
+                {
+                    "name": "PAR",
+                    "title": "Radiation, photosynthetically active",
+                    "type": "number",
+                    "format": "default",
+                    "description": "downward PAR",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "http://purl.obolibrary.org/obo/ENVO_01001215",
+                    "pm:unitOfMeasure": "μmol/m^2/s"
+                },
+                {
+                    "name": "Cond",
+                    "title": "Conductivity",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "mS/cm"
+                },
+                {
+                    "name": "PP C",
+                    "title": "Primary production of carbon",
+                    "type": "number",
+                    "format": "default",
+                    "description": "isotope uptake",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "mg/m^3/d"
+                },
+                {
+                    "name": "OXYGEN",
+                    "title": "Oxygen",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/kg"
+                },
+                {
+                    "name": "PON",
+                    "title": "Nitrogen, organic, particulate",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "Plank meso/macro",
+                    "title": "Plankton abundance",
+                    "type": "number",
+                    "format": "default",
+                    "description": "of meso and macroplankton",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "/m^3"
+                },
+                {
+                    "name": "Bact prod C",
+                    "title": "Bacteria, production as carbon",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "mg/m^3/d"
+                },
+                {
+                    "name": "DON",
+                    "title": "Nitrogen, organic, dissolved",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "mg/L"
+                },
+                {
+                    "name": "[NH4]+",
+                    "title": "Ammonium",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "Si(OH)4",
+                    "title": "Silicate",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "μmol/L"
+                },
+                {
+                    "name": "Turbidity",
+                    "title": "Turbidity (Formazin Turbidity Unit)",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "FTU"
+                },
+                {
+                    "name": "Fluorometer",
+                    "title": "Fluorometer",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "V"
+                },
+                {
+                    "name": "Chl a",
+                    "title": "Chlorophyll a",
+                    "type": "number",
+                    "format": "default",
+                    "description": "",
+                    "constraints": {
+                        "required": true
+                    },
+                    "rdfType": "",
+                    "pm:unitOfMeasure": "mg/m^3"
+                }
+            ],
+            "missingValues": [
+                ""
+            ]
+        }
+    }]
+}

@@ -1,0 +1,65 @@
+Parameter	Column #	Short Name	Unit	Method	Comment	Principal Investigator	PURL LABEL	PURL/TEMP PURL	Notes:
+Sample ID	1	Sample ID			Site_Date_Depth_Protocol	Kottmann, Renzo	centrally registered identifier	http://purl.obolibrary.org/obo/IAO_0000578	we can use the centrally registered identifier term which refers to both a centrally registered identifier registry such as ENA and a centrally registered identifier symbol which could for exapmle refer to an ENA accession number. Pier had suggested I use these terms for this type of data in my masters research. 
+Sample code/label	2	Sample label		registered at the European Nucleotides Archive (ENA)	INSDC biosample accession number	Kottmann, Renzo	centrally registered identifier symbol	http://purl.obolibrary.org/obo/IAO_0000577	centrally registered identifier symbol should be appropriate
+Sample code/label	3	Sample label		registered at the European Nucleotides Archive (ENA)	INSDC bioarchive accession number	Kottmann, Renzo		http://purl.obolibrary.org/obo/IAO_0000577	centrally registered identifier symbol should be appropriate
+Sample code/label	4	Sample label		registered at the European Nucleotides Archive (ENA)	INSDC sample accession number(s)	Kottmann, Renzo		http://purl.obolibrary.org/obo/IAO_0000577	centrally registered identifier symbol should be appropriate
+Uniform resource locator/link to file	5	URL file		published at the European Nucleotides Archive	related to the INSDC sample accession number(s)	Kottmann, Renzo			
+Campaign of event	6	Campaign				Ocean Sampling Day Consortium, Participants			
+Site	7	Site			label	Kottmann, Renzo			OSD specific site label
+Site	8	Site			number	Kottmann, Renzo			OSD specific site number
+Event label	9	Event				Ocean Sampling Day Consortium, Participants			OSD specific
+Device of event	10	Device				Ocean Sampling Day Consortium, Participants			collection device type of bucket to collect the water
+Comment of event	11	Comment				Ocean Sampling Day Consortium, Participants			a comment
+URI of event	12	URI				Ocean Sampling Day Consortium, Participants			link to the handbook
+Date/Time of event	13	Date/Time				Ocean Sampling Day Consortium, Participants	zero-dimensional temporal region	http://purl.obolibrary.org/obo/BFO_0000148	**DATE/TIME** FIGURE THIS OUT
+Latitude of event	14	Latitude				Ocean Sampling Day Consortium, Participants	latitude coordinate measurement datum	http://purl.obolibrary.org/obo/OBI_0001620	
+Longitude of event	15	Longitude				Ocean Sampling Day Consortium, Participants	longitude coordinate measurement datum	http://purl.obolibrary.org/obo/OBI_0001621	
+Date/Time of event 2	16	Date/Time 2				Ocean Sampling Day Consortium, Participants			maybe this is the stop time
+Latitude of event 2	17	Latitude 2				Ocean Sampling Day Consortium, Participants			maybe this is the final latitude during sample collection (normally their the same
+Longitude of event 2	18	Longitude 2				Ocean Sampling Day Consortium, Participants			same as lat
+DEPTH, water	19	Depth water	m		Geocode	Ocean Sampling Day Consortium, Participants	depth of water	//TODO	
+Time zone	20	TZ			of OSD site	Kottmann, Renzo			
+Local Time	21	Local time			of sampling at OSD site	Kottmann, Renzo			
+Country	22	Country			closest coast (iso3 code)	Kottmann, Renzo			closest coast (iso3 code
+Country	23	Country			distance between site and closest coast (metre)	Kottmann, Renzo			distance between site and cloest country
+Biogeographical province	24	BG province		Longhurst (2007) registered at marineregions.org	closest to sampling site (abbreviation)	Kottmann, Renzo			closest to sampling site (abb..
+Biogeographical province	25	BG province		Longhurst (2007) registered at marineregions.org	closest to sampling site (description)	Kottmann, Renzo			closest to sampling site (des...
+Biogeographical province	26	BG province		Longhurst (2007) registered at marineregions.org	distance between sampling site and the closest biogeographical province (decimal degrees)	Kottmann, Renzo			distance between sampling sit...
+Large Marine ecosystem	27	LME			closest to sampling site (description)	Kottmann, Renzo			closest to sampling site (des
+Large Marine ecosystem	28	LME			distance between site and the closets LME (metre)	Kottmann, Renzo			distance between site and the
+Geographic name/locality	29	Locality			of OSD site	Kottmann, Renzo			of OSD site
+Geographic name/locality	30	Locality		IHO General Sea Areas (1953) registered at www.marineregions.org	of ocean and sea regions	Kottmann, Renzo			IHO General Sea Areas (1953
+Uniform resource locator/link to reference	31	URL ref		IHO General Sea Areas (1953) registered at www.marineregions.org	of ocean and sea regions	Kottmann, Renzo			link to marineregion.org which gives Marine Gazetteer Placedetails
+Biome	32	Biome			full name (ENVO:ID)	Kottmann, Renzo	biome	http://purl.obolibrary.org/obo/ENVO_00000428	
+Environmental feature	33	Env feature		terms registered at EnvO, the Environmental Ontology	full name (ENVO:ID)	Kottmann, Renzo	environmental feature	http://purl.obolibrary.org/obo/ENVO_00002297	
+Material	34	Material		terms registered at EnvO, the Environmental Ontology	full name (ENVO:ID)	Kottmann, Renzo	environmental material	http://purl.obolibrary.org/obo/ENVO_00010483	
+Sample method	35	Sample method			Protocol Label	Kottmann, Renzo			Protocol Label
+Sample method	36	Sample method			Quantity (Litre)	Kottmann, Renzo			Quantity (Litre)
+Sample method	37	Sample method			Container	Kottmann, Renzo			Container
+Sample method	38	Sample method			Content	Kottmann, Renzo			Content
+Sample method	39	Sample method			Size-fraction, upper threshold (micrometre)	Kottmann, Renzo			(Size-fraction, upper threshol...)
+Sample method	40	Sample method			Size-fraction, lower threshold (micrometre)	Kottmann, Renzo			(Size-fraction, lower threshol...)
+Sample method	41	Sample method			Treatment, chemicals	Kottmann, Renzo			(Treatment, chemicals)
+Sample method	42	Sample method			Treatment, storage	Kottmann, Renzo			(Treatment, storage)
+Temperature, water	43	Temp	°C			Kottmann, Renzo	temperature of water	http://purl.obolibrary.org/obo/ENVO_09200014	temperature of water purl exisits
+Salinity	44	Sal				Kottmann, Renzo	salinity of water	//TODO	
+pH	45	pH			unknown scale	Kottmann, Renzo	acidity of water	//TODO	use http://purl.obolibrary.org/obo/PATO_0001842 to make it do it like: acidity of soil : http://purl.obolibrary.org/obo/ENVO_09200010
+Phosphate	46	[PO4]3-	µmol/l			Kottmann, Renzo	concentration of phosphate in water	//TODO	
+Nitrate	47	[NO3]-	µmol/l			Kottmann, Renzo	concentration of nitrate in water	//TODO	
+Carbon, organic, particulate	48	POC	µg/l			Kottmann, Renzo	concentration of particulate organic carbon	//TODO	
+Nitrite	49	[NO2]-	µmol/l			Kottmann, Renzo	concentration of nitrite in water	//TODO	
+Carbon, organic, dissolved	50	DOC	µmol/l			Kottmann, Renzo			
+Plankton abundance	51	Plank	#/m3		of nano and microplankton	Kottmann, Renzo			(of nano and microplankton)
+Radiation, photosynthetically active	52	PAR	µmol/m2/s		downward PAR	Kottmann, Renzo	visible spectrum stellar radiation	http://purl.obolibrary.org/obo/ENVO_01001215	visible spectrum stellar radiation nearly the same as PAR the wavelengths have a very subtle em spectrum range difference so PAR could maybe be a different class I'll have to get someone's opinion
+Conductivity	53	Cond	mS/cm			Kottmann, Renzo	conductivity of water	//TODO	use the template from the purl: http://purl.obolibrary.org/obo/ENVO_09200016 conductivity of soil
+Primary production of carbon	54	PP C	mg/m3/day		isotope uptake	Kottmann, Renzo			
+Oxygen	55	OXYGEN	µmol/kg			Kottmann, Renzo	concentration of oxygen in water 	//TODO	
+Nitrogen, organic, particulate	56	PON	µmol/l			Kottmann, Renzo			
+Plankton abundance	57	Plank	#/m3		of meso and macroplankton	Kottmann, Renzo			
+Bacteria, production as carbon	58	Bact prod C	mg/m3/day			Kottmann, Renzo			
+Nitrogen, organic, dissolved	59	DON	mg/l			Kottmann, Renzo			
+Ammonium	60	[NH4]+	µmol/l			Kottmann, Renzo	concentration of ammonium in water	//TODO	
+Silicate	61	Si(OH)4	µmol/l			Kottmann, Renzo	concentration of silicate in water	//TODO	
+Turbidity (Formazin Turbidity Unit)	62	Turbidity	FTU			Kottmann, Renzo	turbidity of water	//TODO	//to be created later no pato turbidity
+Fluorometer	63	Fluorometer	V			Kottmann, Renzo			in volts
+Chlorophyll a	64	Chl a	mg/m3			Kottmann, Renzo	concentration of chlorophyll a in water	//TODO	
