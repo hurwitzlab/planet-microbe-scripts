@@ -9,7 +9,7 @@
     "licenses": [{
         "id": "CC BY 3.0",
         "title": "Attribution 3.0 Unported",
-        "url": "https://creativecommons.org/licenses/by/3.0/",
+        "url": "https://creativecommons.org/licenses/by/3.0/"
     }],
     "resources": [{
         "profile": "tabular-data-resource",
