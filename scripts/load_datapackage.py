@@ -27,7 +27,7 @@ def to_mongo(doc):
     """Convert data package row to mongo doc"""
     for key in doc:
         if isinstance(doc[key], decimal.Decimal):
-            doc[key] = Decimal128(doc[key])
+            doc[key] = float(doc[key])
     return doc
 
 
