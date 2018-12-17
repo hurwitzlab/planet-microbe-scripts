@@ -51,19 +51,27 @@ if __name__ == "__main__":
             schema = resource.schema.descriptor
             schema['name'] = schema_name
             schema_id = schemas.insert(schema)
+            for field in schema['fields']:
+                if field.rdfType == "http://purl.obolibrary.org/obo/IAO_0000578":
+                    sampleKey = field.name
 
             #print(json.dumps(resource, default=json_serial, iterable_as_array=True, indent=2))
             count = 0
             for row in resource.read(keyed=True):
                 row['__schema_name'] = schema_name
                 row['__schema_id'] = schema_id
+                row['__sample_id'] = row[sampleKey]
                 row2 = to_mongo(row)
-                id = samples.insert(row2)
+                #id = samples.insert_one(row2)
                 count += 1
                 print('\rLoading data ...', count, end='')
             print()
+
+            #TODO add indexes on __schema_id and all other fields
 
         except Exception as e:
             print(e)
             if e.errors:
                 print(*e.errors, sep='\n')
+
+
