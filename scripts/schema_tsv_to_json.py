@@ -6,56 +6,44 @@ Read Kai's Schema TSV from stdin and output Frictionless Data Table Schema JSON 
 import sys
 import json
 
-# header = sys.stdin.readline()
-# cols = [t.strip() for t in header.split(sep='\t')]
-#
-# obj = {
-#     '@context': {
-#         'pm': 'http://planetmicrobe.org/rdf/'
-#     },
-#     'profile': 'tabular-data-package',
-#     'name': '',
-#     'title': '',
-#     'homepage': '',
-#     'licenses': [],
-#     'resources': [{
-#         'name': '',
-#         'title': '',
-#         'profile': 'tabular-data-resource',
-#         'schema': {
-#             'fields': [],
-#             'missingValues': [ '' ]
-#         }
-#     }]
-# }
-#
-# for l in sys.stdin:
-#     inp = {}
-#     for t, f in zip(cols, l.split(sep='\t')):
-#         inp[t.strip()] = f.strip()
-#
-#     field = {
-#         'name': inp['Short Name'],
-#         'title': inp['Parameter'],
-#         'type': 'string' if not inp['Unit'] else 'number', # assume number if unit is specified
-#         'format': 'default',
-#         'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
-#         'constraints': { 'required': True },
-#         'rdfType': inp['PURL/TEMP PURL'],
-#         'pm:unitOfMeasure': inp['Unit']
-#     }
-#     obj['resources'][0]['schema']['fields'].append(field)
-#
-# print(json.dumps(obj, indent=4))
+header = sys.stdin.readline()
+cols = [t.strip() for t in header.split(sep='\t')]
 
-from tableschema import Table
+obj = {
+    '@context': {
+        'pm': 'http://planetmicrobe.org/rdf/'
+    },
+    'profile': 'tabular-data-package',
+    'name': '',
+    'title': '',
+    'homepage': '',
+    'licenses': [],
+    'resources': [{
+        'name': '',
+        'title': '',
+        'profile': 'tabular-data-resource',
+        'schema': {
+            'fields': [],
+            'missingValues': [ '' ]
+        }
+    }]
+}
 
-try:
-    table = Table(sys.argv[1])
-except Exception as e:
-    print(e)
+for l in sys.stdin:
+    inp = {}
+    for t, f in zip(cols, l.split(sep='\t')):
+        inp[t.strip()] = f.strip()
 
-# print("Headers:", table.headers)
-# print(table.read(keyed=True))
-table.infer()
-print(json.dumps(table.schema.descriptor, indent=2))
+    field = {
+        'name': inp['Short Name'],
+        'title': inp['Parameter'],
+        'type': 'string' if not inp['Unit'] else 'number', # assume number if unit is specified
+        'format': 'default',
+        'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
+        'constraints': { 'required': True },
+        'rdfType': inp['PURL/TEMP PURL'],
+        'pm:unitOfMeasure': inp['Unit']
+    }
+    obj['resources'][0]['schema']['fields'].append(field)
+
+print(json.dumps(obj, indent=4))
