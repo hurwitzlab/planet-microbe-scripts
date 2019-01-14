@@ -4,14 +4,26 @@ Load Data Package schema and data into Postgres JSON tables
 """
 
 import sys
-import json
+import simplejson as json
+import decimal
+from datetime import date, datetime
 from datapackage import Package, Resource
 from tableschema import Table
 import psycopg2
 
 
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    if isinstance(obj, decimal.Decimal):
+        return (str(obj) for obj in [obj])
+    raise TypeError("Type %s not serializable" % type(obj))
+
+
 if __name__ == "__main__":
-    conn = psycopg2.connect("host='localhost' dbname='jsontest' user='mbomhoff' password=''")
+    conn = psycopg2.connect("host='localhost' dbname='arraytest' user='mbomhoff' password=''")
     cursor = conn.cursor()
 
     package = Package(sys.argv[1])
@@ -32,18 +44,55 @@ if __name__ == "__main__":
 
         count = 0
         for row in resource.read(keyed=True):
-            arrVals = []
+            ## Composite array implementation
+            # arrVals = []
+            # for key in row:
+            #     type = schema.get_field(key).type
+            #     if type == 'number':
+            #         if row[key] == None:
+            #             arrVals.append((None, None))
+            #         else:
+            #             arrVals.append((float(row[key]), None))
+            #     else: #if type == 'string' or type == 'datetime':
+            #         arrVals.append((None, str(row[key])))
+            #stmt = cursor.mogrify("INSERT INTO sample (schema_id,fields) VALUES(%s,%s::field_type[])", [schema_id,arrVals]) # for composite array implementation
+            #cursor.execute(stmt)
+
+            ## Array Implementation
+            numberVals = []
+            stringVals = []
             for key in row:
                 type = schema.get_field(key).type
                 if type == 'number':
                     if row[key] == None:
-                        arrVals.append((None, None))
+                        numberVals.append(None)
                     else:
-                        arrVals.append((float(row[key]), None))
+                        numberVals.append(float(row[key]))
+                    stringVals.append(None)
                 else: #if type == 'string' or type == 'datetime':
-                    arrVals.append((None, str(row[key])))
-            stmt = cursor.mogrify("INSERT INTO sample (schema_id,fields) VALUES(%s,%s::field_type[])", [schema_id,arrVals])
+                    stringVals.append(str(row[key]))
+                    numberVals.append(None);
+            stmt = cursor.mogrify("INSERT INTO sample (schema_id,number_vals,string_vals) VALUES(%s,%s,%s)", [schema_id,numberVals,stringVals])
             cursor.execute(stmt)
+
+            ## JSON implementation
+            #cursor.execute('INSERT INTO sample (schema_id,fields) VALUES (%s,%s);', [schema_id, json.dumps(row, default=json_serial, iterable_as_array=True)])
+
+            # Relational implementation
+            # cursor.execute("INSERT INTO sample (schema_id) VALUES(%s) RETURNING sample_id;", [schema_id])
+            # sample_id = cursor.fetchone()[0]
+            # fieldNum = 0
+            # for key in row:
+            #     type = schema.get_field(key).type
+            #     if type == 'number':
+            #         if row[key] == None:
+            #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,None])
+            #         else:
+            #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,float(row[key])])
+            #     else:
+            #         cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,str(row[key]),None])
+            #     fieldNum += 1
+
             conn.commit()
             count += 1
             print('\rLoading data ...', count, end='')
