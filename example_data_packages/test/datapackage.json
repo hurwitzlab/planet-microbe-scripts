@@ -6,7 +6,7 @@
     "name": "tara-env-context",
     "title": "Mock data package for testing",
     "homepage": "",
-    "licenses": [ "" ],
+    "licenses": [ {} ],
     "resources": [
         {
             "profile": "tabular-data-resource",
@@ -90,7 +90,7 @@
                     {
                         "name": "Depth",
                         "title": "Depth",
-                        "type": "string",
+                        "type": "number",
                         "format": "default",
                         "description": "",
                         "constraints": {
