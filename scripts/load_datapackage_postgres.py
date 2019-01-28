@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Load Data Package schema and data into Postgres JSON tables
+Load Data Package schema and data into Postgres
 """
 
 import sys
@@ -23,7 +23,7 @@ def json_serial(obj):
 
 
 if __name__ == "__main__":
-    conn = psycopg2.connect("host='localhost' dbname='arraytest' user='mbomhoff' password=''")
+    conn = psycopg2.connect("host='localhost' dbname='arraytestgis' user='mbomhoff' password=''")
     cursor = conn.cursor()
 
     package = Package(sys.argv[1])
@@ -42,58 +42,82 @@ if __name__ == "__main__":
         conn.commit()
         print("schema_id:", schema_id)
 
-        count = 0
-        for row in resource.read(keyed=True):
-            ## Composite array implementation
-            # arrVals = []
-            # for key in row:
-            #     type = schema.get_field(key).type
-            #     if type == 'number':
-            #         if row[key] == None:
-            #             arrVals.append((None, None))
-            #         else:
-            #             arrVals.append((float(row[key]), None))
-            #     else: #if type == 'string' or type == 'datetime':
-            #         arrVals.append((None, str(row[key])))
-            #stmt = cursor.mogrify("INSERT INTO sample (schema_id,fields) VALUES(%s,%s::field_type[])", [schema_id,arrVals]) # for composite array implementation
-            #cursor.execute(stmt)
+        for field in schema.descriptor['fields']:
+            if field['rdfType'] == "http://purl.obolibrary.org/obo/OBI_0001620":
+                latitudeKey = field['name']
+            elif field['rdfType'] == "http://purl.obolibrary.org/obo/OBI_0001621":
+                longitudeKey = field['name']
 
-            ## Array Implementation
-            numberVals = []
-            stringVals = []
-            for key in row:
-                type = schema.get_field(key).type
-                if type == 'number':
-                    if row[key] == None:
+        count = 0
+        try:
+            for row in resource.read(keyed=True):
+                # Array Implementation
+                latitude = None
+                longitude = None
+                numberVals = []
+                stringVals = []
+                for key in row:
+                    type = schema.get_field(key).type
+                    if type == 'number':
+                        if row[key] == None: # no data
+                            numberVals.append(None)
+                        else:
+                            numberVals.append(float(row[key]))
+                            if latitudeKey is not None and key == latitudeKey:
+                                latitude = float(row[key])
+                            elif longitudeKey is not None and key == longitudeKey:
+                                longitude = float(row[key])
+                        stringVals.append(None)
+                    elif type == 'string':
+                        stringVals.append(str(row[key]))
+                        numberVals.append(None)
+                    elif type == 'datetime': # FIXME store as datetime type not string
+                        stringVals.append(str(row[key]))
                         numberVals.append(None)
                     else:
-                        numberVals.append(float(row[key]))
-                    stringVals.append(None)
-                else: #if type == 'string' or type == 'datetime':
-                    stringVals.append(str(row[key]))
-                    numberVals.append(None);
-            stmt = cursor.mogrify("INSERT INTO sample (schema_id,number_vals,string_vals) VALUES(%s,%s,%s)", [schema_id,numberVals,stringVals])
-            cursor.execute(stmt)
+                        print("Unknown type:", type)
+                        exit(-1)
 
-            ## JSON implementation
-            #cursor.execute('INSERT INTO sample (schema_id,fields) VALUES (%s,%s);', [schema_id, json.dumps(row, default=json_serial, iterable_as_array=True)])
+                stmt = cursor.mogrify("INSERT INTO sample (schema_id,location,number_vals,string_vals) VALUES(%s,ST_SetSRID(ST_MakePoint(%s,%s),4326),%s,%s)", [schema_id,longitude,latitude,numberVals,stringVals])
+                cursor.execute(stmt)
 
-            # Relational implementation
-            # cursor.execute("INSERT INTO sample (schema_id) VALUES(%s) RETURNING sample_id;", [schema_id])
-            # sample_id = cursor.fetchone()[0]
-            # fieldNum = 0
-            # for key in row:
-            #     type = schema.get_field(key).type
-            #     if type == 'number':
-            #         if row[key] == None:
-            #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,None])
-            #         else:
-            #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,float(row[key])])
-            #     else:
-            #         cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,str(row[key]),None])
-            #     fieldNum += 1
+                ## JSON implementation
+                #cursor.execute('INSERT INTO sample (schema_id,fields) VALUES (%s,%s);', [schema_id, json.dumps(row, default=json_serial, iterable_as_array=True)])
 
-            conn.commit()
-            count += 1
-            print('\rLoading data ...', count, end='')
-        print()
+                ## Composite array implementation
+                # arrVals = []
+                # for key in row:
+                #     type = schema.get_field(key).type
+                #     if type == 'number':
+                #         if row[key] == None:
+                #             arrVals.append((None, None))
+                #         else:
+                #             arrVals.append((float(row[key]), None))
+                #     else: #if type == 'string' or type == 'datetime':
+                #         arrVals.append((None, str(row[key])))
+                #stmt = cursor.mogrify("INSERT INTO sample (schema_id,fields) VALUES(%s,%s::field_type[])", [schema_id,arrVals]) # for composite array implementation
+                #cursor.execute(stmt)
+
+                ## Relational implementation
+                # cursor.execute("INSERT INTO sample (schema_id) VALUES(%s) RETURNING sample_id;", [schema_id])
+                # sample_id = cursor.fetchone()[0]
+                # fieldNum = 0
+                # for key in row:
+                #     type = schema.get_field(key).type
+                #     if type == 'number':
+                #         if row[key] == None:
+                #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,None])
+                #         else:
+                #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,float(row[key])])
+                #     else:
+                #         cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,str(row[key]),None])
+                #     fieldNum += 1
+
+                conn.commit()
+                count += 1
+                print('\rLoading data ...', count, end='')
+            print()
+        except Exception as e:
+            print(e)
+            if e.errors:
+                print(*e.errors, sep='\n')
