@@ -23,7 +23,7 @@ def json_serial(obj):
 
 
 if __name__ == "__main__":
-    conn = psycopg2.connect("host='localhost' dbname='arraytest' user='mbomhoff' password=''")
+    conn = psycopg2.connect("host='' dbname='arraytest' user='mbomhoff' password=''")
     cursor = conn.cursor()
 
     package = Package(sys.argv[1])
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         print("schema_id:", schema_id)
 
         count = 0
-        for row in resource.read(keyed=True):
+        for row in resource.read():
             ## Composite array implementation
             # arrVals = []
             # for key in row:
@@ -61,17 +61,19 @@ if __name__ == "__main__":
             ## Array Implementation
             numberVals = []
             stringVals = []
-            for key in row:
-                type = schema.get_field(key).type
+            i = 0
+            for val in row:
+                type = schema.fields[i].type
                 if type == 'number':
-                    if row[key] == None:
+                    if val == None:
                         numberVals.append(None)
                     else:
-                        numberVals.append(float(row[key]))
+                        numberVals.append(float(val))
                     stringVals.append(None)
                 else: #if type == 'string' or type == 'datetime':
-                    stringVals.append(str(row[key]))
+                    stringVals.append(str(val))
                     numberVals.append(None);
+                i += 1
             stmt = cursor.mogrify("INSERT INTO sample (schema_id,number_vals,string_vals) VALUES(%s,%s,%s)", [schema_id,numberVals,stringVals])
             cursor.execute(stmt)
 
