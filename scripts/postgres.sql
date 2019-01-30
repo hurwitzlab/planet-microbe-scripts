@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS sample CASCADE;
 
 CREATE DATABASE arraytestgis;
 
+CREATE EXTENSION Postgis;
+
 CREATE TABLE schema (
     schema_id serial PRIMARY KEY,
     name varchar(100) NOT NULL,
