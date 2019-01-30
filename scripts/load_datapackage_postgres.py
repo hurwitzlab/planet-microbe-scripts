@@ -56,6 +56,7 @@ if __name__ == "__main__":
                 longitude = None
                 numberVals = []
                 stringVals = []
+                datetimeVals = []
                 for key in row:
                     type = schema.get_field(key).type
                     if type == 'number':
@@ -68,17 +69,21 @@ if __name__ == "__main__":
                             elif longitudeKey is not None and key == longitudeKey:
                                 longitude = float(row[key])
                         stringVals.append(None)
+                        datetimeVals.append(None)
                     elif type == 'string':
                         stringVals.append(str(row[key]))
                         numberVals.append(None)
-                    elif type == 'datetime': # FIXME store as datetime type not string
-                        stringVals.append(str(row[key]))
+                        datetimeVals.append(None)
+                    elif type == 'datetime': #TODO handle time zone
+                        stringVals.append(None)
                         numberVals.append(None)
+                        datetimeVals.append(str(row[key]))
                     else:
                         print("Unknown type:", type)
                         exit(-1)
 
-                stmt = cursor.mogrify("INSERT INTO sample (schema_id,location,number_vals,string_vals) VALUES(%s,ST_SetSRID(ST_MakePoint(%s,%s),4326),%s,%s)", [schema_id,longitude,latitude,numberVals,stringVals])
+                stmt = cursor.mogrify("INSERT INTO sample (schema_id,location,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakePoint(%s,%s),4326),%s,%s,%s::timestamp[])",
+                                      [schema_id,longitude,latitude,numberVals,stringVals,datetimeVals])
                 cursor.execute(stmt)
 
                 ## JSON implementation

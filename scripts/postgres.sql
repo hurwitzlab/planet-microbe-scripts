@@ -17,7 +17,8 @@ CREATE TABLE sample (
     schema_id integer NOT NULL REFERENCES schema(schema_id),
     location geography(point,4326),
     number_vals real [],
-    string_vals text []
+    string_vals text [],
+    datetime_vals timestamp []
 );
 
 CREATE INDEX schema_id_idx ON sample (schema_id);
