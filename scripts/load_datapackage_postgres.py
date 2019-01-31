@@ -42,45 +42,42 @@ if __name__ == "__main__":
         conn.commit()
         print("schema_id:", schema_id)
 
-        for field in schema.descriptor['fields']:
-            if field['rdfType'] == "http://purl.obolibrary.org/obo/OBI_0001620":
-                latitudeKey = field['name']
-            elif field['rdfType'] == "http://purl.obolibrary.org/obo/OBI_0001621":
-                longitudeKey = field['name']
-
         count = 0
         try:
-            for row in resource.read(keyed=True):
+            for row in resource.read():
                 # Array Implementation
                 latitude = None
                 longitude = None
                 numberVals = []
                 stringVals = []
                 datetimeVals = []
-                for key in row:
-                    type = schema.get_field(key).type
+                i = 0
+                for val in row:
+                    type = schema.fields[i].type
+                    rdfType = schema.descriptor['fields'][i]['rdfType']
                     if type == 'number':
-                        if row[key] == None: # no data
+                        if val == None: # no data
                             numberVals.append(None)
                         else:
-                            numberVals.append(float(row[key]))
-                            if latitudeKey is not None and key == latitudeKey:
-                                latitude = float(row[key])
-                            elif longitudeKey is not None and key == longitudeKey:
-                                longitude = float(row[key])
+                            numberVals.append(float(val))
+                            if rdfType == "http://purl.obolibrary.org/obo/OBI_0001620":
+                                latitude = float(val)
+                            elif rdfType == "http://purl.obolibrary.org/obo/OBI_0001621":
+                                longitude = float(val)
                         stringVals.append(None)
                         datetimeVals.append(None)
                     elif type == 'string':
-                        stringVals.append(str(row[key]))
+                        stringVals.append(str(val))
                         numberVals.append(None)
                         datetimeVals.append(None)
                     elif type == 'datetime': #TODO handle time zone
                         stringVals.append(None)
                         numberVals.append(None)
-                        datetimeVals.append(str(row[key]))
+                        datetimeVals.append(str(val))
                     else:
                         print("Unknown type:", type)
                         exit(-1)
+                    i += 1
 
                 stmt = cursor.mogrify("INSERT INTO sample (schema_id,location,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakePoint(%s,%s),4326),%s,%s,%s::timestamp[])",
                                       [schema_id,longitude,latitude,numberVals,stringVals,datetimeVals])
