@@ -1,22 +1,23 @@
 
-DROP TABLE IF EXISTS schema CASCADE;
-DROP TABLE IF EXISTS sample CASCADE;
+--DROP TABLE IF EXISTS schema CASCADE;
+--DROP TABLE IF EXISTS sample CASCADE;
+--DROP DATABASE IF EXISTS pm;
 
-CREATE DATABASE arraytestgis;
+--CREATE DATABASE pm;
 
 CREATE EXTENSION Postgis;
 
-CREATE TABLE organization ( -- replaces project_group in iMicrobe
+-- replaces project_group in iMicrobe
+CREATE TABLE organization (
     organization_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     url VARCHAR(255),
     private BOOLEAN NOT NULL DEFAULT TRUE,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user (
+CREATE TABLE "user" (
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(50) UNIQUE NOT NULL,
     first_name VARCHAR(50),
@@ -24,42 +25,41 @@ CREATE TABLE user (
     email VARCHAR(255),
     role SMALLINT, -- normal user 0, power user 1, admin 127
     orcid VARCHAR(30),
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE project_type (
-    project_type_id SERIAL PRIMARY_KEY,
+    project_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
 
 CREATE TABLE project (
     project_id SERIAL PRIMARY KEY,
-    project_type_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    project_type_id INTEGER NOT NULL REFERENCES project_type(project_type_id),
     accn VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     url VARCHAR(255),
     private BOOLEAN NOT NULL DEFAULT TRUE,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE organization_to_user (
-    organization_to_user_id SERIAL PRIMARY_KEY,
+    organization_to_user_id SERIAL PRIMARY KEY,
     organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
-    user_id INTEGER NOT NULL REFERENCES user(user_id)
+    user_id INTEGER NOT NULL REFERENCES "user"(user_id)
 );
 
 CREATE TABLE organization_to_project (
-    organization_to_project_id SERIAL PRIMARY_KEY,
+    organization_to_project_id SERIAL PRIMARY KEY,
     organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
-    project_id INTEGER NOT NULL REFERENCES user(project_id)
+    project_id INTEGER NOT NULL REFERENCES project(project_id)
 );
 
 CREATE TABLE sampling_event_type (
-    sampling_event_type_id SERIAL PRIMARY_KEY,
+    sampling_event_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
@@ -68,8 +68,8 @@ CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES project(project_id),
     sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE schema (
@@ -86,7 +86,7 @@ CREATE TABLE sample (
     accn VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     location GEOGRAPHY(POINT,4326),
 
     -- Fields for storing dataset-specific attributes
@@ -96,7 +96,7 @@ CREATE TABLE sample (
 );
 
 CREATE TABLE experiment_type (
-    experiment_type_id SERIAL PRIMARY_KEY,
+    experiment_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
@@ -106,8 +106,8 @@ CREATE TABLE experiment (
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
     experiment_type_id INTEGER NOT NULL REFERENCES experiment_type(experiment_type_id),
     name VARCHAR(255) NOT NULL,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE library (
@@ -123,7 +123,7 @@ CREATE TABLE run (
 );
 
 CREATE TABLE file_type (
-    file_type_id SERIAL PRIMARY_KEY,
+    file_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
