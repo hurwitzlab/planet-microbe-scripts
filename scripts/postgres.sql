@@ -58,6 +58,22 @@ CREATE TABLE organization_to_project (
     project_id INTEGER NOT NULL REFERENCES project(project_id)
 );
 
+CREATE TABLE schema (
+    schema_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    fields JSON NOT NULL,
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Fields for storing dataset-specific attributes
+CREATE TABLE dataset (
+    dataset_id SERIAL PRIMARY KEY,
+    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    number_vals REAL [],
+    string_vals TEXT [],
+    datetime_vals TIMESTAMP []
+);
+
 CREATE TABLE sampling_event_type (
     sampling_event_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
@@ -67,32 +83,21 @@ CREATE TABLE sampling_event_type (
 CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES project(project_id),
+    dataset_id INTEGER NOT NULL REFERENCES dataset(dataset_id),
     sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE schema (
-    schema_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    fields JSON NOT NULL,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
-    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    dataset_id INTEGER NOT NULL REFERENCES dataset(dataset_id),
     sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
     accn VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    location GEOGRAPHY(POINT,4326),
-
-    -- Fields for storing dataset-specific attributes
-    number_vals REAL [],
-    string_vals TEXT [],
-    datetime_vals TIMESTAMP []
+    location GEOGRAPHY(POINT,4326)
 );
 
 CREATE TABLE experiment_type (
@@ -104,6 +109,7 @@ CREATE TABLE experiment_type (
 CREATE TABLE experiment (
     experiment_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
     experiment_type_id INTEGER NOT NULL REFERENCES experiment_type(experiment_type_id),
     name VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -118,8 +124,12 @@ CREATE TABLE library (
 
 CREATE TABLE run (
     run_id SERIAL PRIMARY KEY,
-    library_id INTEGER NOT NULL REFERENCES library(library_id)
-    --TODO
+    library_id INTEGER NOT NULL REFERENCES library(library_id),
+    num_spots BIGINT NOT NULL,
+    total_size BIGINT NOT NULL,
+    avg_read_len SMALLINT NOT NULL,
+    gc_content REAL,
+    time_of_run TIMESTAMP
 );
 
 CREATE TABLE file_type (
@@ -140,10 +150,10 @@ CREATE TABLE sequence_file (
     run_id INTEGER NOT NULL REFERENCES run(run_id),
     file_type_id INTEGER NOT NULL REFERENCES file_type(file_type_id),
     file_format_id INTEGER NOT NULL REFERENCES file_format(file_format_id),
-    uri text NOT NULL -- path
-    --TODO
+    uri text NOT NULL -- path, e.g. datastore:/iplant/home/...
+
 );
 
-CREATE INDEX schema_id_idx ON sample (schema_id);
+CREATE INDEX schema_id_idx ON dataset(schema_id);
 
 CREATE INDEX location_gix ON sample USING GIST (location);
