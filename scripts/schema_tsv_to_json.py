@@ -11,11 +11,20 @@ cols = [t.strip() for t in header.split(sep='\t')]
 
 obj = {
     '@context': {
-        'pm': 'http://planetmicrobe.org/rdf/'
+        'pm': 'http://purl.obolibrary.org/obo/PMO_00000000'
     },
     'profile': 'tabular-data-package',
     'name': '',
     'title': '',
+    "path": "data.tsv",
+    "dialect": {
+        "delimiter": "\t",
+        "header": true,
+        "caseSensitiveHeader": true
+    },
+    "format": "csv",
+    "mediatype": "text/tab-separated-values",
+    "encoding": "UTF-8",
     'homepage': '',
     'licenses': [],
     'resources': [{
@@ -35,14 +44,17 @@ for l in sys.stdin:
         inp[t.strip()] = f.strip()
 
     field = {
-        'name': inp['Short Name'],
-        'title': inp['Parameter'],
-        'type': 'string' if not inp['Unit'] else 'number', # assume number if unit is specified
-        'format': 'default',
-        'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
+        'name': inp['Parameter'],
+        #'title': inp['Parameter'],
+        'type': inp['type'] if inp['type'] else 'string',
+        'format': inp['Frictionless Format'] if inp['Frictionless Format'] else 'default',
+        #'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
         'constraints': { 'required': True },
         'rdfType': inp['PURL/TEMP PURL'],
-        'pm:unitOfMeasure': inp['Unit']
+        #'pm:unitOfMeasure': inp['Unit']
+        'pm:unitRdf': inp['units PURL'],
+        'pm:sourceCategory': inp['source category'],
+        'pm:sourceURL': inp['source url']
     }
     obj['resources'][0]['schema']['fields'].append(field)
 
