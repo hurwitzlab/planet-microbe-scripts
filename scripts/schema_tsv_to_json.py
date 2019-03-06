@@ -33,7 +33,7 @@ obj = {
         'profile': 'tabular-data-resource',
         'schema': {
             'fields': [],
-            'missingValues': [ '' ]
+            'missingValues': [ '', 'nd' ] #TODO auto-detect missing values from data file
         }
     }]
 }
@@ -49,9 +49,8 @@ for l in sys.stdin:
         'type': inp['type'] if inp['type'] else 'string',
         'format': inp['Frictionless Format'] if inp['Frictionless Format'] else 'default',
         #'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
-        'constraints': { 'required': True },
+        #'constraints': { 'required': True }, #TODO revisit this later
         'rdfType': inp['PURL/TEMP PURL'],
-        #'pm:unitOfMeasure': inp['Unit']
         'pm:unitRdf': inp['units PURL'],
         'pm:sourceCategory': inp['source category'],
         'pm:sourceURL': inp['source url']
