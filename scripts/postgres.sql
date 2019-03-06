@@ -56,9 +56,16 @@ CREATE TABLE dataset (
     datetime_vals TIMESTAMP []
 );
 
+CREATE TABLE campaign_type (
+    campaign_type_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
 -- Campaign represents cruise
 CREATE TABLE campaign (
     campaign_id SERIAL PRIMARY KEY,
+    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
     name VARCHAR(255) NOT NULL,
     description TEXT,
     deployment VARCHAR(255),
@@ -78,7 +85,9 @@ CREATE TABLE sampling_event (
     sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
     campaign_id INTEGER NOT NULL REFERENCES campaign(campaign_id),
     locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
-    url TEXT NOT NULL, -- path to CSV file, e.g. datastore:/iplant/home/...
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    data_url TEXT NOT NULL, -- path to CSV file, e.g. datastore:/iplant/home/...
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
