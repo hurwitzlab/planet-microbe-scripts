@@ -9,20 +9,17 @@ CREATE EXTENSION Postgis;
 
 CREATE TABLE ontology (
     ontology_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    purl TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE ontology_term (
     ontology_term_id SERIAL PRIMARY KEY,
     ontology_id INTEGER NOT NULL REFERENCES ontology(ontology_id),
-    purl VARCHAR(255) NOT NULL,
-    label TEXT
-);
-
-CREATE TABLE unit_type (
-    unit_type_id SERIAL PRIMARY KEY,
-    ontology_id INTEGER NOT NULL REFERENCES ontology(ontology_id),
-    name VARCHAR(255)
+    label VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    purl TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE schema (
@@ -31,10 +28,16 @@ CREATE TABLE schema (
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE measurement_source_category (
+    measurement_source_category_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT
+);
+
 CREATE TABLE measurement_source (
     measurement_source_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT
+    measurement_source_category_id INTEGER NOT NULL REFERENCES measurement_source_category(measurement_source_category_id),
+    url TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE measurement_type (
@@ -42,8 +45,8 @@ CREATE TABLE measurement_type (
     measurement_source_id INTEGER NOT NULL REFERENCES measurement_source(measurement_source_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
-    unit_type_id INTEGER NOT NULL REFERENCES unit_type(unit_type_id),
-    name VARCHAR(255),
+    unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
+    name VARCHAR(255) NOT NULL,
     position INTEGER NOT NULL
 );
 
