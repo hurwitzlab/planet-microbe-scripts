@@ -1,12 +1,22 @@
 {
     "@context": {
-        "pm": "http://planetmicrobe.org/rdf/"
+        "pm": "http://purl.obolibrary.org/obo/PMO_00000000"
     },
     "profile": "tabular-data-package",
-    "name": "",
-    "title": "",
-    "homepage": "",
-    "licenses": [],
+    "name": "Chisolm HOT and BATS",
+    "title": "Temporal sampling of marine metagenomes from Station ALOHA and BATS",
+    "description": "Temporal sampling of marine metagenomes from Station ALOHA and BATS",
+    "pm:projectType": "marine metagenome",
+    "homepage": "https://www.ncbi.nlm.nih.gov//bioproject/PRJNA385855",
+    "sources": [{
+        "name": "NCBI",
+        "web": "https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?study=SRP109831"
+    }],
+    "licenses": [{
+        "id": "",
+        "title": "NCBI Website and Data Usage Policies and Disclaimers",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/"
+    }],
     "resources": [
         {
             "name": "",
@@ -27,9 +37,6 @@
                         "name": "Sample_ID",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "",
@@ -39,9 +46,6 @@
                         "name": "Sample_event_ID",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "",
@@ -51,9 +55,6 @@
                         "name": "Archive",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -63,9 +64,6 @@
                         "name": "Archive_ID",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001901",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -75,9 +73,6 @@
                         "name": "organism",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/NCBITaxon_408169",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -87,9 +82,6 @@
                         "name": "broad-scale environmental context",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_00000428",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -99,9 +91,6 @@
                         "name": "local-scale environmental context",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -111,9 +100,6 @@
                         "name": "environmental medium",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_00010483",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -123,9 +109,6 @@
                         "name": "Longhurst_province",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/BFO_0000009",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "",
@@ -135,9 +118,6 @@
                         "name": "Station_Name",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -147,9 +127,6 @@
                         "name": "geographic location",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/BFO_0000029",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -159,9 +136,6 @@
                         "name": "bottle_id",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -171,9 +145,6 @@
                         "name": "description",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001615",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -183,9 +154,6 @@
                         "name": "sample_name",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001900",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -195,9 +163,6 @@
                         "name": "cruise_expedition",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -207,9 +172,6 @@
                         "name": "cruise_name",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001628",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -219,9 +181,6 @@
                         "name": "start_collection_date",
                         "type": "date",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -231,9 +190,6 @@
                         "name": "end_collection_date",
                         "type": "date",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -243,9 +199,6 @@
                         "name": "depth_sample",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100031",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000008",
                         "pm:sourceCategory": "NCBI",
@@ -255,9 +208,6 @@
                         "name": "rosette_position",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -267,9 +217,6 @@
                         "name": "latitude",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000185",
                         "pm:sourceCategory": "NCBI",
@@ -279,9 +226,6 @@
                         "name": "longitude",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000185",
                         "pm:sourceCategory": "NCBI",
@@ -291,9 +235,6 @@
                         "name": "filter_max",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -303,9 +244,6 @@
                         "name": "filter_min",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -315,9 +253,6 @@
                         "name": "filter_type",
                         "type": "string",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -327,9 +262,6 @@
                         "name": "volume_filtered",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -339,9 +271,6 @@
                         "name": "start_date_Time",
                         "type": "datetime",
                         "format": "%Y-%m-%dT%H:%M:%S",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -351,9 +280,6 @@
                         "name": "End_date_Time",
                         "type": "datetime",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NCBI",
@@ -363,9 +289,6 @@
                         "name": "lon",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000185",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -375,9 +298,6 @@
                         "name": "lat",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000185",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -387,9 +307,6 @@
                         "name": "CTDPRS",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100033",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -399,9 +316,6 @@
                         "name": "CTDTMP",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200014",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000027",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -411,9 +325,6 @@
                         "name": "CTDSAL",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -423,9 +334,6 @@
                         "name": "CTDOXY",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200021",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010004",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -435,9 +343,6 @@
                         "name": "XMISS",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -447,9 +352,6 @@
                         "name": "CHLPIG",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010003",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -459,9 +361,6 @@
                         "name": "NUMBER",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -471,9 +370,6 @@
                         "name": "NITRATE",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100022",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010003",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -483,9 +379,6 @@
                         "name": "FLUOR",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100032",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "CTD BCODMO",
@@ -495,9 +388,6 @@
                         "name": "inferred_depth",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100031",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000008",
                         "pm:sourceCategory": "inferred",
@@ -507,9 +397,6 @@
                         "name": "ROSETTE",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -519,9 +406,6 @@
                         "name": "CTDPRS",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100033",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -531,9 +415,6 @@
                         "name": "CTDOXY",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200021",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010004",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -543,9 +424,6 @@
                         "name": "CTDSAL",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -555,9 +433,6 @@
                         "name": "CTDTMP",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200014",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000027",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -567,9 +442,6 @@
                         "name": "NO2_NO3",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010003",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -579,9 +451,6 @@
                         "name": "OXYGEN",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200021",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010004",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -591,9 +460,6 @@
                         "name": "PHSPHT",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100026",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010004",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -603,9 +469,6 @@
                         "name": "PHSPHT_inferred",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100026",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010003",
                         "pm:sourceCategory": "inferred",
@@ -615,9 +478,6 @@
                         "name": "REPLICT",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -627,9 +487,6 @@
                         "name": "SALNITY",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -639,9 +496,6 @@
                         "name": "SIGMA",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -651,9 +505,6 @@
                         "name": "SILCAT",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100027",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010004",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -663,9 +514,6 @@
                         "name": "SILCAT_inferred",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100027",
                         "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0010003",
                         "pm:sourceCategory": "inferred",
@@ -675,9 +523,6 @@
                         "name": "THETA",
                         "type": "number",
                         "format": "default",
-                        "constraints": {
-                            "required": true
-                        },
                         "rdfType": "",
                         "pm:unitRdf": "",
                         "pm:sourceCategory": "NISKIN BCODMO",
@@ -685,7 +530,7 @@
                     }
                 ],
                 "missingValues": [
-                    ""
+                    "", "nd"
                 ]
             }
         }
