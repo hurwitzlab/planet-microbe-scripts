@@ -74,7 +74,7 @@ CREATE TABLE campaign (
 
 CREATE TABLE sampling_event_type (
     sampling_event_type_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
+--    name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
 
@@ -94,10 +94,10 @@ CREATE TABLE sampling_event (
 
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
-    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    sampling_event_id INTEGER REFERENCES sampling_event(sampling_event_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    accn VARCHAR(255),
-    name VARCHAR(255) NOT NULL,
+--    accn VARCHAR(255),
+--    name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
     number_vals REAL [],
     string_vals TEXT [],

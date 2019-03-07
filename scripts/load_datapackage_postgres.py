@@ -22,8 +22,16 @@ def json_serial(obj):
     raise TypeError("Type %s not serializable" % type(obj))
 
 
+# def db_create_schema(fdSchema):
+#     #TODO check if schema already exists
+#     schemaId = cursor.execute('INSERT INTO schema (name) VALUES (%s) RETURNING schema_id;', [schema_name])
+#
+#     for f in fdSchema.fields:
+#         cursor.execute('INSERT INTO field ...
+
+
 if __name__ == "__main__":
-    conn = psycopg2.connect("host='' dbname='arraytestgis' user='mbomhoff' password=''")
+    conn = psycopg2.connect("host='' dbname='pm' user='mbomhoff' password=''")
     cursor = conn.cursor()
 
     package = Package(sys.argv[1])
@@ -70,51 +78,20 @@ if __name__ == "__main__":
                         stringVals.append(str(val))
                         numberVals.append(None)
                         datetimeVals.append(None)
-                    elif type == 'datetime': #TODO handle time zone
+                    elif type == 'datetime' or type == 'date': #TODO handle time zone
                         stringVals.append(None)
                         numberVals.append(None)
-                        datetimeVals.append(str(val))
+                        datetimeVals.append(val)
                     else:
                         print("Unknown type:", type)
                         exit(-1)
                     i += 1
 
-                stmt = cursor.mogrify("INSERT INTO sample (schema_id,location,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakePoint(%s,%s),4326),%s,%s,%s::timestamp[])",
-                                      [schema_id,longitude,latitude,numberVals,stringVals,datetimeVals])
+                stmt = cursor.mogrify(
+                    "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakeLine(ARRAY[ST_MakePoint(%s,%s)]),4326),%s,%s,%s::timestamp[])",
+                    [schema_id,longitude,latitude,numberVals,stringVals,datetimeVals]
+                )
                 cursor.execute(stmt)
-
-                ## JSON implementation
-                #cursor.execute('INSERT INTO sample (schema_id,fields) VALUES (%s,%s);', [schema_id, json.dumps(row, default=json_serial, iterable_as_array=True)])
-
-                ## Composite array implementation
-                # arrVals = []
-                # for key in row:
-                #     type = schema.get_field(key).type
-                #     if type == 'number':
-                #         if row[key] == None:
-                #             arrVals.append((None, None))
-                #         else:
-                #             arrVals.append((float(row[key]), None))
-                #     else: #if type == 'string' or type == 'datetime':
-                #         arrVals.append((None, str(row[key])))
-                #stmt = cursor.mogrify("INSERT INTO sample (schema_id,fields) VALUES(%s,%s::field_type[])", [schema_id,arrVals]) # for composite array implementation
-                #cursor.execute(stmt)
-
-                ## Relational implementation
-                # cursor.execute("INSERT INTO sample (schema_id) VALUES(%s) RETURNING sample_id;", [schema_id])
-                # sample_id = cursor.fetchone()[0]
-                # fieldNum = 0
-                # for key in row:
-                #     type = schema.get_field(key).type
-                #     if type == 'number':
-                #         if row[key] == None:
-                #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,None])
-                #         else:
-                #             cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,None,float(row[key])])
-                #     else:
-                #         cursor.execute('INSERT INTO field (schema_id,sample_id,field_num,string_value,number_value) VALUES (%s,%s,%s,%s,%s);', [schema_id,sample_id,fieldNum,str(row[key]),None])
-                #     fieldNum += 1
-
                 conn.commit()
                 count += 1
                 print('\rLoading data ...', count, end='')
