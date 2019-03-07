@@ -25,38 +25,33 @@ CREATE TABLE ontology_term (
 CREATE TABLE schema (
     schema_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
+    fields JSON NOT NULL, --TODO remove, replaced by field tables
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE measurement_source_category (
-    measurement_source_category_id SERIAL PRIMARY KEY,
+CREATE TABLE field_source_category (
+    field_source_category_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT
 );
 
-CREATE TABLE measurement_source (
-    measurement_source_id SERIAL PRIMARY KEY,
-    measurement_source_category_id INTEGER NOT NULL REFERENCES measurement_source_category(measurement_source_category_id),
+CREATE TABLE field_source (
+    field_source_id SERIAL PRIMARY KEY,
+    field_source_category_id INTEGER NOT NULL REFERENCES field_source_category(field_source_category_id),
     url TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE measurement_type (
-    measurement_type_id SERIAL PRIMARY KEY,
-    measurement_source_id INTEGER NOT NULL REFERENCES measurement_source(measurement_source_id),
+CREATE TYPE field_type AS ENUM ('number', 'string', 'datetime');
+
+CREATE TABLE field (
+    field_id SERIAL PRIMARY KEY,
+    field_source_id INTEGER NOT NULL REFERENCES field_source(field_source_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
     unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
     name VARCHAR(255) NOT NULL,
+    type field_type NOT NULL,
     position INTEGER NOT NULL
-);
-
--- Fields for storing dataset-specific attributes
-CREATE TABLE dataset (
-    dataset_id SERIAL PRIMARY KEY,
-    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    number_vals REAL [],
-    string_vals TEXT [],
-    datetime_vals TIMESTAMP []
 );
 
 CREATE TABLE campaign_type (
@@ -99,11 +94,14 @@ CREATE TABLE sampling_event (
 
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
-    dataset_id INTEGER NOT NULL REFERENCES dataset(dataset_id),
     sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     accn VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
+    number_vals REAL [],
+    string_vals TEXT [],
+    datetime_vals TIMESTAMP [],
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
