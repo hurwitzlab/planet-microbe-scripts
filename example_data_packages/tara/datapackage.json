@@ -1,1805 +1,1812 @@
 {
-    "@context": {
-        "pm": "http://planetmicrobe.org/rdf/"
-    },
-    "profile": "tabular-data-package",
-    "name": "tara-env-context",
-    "title": "Environmental context of all samples from the Tara Oceans Expedition (2009-2013), about sensor data in the targeted environmental feature",
-    "homepage": "https://doi.pangaea.de/10.1594/PANGAEA.875576",
-    "licenses": [{
-        "name": "CC-BY-3.0",
-        "title": "Creative Commons Attribution 3.0 Unported",
-        "path": "https://creativecommons.org/licenses/by/3.0/"
-    }],
-    "resources": [
-        {
-            "profile": "tabular-data-resource",
-            "name": "data",
-            "title": "Environmental context of all samples from the Tara Oceans Expedition (2009-2013), about sensor data in the targeted environmental feature",
-            "path": "data.tsv",
-            "dialect": {
-                "delimiter": "\t",
-                "header": true,
-                "caseSensitiveHeader": true
+  "@context": {
+    "pm": "http://planetmicrobe.org/rdf/"
+  },
+  "profile": "tabular-data-package",
+  "name": "tara-env-context",
+  "title": "Environmental context of all samples from the Tara Oceans Expedition (2009-2013), about sensor data in the targeted environmental feature",
+  "homepage": "https://doi.pangaea.de/10.1594/PANGAEA.875576",
+  "keywords": [
+    "TARA",
+    "Tara Oceans Expedition",
+    "PANGAEA"
+  ],
+  "licenses": [
+    {
+      "name": "CC-BY-3.0",
+      "title": "Creative Commons Attribution 3.0 Unported",
+      "path": "https://creativecommons.org/licenses/by/3.0/"
+    }
+  ],
+  "resources": [
+    {
+      "profile": "tabular-data-resource",
+      "name": "data",
+      "title": "Environmental context of all samples from the Tara Oceans Expedition (2009-2013), about sensor data in the targeted environmental feature",
+      "path": "data.tsv",
+      "dialect": {
+        "delimiter": "\t",
+        "header": true,
+        "caseSensitiveHeader": true
+      },
+      "format": "csv",
+      "mediatype": "text/tab-separated-values",
+      "encoding": "UTF-8",
+      "schema": {
+        "fields": [
+          {
+            "name": "Sample ID (TARA barcode)",
+            "title": "Sample ID",
+            "type": "string",
+            "format": "default",
+            "description": "TARA_barcode#, registered at PANGAEA, Data Publisher for Earth and Environmental Science",
+            "constraints": {
+              "required": true
             },
-            "format": "csv",
-            "mediatype": "text/tab-separated-values",
-            "encoding": "UTF-8",
-            "schema": {
-                "fields": [
-                    {
-                        "name": "Sample ID (TARA barcode)",
-                        "title": "Sample ID",
-                        "type": "string",
-                        "format": "default",
-                        "description": "TARA_barcode#, registered at PANGAEA, Data Publisher for Earth and Environmental Science",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/IAO_0000578",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sample ID (BioSample)",
-                        "title": "Sample ID",
-                        "type": "string",
-                        "format": "default",
-                        "description": "BioSamples accession number (SAMEA#), registered at the BioSamples database",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sample ID (ENA)",
-                        "title": "Sample ID",
-                        "type": "string",
-                        "format": "default",
-                        "description": "ENA sample accession number (ERS#), registered at the European Nucleotides Archive (ENA)",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Basis",
-                        "title": "Basis of event",
-                        "type": "string",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Campaign",
-                        "title": "Campaign of event",
-                        "type": "string",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Station",
-                        "title": "Station label",
-                        "type": "string",
-                        "format": "default",
-                        "description": "TARA_event-datetime_station#_event-type, registered at PANGAEA, Data Publisher for Earth and Environmental Science",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Device",
-                        "title": "Device of event",
-                        "type": "string",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Event",
-                        "title": "Event label",
-                        "type": "string",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Date/Time",
-                        "title": "Date/Time of event",
-                        "type": "datetime",
-                        "format": "any",
-                        "description": "",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Latitude",
-                        "title": "Latitude of event",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false,
-                            "minimum": -90,
-                            "maximum": 90
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
-                        "pm:unitOfMeasure": "degree"
-                    },
-                    {
-                        "name": "Longitude",
-                        "title": "Longitude of event",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false,
-                            "minimum": -180,
-                            "maximum": 180
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
-                        "pm:unitOfMeasure": "degree"
-                    },
-                    {
-                        "name": "Env feature",
-                        "title": "Environmental feature",
-                        "type": "string",
-                        "format": "default",
-                        "description": "[abbreviation], full name (ENVO:ID) from which this sample was collected, terms registered at EnvO, the Environmental Ontology",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Depth, nominal",
-                        "title": "Depth, nominal",
-                        "type": "string",
-                        "format": "default",
-                        "description": "from which this sample was collected",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m"
-                    },
-                    {
-                        "name": "Depth top",
-                        "title": "Depth, top/min",
-                        "type": "number",
-                        "format": "default",
-                        "description": "from which this sample was collected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m"
-                    },
-                    {
-                        "name": "Depth bot",
-                        "title": "Depth, bottom/max",
-                        "type": "number",
-                        "format": "default",
-                        "description": "from which this sample was collected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m"
-                    },
-                    {
-                        "name": "Fraction lower",
-                        "title": "Size fraction, lower threshold",
-                        "type": "string",
-                        "format": "default",
-                        "description": "used on board to prepare samples, described in Pesant et al. (2017)",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μm"
-                    },
-                    {
-                        "name": "Fraction upper",
-                        "title": "Size fraction, upper threshold",
-                        "type": "string",
-                        "format": "default",
-                        "description": "used on board to prepare samples, described in Pesant et al. (2017)",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μm"
-                    },
-                    {
-                        "name": "Sample material",
-                        "title": "Sample material",
-                        "type": "string",
-                        "format": "default",
-                        "description": "TARA_station#_environmental-feature_size-fraction",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sample method",
-                        "title": "Sample method",
-                        "type": "string",
-                        "format": "default",
-                        "description": "short label describing the target analysis (BGC=biogeochemistry, IMG=imaging, SEQ=sequencing) and specifics of the methodology and sampling device (N=net, W=pump/bottles/bucket, CW=concentrated by tangential filtration), described in Pesant et al. (2017)",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sample label",
-                        "title": "Sample code/label",
-                        "type": "string",
-                        "format": "default",
-                        "description": "TARA_event-datetime_station#_event-type_environmental-feature_(depth)_protocol-label_size-fraction_sample-barcode",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Distance",
-                        "title": "Distance",
-                        "type": "number",
-                        "format": "default",
-                        "description": "interval between the location at which the sample was collected and that of the closest environmental context information",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "km"
-                    },
-                    {
-                        "name": "Duration",
-                        "title": "Duration",
-                        "type": "string",
-                        "format": "default",
-                        "description": "interval between the date/time at which the sample was collected and that of the closest environmental context information, ISO 8601",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "File name",
-                        "title": "File name",
-                        "type": "string",
-                        "format": "default",
-                        "description": "of sensor profiles that meet the criteria: distance lag <100 km and date/time lag <2 days",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "NOBS",
-                        "title": "Number of observations",
-                        "type": "number",
-                        "format": "default",
-                        "description": "that meet the criteria: 10 m around the environmental feature nominal depth, distance lag <100 km and date/time lag <2 days",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Temp, min",
-                        "title": "Temperature, water, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Temp, lower quartile",
-                        "title": "Temperature, water, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Temp, median",
-                        "title": "Temperature, water, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200014",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Temp, upper quartile",
-                        "title": "Temperature, water, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Temp, max",
-                        "title": "Temperature, water, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Cond, min",
-                        "title": "Conductivity, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mS/cm"
-                    },
-                    {
-                        "name": "Cond, lower quartile",
-                        "title": "Conductivity, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mS/cm"
-                    },
-                    {
-                        "name": "Cond, median",
-                        "title": "Conductivity, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mS/cm"
-                    },
-                    {
-                        "name": "Cond, upper quartile",
-                        "title": "Conductivity, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mS/cm"
-                    },
-                    {
-                        "name": "Cond, max",
-                        "title": "Conductivity, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mS/cm"
-                    },
-                    {
-                        "name": "Sal, min",
-                        "title": "Salinity, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sal, lower quartile",
-                        "title": "Salinity, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sal, median",
-                        "title": "Salinity, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sal, upper quartile",
-                        "title": "Salinity, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Sal, max",
-                        "title": "Salinity, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Tpot, min",
-                        "title": "Temperature, water, potential, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Tpot, lower quartile",
-                        "title": "Temperature, water, potential, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Tpot, median",
-                        "title": "Temperature, water, potential, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Tpot, upper quartile",
-                        "title": "Temperature, water, potential, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Tpot, max",
-                        "title": "Temperature, water, potential, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "deg_c"
-                    },
-                    {
-                        "name": "Sigma-theta, min",
-                        "title": "Density, sigma-theta (0), minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "kg/m^3"
-                    },
-                    {
-                        "name": "Sigma-theta, lower quartile",
-                        "title": "Density, sigma-theta (0), lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "kg/m^3"
-                    },
-                    {
-                        "name": "Sigma-theta, median",
-                        "title": "Density, sigma-theta (0), median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "kg/m^3"
-                    },
-                    {
-                        "name": "Sigma-theta, upper quartile",
-                        "title": "Density, sigma-theta (0), upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "kg/m^3"
-                    },
-                    {
-                        "name": "Sigma-theta, max",
-                        "title": "Density, sigma-theta (0), maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "kg/m^3"
-                    },
-                    {
-                        "name": "OXYGEN, factory, min",
-                        "title": "Oxygen, factory, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, factory, lower quartile",
-                        "title": "Oxygen, factory, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, factory, median",
-                        "title": "Oxygen, factory, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, factory, upper quartile",
-                        "title": "Oxygen, factory, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, factory, max",
-                        "title": "Oxygen, factory, max",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, WOA09, min",
-                        "title": "Oxygen, WOA09, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, WOA09, lower quartile",
-                        "title": "Oxygen, WOA09, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, WOA09, median",
-                        "title": "Oxygen, WOA09, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, WOA09, upper quartile",
-                        "title": "Oxygen, WOA09, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "OXYGEN, WOA09, max",
-                        "title": "Oxygen, WOA09, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    },
-                    {
-                        "name": "[NO3]-, min",
-                        "title": "Nitrate, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/L"
-                    },
-                    {
-                        "name": "[NO3]-, lower quartile",
-                        "title": "Nitrate",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/L"
-                    },
-                    {
-                        "name": "[NO3]-, median",
-                        "title": "Nitrate, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/L"
-                    },
-                    {
-                        "name": "[NO3]-, upper quartile",
-                        "title": "Nitrate, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/L"
-                    },
-                    {
-                        "name": "[NO3]-, max",
-                        "title": "Nitrate, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "μmol/L"
-                    },
-                    {
-                        "name": "Chl a, factory, min",
-                        "title": "Chlorophyll a, factory, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, factory, lower quartile",
-                        "title": "Chlorophyll a, factory, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, factory, median",
-                        "title": "Chlorophyll a, factory, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, factory, upper quartile",
-                        "title": "Chlorophyll a, factory, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, factory, max",
-                        "title": "Chlorophyll a, factory, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, NPQ corrected, min",
-                        "title": "Chlorophyll a, NPQ corrected, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, NPQ corrected, lower quartile",
-                        "title": "Chlorophyll a, NPQ corrected, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, NPQ corrected, median",
-                        "title": "Chlorophyll a, NPQ corrected, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, NPQ corrected, upper quartile",
-                        "title": "Chlorophyll a, NPQ corrected, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, NPQ corrected, maxx",
-                        "title": "Chlorophyll a, NPQ corrected, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, calibrated, min",
-                        "title": "Chlorophyll a, calibrated, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, calibrated, lower quartile",
-                        "title": "Chlorophyll a",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, calibrated, median",
-                        "title": "Chlorophyll a, calibrated, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, calibrated, upper quartile",
-                        "title": "Chlorophyll a, calibrated, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, , fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "Chl a, calibrated, max",
-                        "title": "Chlorophyll a, calibrated, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mg/m^3"
-                    },
-                    {
-                        "name": "beta470, factory, min",
-                        "title": "Angular scattering coefficient, 470 nm, factory, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, factory, lower quartile",
-                        "title": "Angular scattering coefficient, 470 nm, factory, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, factory, median",
-                        "title": "Angular scattering coefficient, 470 nm, factory, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, factory, upper quartile",
-                        "title": "Angular scattering coefficient, 470 nm, factory, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, factory, max",
-                        "title": "Angular scattering coefficient, 470 nm, factory, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, dark, min",
-                        "title": "Angular scattering coefficient, 470 nm, dark, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, dark, lower quartile",
-                        "title": "Angular scattering coefficient, 470 nm, dark, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, dark, median",
-                        "title": "Angular scattering coefficient, 470 nm, dark, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, dark, upper quartile",
-                        "title": "Angular scattering coefficient, 470 nm, dark, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, dark, max",
-                        "title": "Angular scattering coefficient, 470 nm, dark, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, corrected dark, min",
-                        "title": "Angular scattering coefficient, 470 nm, corrected dark, mininum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, corrected dark, lower quartile",
-                        "title": "Angular scattering coefficient, 470 nm, corrected dark, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, corrected dark, median",
-                        "title": "Angular scattering coefficient, 470 nm, corrected dark, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, corrected dark, upper quartile",
-                        "title": "Angular scattering coefficient, 470 nm, corrected dark, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "beta470, corrected dark, max",
-                        "title": "Angular scattering coefficient, 470 nm, corrected dark, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "m/sr"
-                    },
-                    {
-                        "name": "bb470, min",
-                        "title": "Optical backscattering coefficient, 470 nm, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bb470, lower quartile",
-                        "title": "Optical backscattering coefficient, 470 nm, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bb470, median",
-                        "title": "Optical backscattering coefficient, 470 nm, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bb470, upper quartile",
-                        "title": "Optical backscattering coefficient, 470 nm, upper qaurtile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bb470, max",
-                        "title": "Optical backscattering coefficient, 470 nm, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bbp470, min",
-                        "title": "Backscattering coefficient of particles, 470 nm, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bbp470, lower quartile",
-                        "title": "Backscattering coefficient of particles, 470 nm, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bbp470, median",
-                        "title": "Backscattering coefficient of particles, 470 nm, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bbp470, upper quartile",
-                        "title": "Backscattering coefficient of particles, 470 nm, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bbp470, max",
-                        "title": "Backscattering coefficient of particles, 470 nm, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "fCDOM, min",
-                        "title": "Fluorescence, colored dissolved organic matter, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "ppb (QSE)"
-                    },
-                    {
-                        "name": "fCDOM, lower quartile",
-                        "title": "Fluorescence, colored dissolved organic matter, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "ppb (QSE)"
-                    },
-                    {
-                        "name": "fCDOM, median",
-                        "title": "Fluorescence, colored dissolved organic matter, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "ppb (QSE)"
-                    },
-                    {
-                        "name": "fCDOM, upper quartile",
-                        "title": "Fluorescence, colored dissolved organic matter, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "ppb (QSE)"
-                    },
-                    {
-                        "name": "fCDOM, max",
-                        "title": "Fluorescence, colored dissolved organic matter, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "ppb (QSE)"
-                    },
-                    {
-                        "name": "bac660, min",
-                        "title": "Optical beam attenuation coefficient, 660 nm, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bac660, lower quartile",
-                        "title": "Optical beam attenuation coefficient, 660 nm, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bac660, median",
-                        "title": "Optical beam attenuation coefficient, 660 nm, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bac660, upper quartile",
-                        "title": "Optical beam attenuation coefficient, 660 nm, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bac660, max",
-                        "title": "Optical beam attenuation coefficient, 660 nm, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bacp660, min",
-                        "title": "Beam attenuation coefficient of particles, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed to be close to the attenuation coefficient of pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bacp660, lower quartile",
-                        "title": "Beam attenuation coefficient of particles, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bacp660, median",
-                        "title": "Beam attenuation coefficient of particles, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bacp660, upper quartile",
-                        "title": "Beam attenuation coefficient of particles, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "bacp660, max",
-                        "title": "Beam attenuation coefficient of particles, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed to be close to the attenuation coefficient of pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "1/m"
-                    },
-                    {
-                        "name": "PAR day, factory, min",
-                        "title": "Radiation, photosynthetically active per day, factory, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, factory, lower quartile",
-                        "title": "Radiation, photosynthetically active per day, factory, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, factory, median",
-                        "title": "Radiation, photosynthetically active per day, factory, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, factory, upper quartile",
-                        "title": "Radiation, photosynthetically active per day, factory, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, factory, max",
-                        "title": "Radiation, photosynthetically active per day, factory, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR, factory, min",
-                        "title": "Radiation, photosynthetically active, factory, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, factory, lower quartile",
-                        "title": "Radiation, photosynthetically active, factory, lower quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, factory, median",
-                        "title": "Radiation, photosynthetically active, factory, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/ENVO_01001215",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, factory, upper quartile",
-                        "title": "Radiation, photosynthetically active, factory, upper quartile",
-                        "type": "number",
-                        "format": "default",
-                        "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, factory, max",
-                        "title": "Radiation, photosynthetically active, factory, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR day, 1-day avg, min",
-                        "title": "Radiation, photosynthetically active per day, 1-day avg, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 1-day avg, median",
-                        "title": "Radiation, photosynthetically active per day, 1-day avg, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 1-day avg, max",
-                        "title": "Radiation, photosynthetically active per day, 1-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR, 1-day avg, min",
-                        "title": "Radiation, photosynthetically active, 1-day avg, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 1-day avg, median",
-                        "title": "Radiation, photosynthetically active, surface, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 1-day avg, max",
-                        "title": "Radiation, photosynthetically active, surface, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR day, 8-day avg, min",
-                        "title": "Radiation, photosynthetically active per day, 8-day avg, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 8-day avg, median",
-                        "title": "Radiation, photosynthetically active per day, 8-day avg, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 8-day avg, max",
-                        "title": "Radiation, photosynthetically active per day, 8-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR, 8-day avg, min",
-                        "title": "Radiation, photosynthetically active, 8-day avg, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 8-day avg, median",
-                        "title": "Radiation, photosynthetically active, 8-day avg, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 8-day avg, max",
-                        "title": "Radiation, photosynthetically active, 8-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR day, 30-day avg, max",
-                        "title": "Radiation, photosynthetically active per day, 30-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 30-day avg, median",
-                        "title": "Radiation, photosynthetically active per day, 30-day avg, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR day, 30-day avg, max",
-                        "title": "Radiation, photosynthetically active per day, 30-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "mol quanta/m^2/day"
-                    },
-                    {
-                        "name": "PAR, 30-day avg, min",
-                        "title": "Radiation, photosynthetically active, 30-day avg, minimum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 30-day avg, median",
-                        "title": "Radiation, photosynthetically active, 30-day avg, median",
-                        "type": "number",
-                        "format": "default",
-                        "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    },
-                    {
-                        "name": "PAR, 30-day avg, max",
-                        "title": "Radiation, photosynthetically active, 30-day avg, maximum",
-                        "type": "number",
-                        "format": "default",
-                        "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "",
-                        "pm:unitOfMeasure": "%"
-                    }
-                ],
-                "missingValues": [
-                    ""
-                ]
-            }
-        }
-    ]
+            "rdfType": "http://purl.obolibrary.org/obo/IAO_0000578",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sample ID (BioSample)",
+            "title": "Sample ID",
+            "type": "string",
+            "format": "default",
+            "description": "BioSamples accession number (SAMEA#), registered at the BioSamples database",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sample ID (ENA)",
+            "title": "Sample ID",
+            "type": "string",
+            "format": "default",
+            "description": "ENA sample accession number (ERS#), registered at the European Nucleotides Archive (ENA)",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/IAO_0000577",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Basis",
+            "title": "Basis of event",
+            "type": "string",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Campaign",
+            "title": "Campaign of event",
+            "type": "string",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Station",
+            "title": "Station label",
+            "type": "string",
+            "format": "default",
+            "description": "TARA_event-datetime_station#_event-type, registered at PANGAEA, Data Publisher for Earth and Environmental Science",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Device",
+            "title": "Device of event",
+            "type": "string",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Event",
+            "title": "Event label",
+            "type": "string",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Date/Time",
+            "title": "Date/Time of event",
+            "type": "datetime",
+            "format": "any",
+            "description": "",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Latitude",
+            "title": "Latitude of event",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false,
+              "minimum": -90,
+              "maximum": 90
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
+            "pm:unitOfMeasure": "degree"
+          },
+          {
+            "name": "Longitude",
+            "title": "Longitude of event",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false,
+              "minimum": -180,
+              "maximum": 180
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
+            "pm:unitOfMeasure": "degree"
+          },
+          {
+            "name": "Env feature",
+            "title": "Environmental feature",
+            "type": "string",
+            "format": "default",
+            "description": "[abbreviation], full name (ENVO:ID) from which this sample was collected, terms registered at EnvO, the Environmental Ontology",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Depth, nominal",
+            "title": "Depth, nominal",
+            "type": "string",
+            "format": "default",
+            "description": "from which this sample was collected",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m"
+          },
+          {
+            "name": "Depth top",
+            "title": "Depth, top/min",
+            "type": "number",
+            "format": "default",
+            "description": "from which this sample was collected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m"
+          },
+          {
+            "name": "Depth bot",
+            "title": "Depth, bottom/max",
+            "type": "number",
+            "format": "default",
+            "description": "from which this sample was collected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m"
+          },
+          {
+            "name": "Fraction lower",
+            "title": "Size fraction, lower threshold",
+            "type": "string",
+            "format": "default",
+            "description": "used on board to prepare samples, described in Pesant et al. (2017)",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μm"
+          },
+          {
+            "name": "Fraction upper",
+            "title": "Size fraction, upper threshold",
+            "type": "string",
+            "format": "default",
+            "description": "used on board to prepare samples, described in Pesant et al. (2017)",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μm"
+          },
+          {
+            "name": "Sample material",
+            "title": "Sample material",
+            "type": "string",
+            "format": "default",
+            "description": "TARA_station#_environmental-feature_size-fraction",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sample method",
+            "title": "Sample method",
+            "type": "string",
+            "format": "default",
+            "description": "short label describing the target analysis (BGC=biogeochemistry, IMG=imaging, SEQ=sequencing) and specifics of the methodology and sampling device (N=net, W=pump/bottles/bucket, CW=concentrated by tangential filtration), described in Pesant et al. (2017)",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sample label",
+            "title": "Sample code/label",
+            "type": "string",
+            "format": "default",
+            "description": "TARA_event-datetime_station#_event-type_environmental-feature_(depth)_protocol-label_size-fraction_sample-barcode",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Distance",
+            "title": "Distance",
+            "type": "number",
+            "format": "default",
+            "description": "interval between the location at which the sample was collected and that of the closest environmental context information",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "km"
+          },
+          {
+            "name": "Duration",
+            "title": "Duration",
+            "type": "string",
+            "format": "default",
+            "description": "interval between the date/time at which the sample was collected and that of the closest environmental context information, ISO 8601",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "File name",
+            "title": "File name",
+            "type": "string",
+            "format": "default",
+            "description": "of sensor profiles that meet the criteria: distance lag <100 km and date/time lag <2 days",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "NOBS",
+            "title": "Number of observations",
+            "type": "number",
+            "format": "default",
+            "description": "that meet the criteria: 10 m around the environmental feature nominal depth, distance lag <100 km and date/time lag <2 days",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Temp, min",
+            "title": "Temperature, water, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Temp, lower quartile",
+            "title": "Temperature, water, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Temp, median",
+            "title": "Temperature, water, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/ENVO_09200014",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Temp, upper quartile",
+            "title": "Temperature, water, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Temp, max",
+            "title": "Temperature, water, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Cond, min",
+            "title": "Conductivity, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mS/cm"
+          },
+          {
+            "name": "Cond, lower quartile",
+            "title": "Conductivity, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mS/cm"
+          },
+          {
+            "name": "Cond, median",
+            "title": "Conductivity, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mS/cm"
+          },
+          {
+            "name": "Cond, upper quartile",
+            "title": "Conductivity, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mS/cm"
+          },
+          {
+            "name": "Cond, max",
+            "title": "Conductivity, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mS/cm"
+          },
+          {
+            "name": "Sal, min",
+            "title": "Salinity, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sal, lower quartile",
+            "title": "Salinity, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sal, median",
+            "title": "Salinity, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sal, upper quartile",
+            "title": "Salinity, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Sal, max",
+            "title": "Salinity, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Tpot, min",
+            "title": "Temperature, water, potential, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Tpot, lower quartile",
+            "title": "Temperature, water, potential, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Tpot, median",
+            "title": "Temperature, water, potential, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Tpot, upper quartile",
+            "title": "Temperature, water, potential, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Tpot, max",
+            "title": "Temperature, water, potential, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "deg_c"
+          },
+          {
+            "name": "Sigma-theta, min",
+            "title": "Density, sigma-theta (0), minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "kg/m^3"
+          },
+          {
+            "name": "Sigma-theta, lower quartile",
+            "title": "Density, sigma-theta (0), lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "kg/m^3"
+          },
+          {
+            "name": "Sigma-theta, median",
+            "title": "Density, sigma-theta (0), median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "kg/m^3"
+          },
+          {
+            "name": "Sigma-theta, upper quartile",
+            "title": "Density, sigma-theta (0), upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "kg/m^3"
+          },
+          {
+            "name": "Sigma-theta, max",
+            "title": "Density, sigma-theta (0), maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "kg/m^3"
+          },
+          {
+            "name": "OXYGEN, factory, min",
+            "title": "Oxygen, factory, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, factory, lower quartile",
+            "title": "Oxygen, factory, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, factory, median",
+            "title": "Oxygen, factory, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, factory, upper quartile",
+            "title": "Oxygen, factory, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, factory, max",
+            "title": "Oxygen, factory, max",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, WOA09, min",
+            "title": "Oxygen, WOA09, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, WOA09, lower quartile",
+            "title": "Oxygen, WOA09, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, WOA09, median",
+            "title": "Oxygen, WOA09, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, WOA09, upper quartile",
+            "title": "Oxygen, WOA09, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "OXYGEN, WOA09, max",
+            "title": "Oxygen, WOA09, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using WOA09 climatology",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/kg"
+          },
+          {
+            "name": "[NO3]-, min",
+            "title": "Nitrate, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/L"
+          },
+          {
+            "name": "[NO3]-, lower quartile",
+            "title": "Nitrate",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/L"
+          },
+          {
+            "name": "[NO3]-, median",
+            "title": "Nitrate, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/L"
+          },
+          {
+            "name": "[NO3]-, upper quartile",
+            "title": "Nitrate, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/L"
+          },
+          {
+            "name": "[NO3]-, max",
+            "title": "Nitrate, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "μmol/L"
+          },
+          {
+            "name": "Chl a, factory, min",
+            "title": "Chlorophyll a, factory, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, factory, lower quartile",
+            "title": "Chlorophyll a, factory, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, factory, median",
+            "title": "Chlorophyll a, factory, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, factory, upper quartile",
+            "title": "Chlorophyll a, factory, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, factory, max",
+            "title": "Chlorophyll a, factory, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, NPQ corrected, min",
+            "title": "Chlorophyll a, NPQ corrected, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, NPQ corrected, lower quartile",
+            "title": "Chlorophyll a, NPQ corrected, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, NPQ corrected, median",
+            "title": "Chlorophyll a, NPQ corrected, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, NPQ corrected, upper quartile",
+            "title": "Chlorophyll a, NPQ corrected, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, NPQ corrected, maxx",
+            "title": "Chlorophyll a, NPQ corrected, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, NPQ corrected",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, calibrated, min",
+            "title": "Chlorophyll a, calibrated, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, calibrated, lower quartile",
+            "title": "Chlorophyll a",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, calibrated, median",
+            "title": "Chlorophyll a, calibrated, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, calibrated, upper quartile",
+            "title": "Chlorophyll a, calibrated, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, , fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "Chl a, calibrated, max",
+            "title": "Chlorophyll a, calibrated, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, fluorescence was corrected for Non-Photochemical Quenching (NPQ), calculated from in situ sensor data, NPQ cor. and calibrated using water samples",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mg/m^3"
+          },
+          {
+            "name": "beta470, factory, min",
+            "title": "Angular scattering coefficient, 470 nm, factory, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, factory, lower quartile",
+            "title": "Angular scattering coefficient, 470 nm, factory, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, factory, median",
+            "title": "Angular scattering coefficient, 470 nm, factory, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, factory, upper quartile",
+            "title": "Angular scattering coefficient, 470 nm, factory, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, factory, max",
+            "title": "Angular scattering coefficient, 470 nm, factory, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, dark, min",
+            "title": "Angular scattering coefficient, 470 nm, dark, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, dark, lower quartile",
+            "title": "Angular scattering coefficient, 470 nm, dark, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, dark, median",
+            "title": "Angular scattering coefficient, 470 nm, dark, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, dark, upper quartile",
+            "title": "Angular scattering coefficient, 470 nm, dark, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, dark, max",
+            "title": "Angular scattering coefficient, 470 nm, dark, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, corrected dark, min",
+            "title": "Angular scattering coefficient, 470 nm, corrected dark, mininum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, corrected dark, lower quartile",
+            "title": "Angular scattering coefficient, 470 nm, corrected dark, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, corrected dark, median",
+            "title": "Angular scattering coefficient, 470 nm, corrected dark, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, corrected dark, upper quartile",
+            "title": "Angular scattering coefficient, 470 nm, corrected dark, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "beta470, corrected dark, max",
+            "title": "Angular scattering coefficient, 470 nm, corrected dark, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "m/sr"
+          },
+          {
+            "name": "bb470, min",
+            "title": "Optical backscattering coefficient, 470 nm, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bb470, lower quartile",
+            "title": "Optical backscattering coefficient, 470 nm, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bb470, median",
+            "title": "Optical backscattering coefficient, 470 nm, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bb470, upper quartile",
+            "title": "Optical backscattering coefficient, 470 nm, upper qaurtile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bb470, max",
+            "title": "Optical backscattering coefficient, 470 nm, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, includes backscattering by particulate and dissolved matter and water molecules, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bbp470, min",
+            "title": "Backscattering coefficient of particles, 470 nm, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bbp470, lower quartile",
+            "title": "Backscattering coefficient of particles, 470 nm, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bbp470, median",
+            "title": "Backscattering coefficient of particles, 470 nm, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bbp470, upper quartile",
+            "title": "Backscattering coefficient of particles, 470 nm, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bbp470, max",
+            "title": "Backscattering coefficient of particles, 470 nm, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, Calculated from in situ sensor data, corrected with in situ measurements in dark",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "fCDOM, min",
+            "title": "Fluorescence, colored dissolved organic matter, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "ppb (QSE)"
+          },
+          {
+            "name": "fCDOM, lower quartile",
+            "title": "Fluorescence, colored dissolved organic matter, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "ppb (QSE)"
+          },
+          {
+            "name": "fCDOM, median",
+            "title": "Fluorescence, colored dissolved organic matter, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "ppb (QSE)"
+          },
+          {
+            "name": "fCDOM, upper quartile",
+            "title": "Fluorescence, colored dissolved organic matter, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "ppb (QSE)"
+          },
+          {
+            "name": "fCDOM, max",
+            "title": "Fluorescence, colored dissolved organic matter, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, expressed in ppb QSE (i.e. fluorescence emitted by 1 ppb of quinine sulfate diluted in 0.05 M sulfuric acid), calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "ppb (QSE)"
+          },
+          {
+            "name": "bac660, min",
+            "title": "Optical beam attenuation coefficient, 660 nm, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bac660, lower quartile",
+            "title": "Optical beam attenuation coefficient, 660 nm, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bac660, median",
+            "title": "Optical beam attenuation coefficient, 660 nm, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bac660, upper quartile",
+            "title": "Optical beam attenuation coefficient, 660 nm, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bac660, max",
+            "title": "Optical beam attenuation coefficient, 660 nm, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, includes attenuation by particulate and dissolved matter and water molecules, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bacp660, min",
+            "title": "Beam attenuation coefficient of particles, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed to be close to the attenuation coefficient of pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bacp660, lower quartile",
+            "title": "Beam attenuation coefficient of particles, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bacp660, median",
+            "title": "Beam attenuation coefficient of particles, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bacp660, upper quartile",
+            "title": "Beam attenuation coefficient of particles, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed similar to pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "bacp660, max",
+            "title": "Beam attenuation coefficient of particles, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, corrected for temperature drift of the sensor, using c(660) value at depth (assumed to be close to the attenuation coefficient of pure seawater), Calculated from in situ sensor data, corrected for temperature drift",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "1/m"
+          },
+          {
+            "name": "PAR day, factory, min",
+            "title": "Radiation, photosynthetically active per day, factory, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, factory, lower quartile",
+            "title": "Radiation, photosynthetically active per day, factory, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, factory, median",
+            "title": "Radiation, photosynthetically active per day, factory, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, factory, upper quartile",
+            "title": "Radiation, photosynthetically active per day, factory, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, factory, max",
+            "title": "Radiation, photosynthetically active per day, factory, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR, factory, min",
+            "title": "Radiation, photosynthetically active, factory, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, factory, lower quartile",
+            "title": "Radiation, photosynthetically active, factory, lower quartile",
+            "type": "number",
+            "format": "default",
+            "description": "lower quartile value (25th percentile, first quartile, Q1) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, factory, median",
+            "title": "Radiation, photosynthetically active, factory, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/ENVO_01001215",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, factory, upper quartile",
+            "title": "Radiation, photosynthetically active, factory, upper quartile",
+            "type": "number",
+            "format": "default",
+            "description": "upper quartile value (75th percentile, third quartile, Q3) in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, factory, max",
+            "title": "Radiation, photosynthetically active, factory, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from in situ sensor data, calibrated using factory settings",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR day, 1-day avg, min",
+            "title": "Radiation, photosynthetically active per day, 1-day avg, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 1-day avg, median",
+            "title": "Radiation, photosynthetically active per day, 1-day avg, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 1-day avg, max",
+            "title": "Radiation, photosynthetically active per day, 1-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR, 1-day avg, min",
+            "title": "Radiation, photosynthetically active, 1-day avg, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 1-day avg, median",
+            "title": "Radiation, photosynthetically active, surface, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 1-day avg, max",
+            "title": "Radiation, photosynthetically active, surface, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 1-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR day, 8-day avg, min",
+            "title": "Radiation, photosynthetically active per day, 8-day avg, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 8-day avg, median",
+            "title": "Radiation, photosynthetically active per day, 8-day avg, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 8-day avg, max",
+            "title": "Radiation, photosynthetically active per day, 8-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR, 8-day avg, min",
+            "title": "Radiation, photosynthetically active, 8-day avg, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 8-day avg, median",
+            "title": "Radiation, photosynthetically active, 8-day avg, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 8-day avg, max",
+            "title": "Radiation, photosynthetically active, 8-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 8-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR day, 30-day avg, max",
+            "title": "Radiation, photosynthetically active per day, 30-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 30-day avg, median",
+            "title": "Radiation, photosynthetically active per day, 30-day avg, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR day, 30-day avg, max",
+            "title": "Radiation, photosynthetically active per day, 30-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "mol quanta/m^2/day"
+          },
+          {
+            "name": "PAR, 30-day avg, min",
+            "title": "Radiation, photosynthetically active, 30-day avg, minimum",
+            "type": "number",
+            "format": "default",
+            "description": "minimum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 30-day avg, median",
+            "title": "Radiation, photosynthetically active, 30-day avg, median",
+            "type": "number",
+            "format": "default",
+            "description": "median value (50th percentile, second quartile, Q2) in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          },
+          {
+            "name": "PAR, 30-day avg, max",
+            "title": "Radiation, photosynthetically active, 30-day avg, maximum",
+            "type": "number",
+            "format": "default",
+            "description": "maximum value in the selected environmental feature around the sampling date and location, expressed as % of surface PAR, calculated from Kd(PAR)1 and 30-day avg. daily surface PAR (AMODIS)",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "",
+            "pm:unitOfMeasure": "%"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      }
+    }
+  ]
 }

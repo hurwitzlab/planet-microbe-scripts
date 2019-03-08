@@ -1,121 +1,123 @@
 {
-    "@context": {
-        "pm": "http://planetmicrobe.org/rdf/"
-    },
-    "profile": "tabular-data-package",
-    "name": "tara-env-context",
-    "title": "Mock data package for testing",
-    "homepage": "",
-    "licenses": [ {} ],
-    "resources": [
-        {
-            "profile": "tabular-data-resource",
-            "name": "data",
-            "title": "Mock data set for testing",
-            "path": "data.tsv",
-            "dialect": {
-                "delimiter": "\t",
-                "header": true,
-                "caseSensitiveHeader": true
+  "@context": {
+    "pm": "http://planetmicrobe.org/rdf/"
+  },
+  "profile": "tabular-data-package",
+  "name": "tara-env-context",
+  "title": "Mock data package for testing",
+  "homepage": "",
+  "licenses": [
+    {}
+  ],
+  "resources": [
+    {
+      "profile": "tabular-data-resource",
+      "name": "data",
+      "title": "Mock data set for testing",
+      "path": "data.tsv",
+      "dialect": {
+        "delimiter": "\t",
+        "header": true,
+        "caseSensitiveHeader": true
+      },
+      "format": "csv",
+      "mediatype": "text/tab-separated-values",
+      "encoding": "UTF-8",
+      "schema": {
+        "fields": [
+          {
+            "name": "Sample ID",
+            "title": "Sample ID",
+            "type": "string",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": true
             },
-            "format": "csv",
-            "mediatype": "text/tab-separated-values",
-            "encoding": "UTF-8",
-            "schema": {
-                "fields": [
-                    {
-                        "name": "Sample ID",
-                        "title": "Sample ID",
-                        "type": "string",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/IAO_0000578",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Date/Time",
-                        "title": "Date/Time of event",
-                        "type": "datetime",
-                        "format": "any",
-                        "description": "",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Latitude",
-                        "title": "Latitude of event",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false,
-                            "minimum": -90,
-                            "maximum": 90
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
-                        "pm:unitOfMeasure": "degree"
-                    },
-                    {
-                        "name": "Longitude",
-                        "title": "Longitude of event",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false,
-                            "minimum": -180,
-                            "maximum": 180
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
-                        "pm:unitOfMeasure": "degree"
-                    },
-                    {
-                        "name": "Env feature",
-                        "title": "Environmental feature",
-                        "type": "string",
-                        "format": "default",
-                        "description": "[abbreviation], full name (ENVO:ID) from which this sample was collected, terms registered at EnvO, the Environmental Ontology",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
-                        "pm:unitOfMeasure": ""
-                    },
-                    {
-                        "name": "Depth",
-                        "title": "Depth",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": true
-                        },
-                        "rdfType": "http://planetmicrobe.org/temppurl/PM_1",
-                        "pm:unitOfMeasure": "m"
-                    },
-                    {
-                        "name": "Oxygen",
-                        "title": "Oxygen",
-                        "type": "number",
-                        "format": "default",
-                        "description": "",
-                        "constraints": {
-                            "required": false
-                        },
-                        "rdfType": "http://planetmicrobe.org/temppurl/PM_2",
-                        "pm:unitOfMeasure": "μmol/kg"
-                    }
-                ],
-                "missingValues": [
-                    ""
-                ]
-            }
-        }
-    ]
+            "rdfType": "http://purl.obolibrary.org/obo/IAO_0000578",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Date/Time",
+            "title": "Date/Time of event",
+            "type": "datetime",
+            "format": "any",
+            "description": "",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Latitude",
+            "title": "Latitude of event",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false,
+              "minimum": -90,
+              "maximum": 90
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/OBI_0001620",
+            "pm:unitOfMeasure": "degree"
+          },
+          {
+            "name": "Longitude",
+            "title": "Longitude of event",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false,
+              "minimum": -180,
+              "maximum": 180
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/OBI_0001621",
+            "pm:unitOfMeasure": "degree"
+          },
+          {
+            "name": "Env feature",
+            "title": "Environmental feature",
+            "type": "string",
+            "format": "default",
+            "description": "[abbreviation], full name (ENVO:ID) from which this sample was collected, terms registered at EnvO, the Environmental Ontology",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://purl.obolibrary.org/obo/ENVO_00002297",
+            "pm:unitOfMeasure": ""
+          },
+          {
+            "name": "Depth",
+            "title": "Depth",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": true
+            },
+            "rdfType": "http://planetmicrobe.org/temppurl/PM_1",
+            "pm:unitOfMeasure": "m"
+          },
+          {
+            "name": "Oxygen",
+            "title": "Oxygen",
+            "type": "number",
+            "format": "default",
+            "description": "",
+            "constraints": {
+              "required": false
+            },
+            "rdfType": "http://planetmicrobe.org/temppurl/PM_2",
+            "pm:unitOfMeasure": "μmol/kg"
+          }
+        ],
+        "missingValues": [
+          ""
+        ]
+      }
+    }
+  ]
 }
