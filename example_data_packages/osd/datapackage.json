@@ -7,9 +7,9 @@
     "title": "Registry of samples and environmental context from the Ocean Sampling Day 2014",
     "homepage": "https://doi.pangaea.de/10.1594/PANGAEA.854419",
     "licenses": [{
-        "id": "CC BY 3.0",
-        "title": "Attribution 3.0 Unported",
-        "url": "https://creativecommons.org/licenses/by/3.0/"
+        "name": "CC-BY-3.0",
+        "title": "Creative Commons Attribution 3.0 Unported",
+        "path": "https://creativecommons.org/licenses/by/3.0/"
     }],
     "resources": [{
         "profile": "tabular-data-resource",
@@ -559,7 +559,7 @@
                     "constraints": {
                         "required": false
                     },
-                    "rdfType": "",
+                    "rdfType": "http://planetmicrobe.org/purl/PM_00000001",
                     "pm:unitOfMeasure": ""
                 },
                 {

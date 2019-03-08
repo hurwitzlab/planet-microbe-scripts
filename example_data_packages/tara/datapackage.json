@@ -7,9 +7,9 @@
     "title": "Environmental context of all samples from the Tara Oceans Expedition (2009-2013), about sensor data in the targeted environmental feature",
     "homepage": "https://doi.pangaea.de/10.1594/PANGAEA.875576",
     "licenses": [{
-        "id": "CC BY 3.0",
-        "title": "Attribution 3.0 Unported",
-        "url": "https://creativecommons.org/licenses/by/3.0/"
+        "name": "CC-BY-3.0",
+        "title": "Creative Commons Attribution 3.0 Unported",
+        "path": "https://creativecommons.org/licenses/by/3.0/"
     }],
     "resources": [
         {
