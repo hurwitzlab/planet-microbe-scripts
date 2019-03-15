@@ -19,8 +19,8 @@ obj = {
     "path": "data.tsv",
     "dialect": {
         "delimiter": "\t",
-        "header": true,
-        "caseSensitiveHeader": true
+        "header": True,
+        "caseSensitiveHeader": True
     },
     "format": "csv",
     "mediatype": "text/tab-separated-values",
@@ -44,16 +44,15 @@ for l in sys.stdin:
         inp[t.strip()] = f.strip()
 
     field = {
-        'name': inp['Parameter'],
-        #'title': inp['Parameter'],
-        'type': inp['type'] if inp['type'] else 'string',
-        'format': inp['Frictionless Format'] if inp['Frictionless Format'] else 'default',
-        #'description': inp['Comment'] + (', ' + inp['Method'] if inp['Method'] else ''),
+        'name': inp['parameter'],
+        'type': inp['frictionless type'] if inp['frictionless type'] else 'string',
+        'format': inp['frictionless format'] if inp['frictionless format'] else 'default',
         #'constraints': { 'required': True }, #TODO revisit this later
-        'rdfType': inp['PURL/TEMP PURL'],
-        'pm:unitRdf': inp['units PURL'],
-        'pm:sourceCategory': inp['source category'],
-        'pm:sourceURL': inp['source url']
+        'rdfType': inp['rdf type purl'],
+        'pm:unitRdfType': inp['units purl'],
+        'pm:sourceCategory': inp['pm:source category'],
+        'pm:sourceURL': inp['pm:source url'],
+        'pm:searchable': True if inp['pm:searchable'].lower() == "true" else False
     }
     obj['resources'][0]['schema']['fields'].append(field)
 
