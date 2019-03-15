@@ -12,6 +12,11 @@ from tableschema import Table
 import psycopg2
 
 
+DB_NAME = sys.argv[1]
+DB_USERNAME = 'mbomhoff'
+DP_FILE_PATH = sys.argv[2]
+
+
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
 
@@ -31,10 +36,10 @@ def json_serial(obj):
 
 
 if __name__ == "__main__":
-    conn = psycopg2.connect("host='' dbname='pm' user='mbomhoff' password=''")
+    conn = psycopg2.connect("host='' dbname='" + DB_NAME + "' user='" + DB_USERNAME + "' password=''")
     cursor = conn.cursor()
 
-    package = Package(sys.argv[1])
+    package = Package(DP_FILE_PATH)
     print('Name: ', package.descriptor['name'])
     if not package.valid:
         print(package.errors)
