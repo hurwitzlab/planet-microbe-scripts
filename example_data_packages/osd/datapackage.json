@@ -186,7 +186,7 @@
             "constraints": {
               "required": true
             },
-            "rdfType": "http://purl.obolibrary.org/obo/BFO_0000148",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000008",
             "pm:unitOfMeasure": ""
           },
           {
@@ -266,7 +266,7 @@
             "constraints": {
               "required": true
             },
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000029",
             "pm:unitOfMeasure": "m"
           },
           {
