@@ -63,4 +63,4 @@ for l in sys.stdin:
     }
     obj["resources"][0]["schema"]["fields"].append(field)
 
-print(json.dumps(obj, indent=4))
+print(json.dumps(obj, indent=2))
