@@ -50,7 +50,7 @@ for l in sys.stdin:
         #'constraints': { 'required': True }, #TODO revisit this later
         'rdfType': inp['rdf type purl'],
         'pm:unitRdfType': inp['units purl'],
-        'pm:sourceCategory': inp['pm:source category'],
+        #'pm:sourceCategory': inp['pm:source category'],
         'pm:sourceURL': inp['pm:source url'],
         'pm:searchable': True if inp['pm:searchable'].lower() == "true" else False
     }
