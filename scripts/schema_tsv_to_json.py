@@ -56,7 +56,9 @@ for l in sys.stdin:
         "rdfType": inp["rdf type purl"],
         "pm:unitRdfType": inp["units purl"],
         #"pm:sourceCategory": inp["pm:source category"],
-        "pm:sourceURL": inp["pm:source url"],
+        "pm:sourceUrl": inp["pm:source url"],
+        "pm:measurementSourceRdfType": inp["measurement source purl"],
+        "pm:measurementSourceProtocolUrl": inp["pm:measurement source protocol"],
         "pm:searchable": True if inp["pm:searchable"].lower() == "true" else False
     }
     obj["resources"][0]["schema"]["fields"].append(field)
