@@ -35,6 +35,7 @@ obj = {
         "format": "csv",
         "mediatype": "text/tab-separated-values",
         "encoding": "UTF-8",
+        "hash": "",
         "schema": {
             "fields": [],
             "missingValues": [ "", "nd" ] #TODO auto-detect missing values from data file
