@@ -60,7 +60,7 @@
             "name": "Sample_event_ID",
             "type": "string",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000056",
             "pm:unitRdf": "",
             "pm:sourceCategory": "",
             "pm:sourceURL": ""
@@ -87,7 +87,7 @@
             "name": "organism",
             "type": "string",
             "format": "default",
-            "rdfType": "http://purl.obolibrary.org/obo/NCBITaxon_408169",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000004",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -132,7 +132,7 @@
             "name": "Station_Name",
             "type": "string",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000149",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -150,7 +150,7 @@
             "name": "bottle_id",
             "type": "number",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000006",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -177,7 +177,7 @@
             "name": "cruise_expedition",
             "type": "string",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000007",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -186,7 +186,7 @@
             "name": "cruise_name",
             "type": "string",
             "format": "default",
-            "rdfType": "http://purl.obolibrary.org/obo/OBI_0001628",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000060",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -195,7 +195,7 @@
             "name": "start_collection_date",
             "type": "date",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000008",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -213,7 +213,7 @@
             "name": "depth_sample",
             "type": "number",
             "format": "default",
-            "rdfType": "http://purl.obolibrary.org/obo/ENVO_3100031",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000029",
             "pm:unitRdf": "http://purl.obolibrary.org/obo/UO_0000008",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
@@ -258,7 +258,7 @@
             "name": "filter_min",
             "type": "number",
             "format": "default",
-            "rdfType": "",
+            "rdfType": "http://purl.obolibrary.org/obo/PMO_00000022",
             "pm:unitRdf": "",
             "pm:sourceCategory": "NCBI",
             "pm:sourceURL": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA385855"
