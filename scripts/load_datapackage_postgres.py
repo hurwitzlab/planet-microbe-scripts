@@ -3,6 +3,7 @@
 Load Data Package schema and data into Postgres
 """
 
+import argparse
 import sys
 import simplejson as json
 import decimal
@@ -10,11 +11,6 @@ from datetime import date, datetime
 from datapackage import Package, Resource
 from tableschema import Table
 import psycopg2
-
-
-DB_NAME = sys.argv[1]
-DB_USERNAME = 'mbomhoff'
-DP_FILE_PATH = sys.argv[2]
 
 
 def json_serial(obj):
@@ -34,18 +30,20 @@ def json_serial(obj):
 #     for f in fdSchema.fields:
 #         cursor.execute('INSERT INTO field ...
 
-
-if __name__ == "__main__":
-    conn = psycopg2.connect("host='' dbname='" + DB_NAME + "' user='" + DB_USERNAME + "' password=''")
+def main(args=None):
+    conn = psycopg2.connect("host='' dbname='" + args['dbname'] + "' user='" + args['username'] + "' password=''")
     cursor = conn.cursor()
 
-    package = Package(DP_FILE_PATH)
+    package = Package(args['filepath'])
     print('Name: ', package.descriptor['name'])
     if not package.valid:
         print(package.errors)
     print('Resources: ', package.resource_names)
 
     for rname in package.resource_names:
+        if args['resource'] != None and rname != args['resource']:
+            continue
+
         schema_name = package.descriptor['name'] + '-' + rname
         resource = package.get_resource(rname)
         print('Loading schema ...')
@@ -105,3 +103,14 @@ if __name__ == "__main__":
             print(e)
             if e.errors:
                 print(*e.errors, sep='\n')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Load datapackage into database.')
+    parser.add_argument('-d', '--dbname')
+    parser.add_argument('-u', '--username')
+    parser.add_argument('-r', '--resource')
+    parser.add_argument('filepath')
+
+    print(vars(parser.parse_args()))
+
+    main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
