@@ -6,21 +6,9 @@ Load Data Package schema and data into Postgres
 import argparse
 import sys
 import simplejson as json
-import decimal
-from datetime import date, datetime
 from datapackage import Package, Resource
 from tableschema import Table
 import psycopg2
-
-
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
-
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    if isinstance(obj, decimal.Decimal):
-        return (str(obj) for obj in [obj])
-    raise TypeError("Type %s not serializable" % type(obj))
 
 
 # def db_create_schema(fdSchema):
