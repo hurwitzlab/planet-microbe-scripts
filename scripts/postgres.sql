@@ -1,3 +1,4 @@
+-- psql -d pm_test -f postgres.sql
 
 --DROP TABLE IF EXISTS schema CASCADE;
 --DROP TABLE IF EXISTS sample CASCADE;
@@ -63,13 +64,16 @@ CREATE TABLE campaign_type (
 -- Campaign represents cruise
 CREATE TABLE campaign (
     campaign_id SERIAL PRIMARY KEY,
-    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
+--    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
+    campaign_type VARCHAR(255),
     name VARCHAR(255) NOT NULL,
     description TEXT,
     deployment VARCHAR(255),
+    start_location VARCHAR(255),
+    end_location VARCHAR(255),
     start_time TIMESTAMP,
     end_time TIMESTAMP,
-    url TEXT
+    urls TEXT []
 );
 
 CREATE TABLE sampling_event_type (
@@ -80,7 +84,8 @@ CREATE TABLE sampling_event_type (
 
 CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
-    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
+--    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
+    sampling_event_type VARCHAR(255),
     campaign_id INTEGER NOT NULL REFERENCES campaign(campaign_id),
     locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
     start_time TIMESTAMP,
