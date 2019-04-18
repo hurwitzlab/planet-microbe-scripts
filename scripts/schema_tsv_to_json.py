@@ -58,9 +58,11 @@ for l in sys.stdin:
         #"pm:sourceCategory": inp["pm:source category"],
         "pm:sourceUrl": inp["pm:source url"],
         "pm:measurementSourceRdfType": inp["measurement source purl"],
-        "pm:measurementSourceProtocolUrl": inp["pm:measurement source protocol"],
-        "pm:searchable": True if inp["pm:searchable"].lower() == "true" else False
+        "pm:measurementSourceProtocolUrl": inp["pm:measurement source protocol"]
     }
+    if "pm:searchable" in inp:
+        field["pm:searchable"] = True if inp["pm:searchable"].lower() == "true" else False
+
     obj["resources"][0]["schema"]["fields"].append(field)
 
 print(json.dumps(obj, indent=2))
