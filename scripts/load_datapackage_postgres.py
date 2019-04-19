@@ -3,12 +3,14 @@
 Load Data Package schema and data into Postgres
 """
 
-import argparse
 import sys
+import argparse
 import simplejson as json
 from datapackage import Package, Resource
 from tableschema import Table
 import psycopg2
+from shapely.geometry import LineString
+from shapely import wkb
 
 
 # def db_create_schema(fdSchema):
@@ -17,6 +19,20 @@ import psycopg2
 #
 #     for f in fdSchema.fields:
 #         cursor.execute('INSERT INTO field ...
+
+
+LATITUDE_PURLS = [
+    "http://purl.obolibrary.org/obo/OBI_0001620",
+    "http://purl.obolibrary.org/obo/PMO_00000076",
+    "http://purl.obolibrary.org/obo/PMO_00000079"
+]
+
+LONGITUDE_PURLS = [
+    "http://purl.obolibrary.org/obo/OBI_0001621",
+    "http://purl.obolibrary.org/obo/PMO_00000077",
+    "http://purl.obolibrary.org/obo/PMO_00000078"
+]
+
 
 def main(args=None):
     conn = psycopg2.connect("host='' dbname='" + args['dbname'] + "' user='" + args['username'] + "' password=''")
@@ -29,7 +45,7 @@ def main(args=None):
     print('Resources: ', package.resource_names)
 
     for rname in package.resource_names:
-        if args['resource'] != None and rname != args['resource']:
+        if 'resource' in args and args['resource'] != None and rname != args['resource']:
             continue
 
         schema_name = package.descriptor['name'] + '-' + rname
@@ -45,8 +61,8 @@ def main(args=None):
         try:
             for row in resource.read():
                 # Array Implementation
-                latitude = None
-                longitude = None
+                latitudeVals = []
+                longitudeVals = []
                 numberVals = []
                 stringVals = []
                 datetimeVals = []
@@ -59,10 +75,16 @@ def main(args=None):
                             numberVals.append(None)
                         else:
                             numberVals.append(float(val))
-                            if rdfType == "http://purl.obolibrary.org/obo/OBI_0001620":
-                                latitude = float(val)
-                            elif rdfType == "http://purl.obolibrary.org/obo/OBI_0001621":
-                                longitude = float(val)
+                            try:
+                                if LATITUDE_PURLS.index(rdfType) >= 0:
+                                    latitudeVals.append(float(val))
+                            except ValueError:
+                                pass
+                            try:
+                                if LONGITUDE_PURLS.index(rdfType) >= 0:
+                                    longitudeVals.append(float(val))
+                            except ValueError:
+                                pass
                         stringVals.append(None)
                         datetimeVals.append(None)
                     elif type == 'string':
@@ -78,9 +100,10 @@ def main(args=None):
                         exit(-1)
                     i += 1
 
+                locations = LineString(zip(longitudeVals, latitudeVals))
                 stmt = cursor.mogrify(
-                    "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakeLine(ARRAY[ST_MakePoint(%s,%s)]),4326),%s,%s,%s::timestamp[])",
-                    [schema_id,longitude,latitude,numberVals,stringVals,datetimeVals]
+                    "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[])",
+                    [schema_id,locations.wkb_hex,numberVals,stringVals,datetimeVals]
                 )
                 cursor.execute(stmt)
                 conn.commit()

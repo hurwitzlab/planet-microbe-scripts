@@ -5,11 +5,12 @@ Load Data Package schema and data into Postgres
 
 import sys
 import argparse
-import psycopg2
 import simplejson as json
-from csv import DictWriter
 from datapackage import Package, Resource
 from tableschema import Table
+import psycopg2
+from shapely.geometry import LineString
+from shapely import wkb
 
 
 CAMPAIGN_CRUISE_DB_SCHEMA = {
@@ -26,7 +27,6 @@ CAMPAIGN_CRUISE_DB_SCHEMA = {
     ]
 }
 
-
 SAMPLING_EVENT_DB_SCHEMA = {
     "sampling_event_type": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000146",
     "campaign_id": "http://purl.obolibrary.org/obo/PMO_00000060",
@@ -36,9 +36,21 @@ SAMPLING_EVENT_DB_SCHEMA = {
     "station": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000149"
 }
 
-
 SAMPLE_EVENT_ID_PURL = "http://purl.obolibrary.org/obo/PMO_00000056"
+
 SAMPLE_ID_PURL = "http://purl.obolibrary.org/obo/OBI_0001901"
+
+LATITUDE_PURLS = [
+    "http://purl.obolibrary.org/obo/OBI_0001620",
+    "http://purl.obolibrary.org/obo/PMO_00000076",
+    "http://purl.obolibrary.org/obo/PMO_00000079"
+]
+
+LONGITUDE_PURLS = [
+    "http://purl.obolibrary.org/obo/OBI_0001621",
+    "http://purl.obolibrary.org/obo/PMO_00000077",
+    "http://purl.obolibrary.org/obo/PMO_00000078"
+]
 
 
 # def db_create_schema(fdSchema):
@@ -174,8 +186,8 @@ def load_samples(db, package):
     cursor = db.cursor()
     count = 0
     for id in valuesBySampleId:
-        latitude = None
-        longitude = None
+        latitudeVals = []
+        longitudeVals = []
         numberVals = []
         stringVals = []
         datetimeVals = []
@@ -188,10 +200,16 @@ def load_samples(db, package):
                     numberVals.append(None)
                 else:
                     numberVals.append(float(val))
-                    if rdfType == "http://purl.obolibrary.org/obo/OBI_0001620":
-                        latitude = float(val)
-                    elif rdfType == "http://purl.obolibrary.org/obo/OBI_0001621":
-                        longitude = float(val)
+                    try:
+                        if LATITUDE_PURLS.index(rdfType) >= 0:
+                            latitudeVals.append(float(val))
+                    except ValueError:
+                        pass
+                    try:
+                        if LONGITUDE_PURLS.index(rdfType) >= 0:
+                            longitudeVals.append(float(val))
+                    except ValueError:
+                        pass
                 stringVals.append(None)
                 datetimeVals.append(None)
             elif type == 'string':
@@ -207,9 +225,10 @@ def load_samples(db, package):
                 exit(-1)
             i += 1
 
+        locations = LineString(zip(longitudeVals, latitudeVals))
         stmt = cursor.mogrify(
-            "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(ST_MakeLine(ARRAY[ST_MakePoint(%s,%s)]),4326),%s,%s,%s::timestamp[])",
-            [schema_id, longitude, latitude, numberVals, stringVals, datetimeVals]
+            "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[])",
+            [schema_id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         db.commit()
