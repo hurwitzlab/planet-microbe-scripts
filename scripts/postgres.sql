@@ -103,7 +103,7 @@ CREATE TABLE sample (
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
 --    accn VARCHAR(255),
 --    name VARCHAR(255) NOT NULL,
-    locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
+    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL,
     number_vals REAL [],
     string_vals TEXT [],
     datetime_vals TIMESTAMP [],
