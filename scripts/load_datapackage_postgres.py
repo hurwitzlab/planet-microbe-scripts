@@ -9,7 +9,7 @@ import simplejson as json
 from datapackage import Package, Resource
 from tableschema import Table
 import psycopg2
-from shapely.geometry import LineString
+from shapely.geometry import MultiPoint
 from shapely import wkb
 
 
@@ -70,18 +70,19 @@ def main(args=None):
                 for val in row:
                     type = schema.fields[i].type
                     rdfType = schema.descriptor['fields'][i]['rdfType']
+                    searchable = allFields[i]['pm:searchable']
                     if type == 'number':
                         if val == None: # no data
                             numberVals.append(None)
                         else:
                             numberVals.append(float(val))
                             try:
-                                if LATITUDE_PURLS.index(rdfType) >= 0:
+                                if LATITUDE_PURLS.index(rdfType) >= 0 and searchable:
                                     latitudeVals.append(float(val))
                             except ValueError:
                                 pass
                             try:
-                                if LONGITUDE_PURLS.index(rdfType) >= 0:
+                                if LONGITUDE_PURLS.index(rdfType) >= 0 and searchable:
                                     longitudeVals.append(float(val))
                             except ValueError:
                                 pass
@@ -100,7 +101,7 @@ def main(args=None):
                         exit(-1)
                     i += 1
 
-                locations = LineString(zip(longitudeVals, latitudeVals))
+                locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
                 stmt = cursor.mogrify(
                     "INSERT INTO sample (schema_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[])",
                     [schema_id,locations.wkb_hex,numberVals,stringVals,datetimeVals]
