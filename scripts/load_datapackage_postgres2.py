@@ -103,14 +103,15 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
 
 
 def load_campaigns(db, package):
-    campaigns = get_resources_by_type("campaign", package.resources)
-    if not campaigns:
+    resources = get_resources_by_type("campaign", package.resources)
+    if not resources:
         raise Exception("No campaign resource found")
-    elif len(campaigns) > 1:
+    elif len(resources) > 1:
         raise Exception("More than one campaign resource found")
 
-    load_resource(db, campaigns[0], CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
+    cmapaigns = load_resource(db, resources[0], CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
     db.commit()
+    return campaigns
 
 
 def insert_campaign(db, tableName, obj):
@@ -123,15 +124,15 @@ def insert_campaign(db, tableName, obj):
 
 
 def load_sampling_events(db, package, campaigns):
-    events = get_resources_by_type("sampling_event", package.resources)
-    if not events:
+    resources = get_resources_by_type("sampling_event", package.resources)
+    if not resources:
         raise Exception("No sampling_event resource found")
-    elif len(events) > 1:
+    elif len(resources) > 1:
         raise Exception("More than one sampling_event resource found")
 
-    entries = load_resource(db, events[0], SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
+    sampling_events = load_resource(db, resources[0], SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
     db.commit()
-    return entries
+    return sampling_events
 
 
 def insert_sampling_event(db, tableName, obj):
@@ -298,10 +299,9 @@ def insert_project(db, package, samples):
 
 def main(args=None):
     conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password='')
-    cursor = conn.cursor()
 
     package = Package(args['filepath'])
-    print('Name: ', package.descriptor['name'])
+    print('Package name: ', package.descriptor['name'])
     if not package.valid:
         print(package.errors)
 
