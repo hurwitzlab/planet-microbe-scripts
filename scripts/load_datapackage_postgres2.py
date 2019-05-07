@@ -77,10 +77,10 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
         else:
             fields = get_fields_by_type(v, resource.schema.fields)
 
-        if not fields:
-            raise Exception("Missing field ", v)
-        elif len(fields) > 1 and not isinstance(fields, list):
-            raise Exception("Too many values found for ", v)
+        # if not fields:
+        #     raise Exception("Missing field ", v)
+        # elif len(fields) > 1 and not isinstance(fields, list):
+        #     raise Exception("Too many values found for ", v)
 
         fieldMap[k] = fields
 
@@ -105,16 +105,34 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
 def load_campaigns(db, package):
     resources = get_resources_by_type("campaign", package.resources)
     if not resources:
-        raise Exception("No campaign resource found")
+        print("No campaign resource found") #raise Exception("No campaign resource found")
+        return
     elif len(resources) > 1:
         raise Exception("More than one campaign resource found")
 
-    cmapaigns = load_resource(db, resources[0], CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
+    print("Campaign resource:", resources[0].name)
+    campaigns = load_resource(db, resources[0], CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
     db.commit()
     return campaigns
 
 
 def insert_campaign(db, tableName, obj):
+    #print("insert_campaign:", obj)
+    if not obj['name']:
+        raise Exception("Missing campaign name")
+    if not obj['deployment']:
+        raise Exception("Missing campaign deployment")
+    if not obj['start_location']:
+        raise Exception("Missing campaign start_location")
+    if not obj['end_location']:
+        raise Exception("Missing campaign end_location")
+    if not obj['start_time']:
+        raise Exception("Missing campaign start_time")
+    if not obj['end_time']:
+        raise Exception("Missing campaign end_time")
+    if not obj['urls'] or len(obj['urls']) == 0:
+        raise Exception("Missing campaign urls")
+
     cursor = db.cursor()
     cursor.execute(
         'INSERT INTO campaign (campaign_type,name,deployment,start_location,end_location,start_time,end_time,urls) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING campaign_id',
@@ -123,13 +141,14 @@ def insert_campaign(db, tableName, obj):
     return cursor.fetchone()[0]
 
 
-def load_sampling_events(db, package, campaigns):
+def load_sampling_events(db, package):
     resources = get_resources_by_type("sampling_event", package.resources)
     if not resources:
         raise Exception("No sampling_event resource found")
     elif len(resources) > 1:
         raise Exception("More than one sampling_event resource found")
 
+    print("Sampling event:", resources[0].name)
     sampling_events = load_resource(db, resources[0], SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
     db.commit()
     return sampling_events
@@ -157,7 +176,7 @@ def load_samples(db, package, sampling_events):
     sampleIdToSampleEventId = {}
     for i in range(len(resources)):
         resource = resources[i]
-        print("Sample resource", resource.name)
+        print("Sample resource:", resource.name)
 
         # Determine position of Sample Event ID and Sample ID fields
         fields = resource.schema.descriptor['fields']
@@ -169,18 +188,23 @@ def load_samples(db, package, sampling_events):
             del fields[sampleEventIdPos]
         allFields.extend(fields)
 
-        for row in resource.read():
-            sampleId = row[sampleIdPos]
-            sampleEventId = row[sampleEventIdPos]
-            sampleIdToSampleEventId[sampleId] = sampleEventId
+        try:
+            for row in resource.read():
+                sampleId = row[sampleIdPos]
+                sampleEventId = row[sampleEventIdPos]
+                sampleIdToSampleEventId[sampleId] = sampleEventId
 
-            if i > 0:
-                del row[sampleIdPos]
-                del row[sampleEventIdPos]
+                if i > 0:
+                    del row[sampleIdPos]
+                    del row[sampleEventIdPos]
 
-            if not sampleId in valuesBySampleId:
-                valuesBySampleId[sampleId] = []
-            valuesBySampleId[sampleId].extend(row)
+                if not sampleId in valuesBySampleId:
+                    valuesBySampleId[sampleId] = []
+                valuesBySampleId[sampleId].extend(row)
+        except Exception as e:
+            print(e)
+            if e.errors:
+                print(*e.errors, sep='\n')
 
     # Load schema
     schema_id = insert_schema(db, package.descriptor['name'], { "fields": allFields })
@@ -221,13 +245,15 @@ def load_samples(db, package, sampling_events):
                 stringVals.append(str(val))
                 numberVals.append(None)
                 datetimeVals.append(None)
-            elif type == 'datetime' or type == 'date':  # TODO handle time zone
+            elif type == 'datetime' or type == 'date':  # TODO handle time zone # TODO handle type 'time'
                 stringVals.append(None)
                 numberVals.append(None)
                 datetimeVals.append(val)
-            else:
-                print("Unknown type:", type)
-                exit(-1)
+            else: # TODO throw error
+                print("\nUnknown type:", type)
+                stringVals.append(None)
+                numberVals.append(None)
+                datetimeVals.append(None)
             i += 1
 
         sampling_event_id = None
@@ -306,7 +332,7 @@ def main(args=None):
         print(package.errors)
 
     campaigns = load_campaigns(conn, package)
-    sampling_events = load_sampling_events(conn, package, campaigns)
+    sampling_events = load_sampling_events(conn, package)
     samples = load_samples(conn, package, sampling_events)
     insert_project(conn, package, samples)
 
