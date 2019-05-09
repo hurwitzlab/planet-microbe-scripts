@@ -86,8 +86,8 @@ CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
 --    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
     sampling_event_type VARCHAR(255),
-    campaign_id INTEGER NOT NULL REFERENCES campaign(campaign_id),
-    locations GEOGRAPHY(LINESTRING,4326) NOT NULL,
+    campaign_id INTEGER REFERENCES campaign(campaign_id),
+    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     data_url TEXT NOT NULL, -- path to CSV file, e.g. datastore:/iplant/home/...
@@ -103,7 +103,7 @@ CREATE TABLE sample (
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
 --    accn VARCHAR(255),
 --    name VARCHAR(255) NOT NULL,
-    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL,
+    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
     number_vals REAL [],
     string_vals TEXT [],
     datetime_vals TIMESTAMP [],

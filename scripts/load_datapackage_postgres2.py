@@ -33,6 +33,10 @@ SAMPLING_EVENT_DB_SCHEMA = {
     "campaign_id": "http://purl.obolibrary.org/obo/PMO_00000060",
     "latitude": "http://purl.obolibrary.org/obo/OBI_0001621",
     "longitude": "http://purl.obolibrary.org/obo/OBI_0001620",
+    "start_latitude": "http://purl.obolibrary.org/obo/PMO_00000077",
+    "start_longitude": "http://purl.obolibrary.org/obo/PMO_00000076",
+    "end_latitude": "http://purl.obolibrary.org/obo/PMO_00000079",
+    "end_longitude": "http://purl.obolibrary.org/obo/PMO_00000078",
     "start_time": "http://purl.obolibrary.org/obo/PMO_00000008",
     "station": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000149"
 }
@@ -157,10 +161,37 @@ def load_sampling_events(db, package):
 def insert_sampling_event(db, tableName, obj):
     cursor = db.cursor()
     cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', obj['campaign_id']) # FIXME campaign name may not be unique
-    campaign_id = cursor.fetchone()[0]
+    if cursor.rowcount > 0:
+        campaignId = cursor.fetchone()[0]
+    else:
+        campaignId = None
+
+    if obj['sampling_event_type']:
+        samplingEventType = obj['sampling_event_type'][0]
+    else:
+        samplingEventType = None
+
+    latitudeVals = []
+    longitudeVals = []
+    if obj['latitude'] and obj['longitude']:
+        latitudeVals.append(obj['latitude'][0])
+        longitudeVals.append(obj['longitude'][0])
+    if obj['start_latitude'] and obj['start_longitude']:
+        latitudeVals.append(obj['start_latitude'][0])
+        longitudeVals.append(obj['start_longitude'][0])
+    if obj['end_latitude'] and obj['end_longitude']:
+        latitudeVals.append(obj['end_latitude'][0])
+        longitudeVals.append(obj['end_longitude'][0])
+
+    if len(latitudeVals) == 0 or len(longitudeVals) == 0 or len(latitudeVals) != len(longitudeVals):
+        raise Exception("Invalid lat/lng values for sampling event")
+
+    locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
+
+    print('insert_sampling_event:', obj)
     cursor.execute(
-        'INSERT INTO sampling_event (sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,ST_SetSRID(ST_MakeLine(ARRAY[ST_MakePoint(%s,%s)]),4326),%s,%s) RETURNING sampling_event_id',
-        [obj['sampling_event_type'][0], campaign_id, obj['longitude'][0], obj['latitude'][0], obj['start_time'][0], "FIXME"]
+        'INSERT INTO sampling_event (sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
+        [samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
     )
     return cursor.fetchone()[0]
 
@@ -177,26 +208,41 @@ def load_samples(db, package, sampling_events):
     for i in range(len(resources)):
         resource = resources[i]
         print("Sample resource:", resource.name)
+        for f in resource.schema.fields:
+            print(f)
+            print(f.name)
 
-        # Determine position of Sample Event ID and Sample ID fields
+        # Determine position of Sample ID fields
         fields = resource.schema.descriptor['fields']
-        sampleIdPos = list(map(lambda f: f['rdfType'], fields)).index(SAMPLE_ID_PURL)
-        sampleEventIdPos = list(map(lambda f: f['rdfType'], fields)).index(SAMPLE_EVENT_ID_PURL)
+        rdfTypes = list(map(lambda f: f['rdfType'], fields))
 
+        if not SAMPLE_ID_PURL in rdfTypes:
+            raise Exception("Missing sample identifier")
+        sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
+
+        # Index sample event IDs and remove redundant fields
+        if SAMPLE_EVENT_ID_PURL in rdfTypes:
+            sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
+        else:
+            sampleEventIdPos = None
+
+        # Remove redundant Sample ID and Sample Event ID fields
         if i > 0:
             del fields[sampleIdPos]
-            del fields[sampleEventIdPos]
+            if sampleEventIdPos != None:
+                del fields[sampleEventIdPos]
         allFields.extend(fields)
 
         try:
             for row in resource.read():
                 sampleId = row[sampleIdPos]
-                sampleEventId = row[sampleEventIdPos]
-                sampleIdToSampleEventId[sampleId] = sampleEventId
-
+                if sampleEventIdPos != None:
+                    sampleEventId = row[sampleEventIdPos]
+                    sampleIdToSampleEventId[sampleId] = sampleEventId
                 if i > 0:
                     del row[sampleIdPos]
-                    del row[sampleEventIdPos]
+                    if sampleEventIdPos != None:
+                        del row[sampleEventIdPos]
 
                 if not sampleId in valuesBySampleId:
                     valuesBySampleId[sampleId] = []
@@ -257,10 +303,11 @@ def load_samples(db, package, sampling_events):
             i += 1
 
         sampling_event_id = None
-        for eventId in sampling_events:
-            if sampling_events[eventId]['sampling_event_id'][0] == sampleIdToSampleEventId[id]:
-                sampling_event_id = eventId
-                break
+        if sampleEventIdPos != None:
+            for eventId in sampling_events:
+                if sampling_events[eventId]['sampling_event_id'][0] == sampleIdToSampleEventId[id]:
+                    sampling_event_id = eventId
+                    break
 
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
