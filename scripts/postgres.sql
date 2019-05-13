@@ -101,7 +101,7 @@ CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
     sampling_event_id INTEGER REFERENCES sampling_event(sampling_event_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
---    accn VARCHAR(255),
+    s,
 --    name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
     number_vals REAL [],

@@ -312,8 +312,8 @@ def load_samples(db, package, sampling_events):
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
-            "INSERT INTO sample (schema_id,sampling_event_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
-            [schema_id, sampling_event_id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
+            "INSERT INTO sample (schema_id,accn,sampling_event_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
+            [schema_id, id, sampling_event_id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         sample_id = cursor.fetchone()[0]
