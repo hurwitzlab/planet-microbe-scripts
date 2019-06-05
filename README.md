@@ -21,6 +21,7 @@ For more information on FD Table Schemas see http://frictionlessdata.io/specs/ta
 Make sure you have a database and schema:
 ```
 createdb planetmicrobe -U planetmicrobe
+psql -d planetmicrobe -U postgres -c "CREATE EXTENSION postgis;"
 psql -d planetmicrobe -U planetmicrobe -f scripts/postgres.sql
 ```
 
