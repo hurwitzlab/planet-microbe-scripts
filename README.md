@@ -1,4 +1,4 @@
-# Planet Microbe Schemas
+# Planet Microbe Scripts
 
 This repository contains scripts and example mapping tables for generating Frictionless 
 Data tabular data package schemas.
