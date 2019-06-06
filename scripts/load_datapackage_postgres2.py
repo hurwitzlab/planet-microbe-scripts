@@ -2,9 +2,7 @@
 """
 Load Data Package schema and data into Postgres database
 
-source scripts/venv/bin/activate
-python scripts/load_datapackage_postgres2.py -d pm_test -u mbomhoff  ~/repos/planet-microbe-datapackages/HOT-Chisholm/datapackage.json
-
+load_datapackage_postgres2.py -d <database> -u <username> datapackage.json
 """
 
 import sys
@@ -35,8 +33,8 @@ SAMPLING_EVENT_DB_SCHEMA = {
     "sampling_event_id": "http://purl.obolibrary.org/obo/PMO_00000056",
     "sampling_event_type": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000146",
     "campaign_id": "http://purl.obolibrary.org/obo/PMO_00000060",
-    "latitude": "http://purl.obolibrary.org/obo/OBI_0001621",
-    "longitude": "http://purl.obolibrary.org/obo/OBI_0001620",
+    "latitude": "http://purl.obolibrary.org/obo/OBI_0001620",
+    "longitude": "http://purl.obolibrary.org/obo/OBI_0001621",
     "start_latitude": "http://purl.obolibrary.org/obo/PMO_00000077",
     "start_longitude": "http://purl.obolibrary.org/obo/PMO_00000076",
     "end_latitude": "http://purl.obolibrary.org/obo/PMO_00000079",
@@ -195,9 +193,13 @@ def insert_sampling_event(db, tableName, obj):
     if len(latitudeVals) == 0 or len(longitudeVals) == 0 or len(latitudeVals) != len(longitudeVals):
         raise Exception("Invalid lat/lng values for sampling event")
 
+    # print("accn:", samplingEventId)
+    # print("lats:", latitudeVals)
+    # print("lngs:", longitudeVals)
+    # print("zip:", list(zip(longitudeVals, latitudeVals)))
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
-    print('insert_sampling_event:', obj)
+    #print('insert_sampling_event:', obj)
     cursor.execute(
         'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
         [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
@@ -217,9 +219,9 @@ def load_samples(db, package, sampling_events):
     for i in range(len(resources)):
         resource = resources[i]
         print("Sample resource:", resource.name)
-        for f in resource.schema.fields:
-            print(f)
-            print(f.name)
+        # for f in resource.schema.fields:
+        #     print(f)
+        #     print(f.name)
 
         # Determine position of Sample ID fields
         fields = resource.schema.descriptor['fields']
@@ -318,6 +320,10 @@ def load_samples(db, package, sampling_events):
                     sampling_event_id = eventId
                     break
 
+        # print("accn:", id)
+        # print("lats:", latitudeVals)
+        # print("lngs:", longitudeVals)
+        # print("zip:", list(zip(longitudeVals, latitudeVals)))
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
