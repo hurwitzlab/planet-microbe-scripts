@@ -2,7 +2,7 @@
 """
 Load Data Package schema and data into Postgres database
 
-load_datapackage_postgres2.py -d <database> -u <username> datapackage.json
+load_datapackage_postgres2.py -d <database> -u <username> -p <password> datapackage.json
 """
 
 import sys
@@ -386,7 +386,7 @@ def insert_project(db, package, samples):
 
 
 def main(args=None):
-    conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password='')
+    conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
 
     package = Package(args['filepath'])
     print('Package name: ', package.descriptor['name'])
@@ -403,6 +403,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load datapackage into database.')
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
+    parser.add_argument('-p', '--password')
     parser.add_argument('-r', '--resource')
     parser.add_argument('filepath')
 
