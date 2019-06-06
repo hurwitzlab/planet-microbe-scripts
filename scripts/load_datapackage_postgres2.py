@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
 Load Data Package schema and data into Postgres database
+
+source scripts/venv/bin/activate
+python scripts/load_datapackage_postgres2.py -d pm_test -u mbomhoff  ~/repos/planet-microbe-datapackages/HOT-Chisholm/datapackage.json
+
 """
 
 import sys
@@ -166,6 +170,11 @@ def insert_sampling_event(db, tableName, obj):
     else:
         campaignId = None
 
+    if obj['sampling_event_id']:
+        samplingEventId = obj['sampling_event_id'][0]
+    else:
+        samplingEventId = None
+
     if obj['sampling_event_type']:
         samplingEventType = obj['sampling_event_type'][0]
     else:
@@ -190,8 +199,8 @@ def insert_sampling_event(db, tableName, obj):
 
     print('insert_sampling_event:', obj)
     cursor.execute(
-        'INSERT INTO sampling_event (sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
-        [samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
+        'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
+        [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
     )
     return cursor.fetchone()[0]
 
