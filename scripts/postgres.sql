@@ -1,10 +1,6 @@
+-- Load:
 -- psql -d pm_test -f postgres.sql
-
---DROP TABLE IF EXISTS schema CASCADE;
---DROP TABLE IF EXISTS sample CASCADE;
---DROP DATABASE IF EXISTS pm;
-
---CREATE DATABASE pm;
+-- delete from project_to_sample; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;
 
 CREATE EXTENSION Postgis;
 
@@ -65,7 +61,7 @@ CREATE TABLE campaign_type (
 CREATE TABLE campaign (
     campaign_id SERIAL PRIMARY KEY,
 --    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
-    campaign_type VARCHAR(255),
+    campaign_type VARCHAR(255), --TODO change to campaign_type_id
     name VARCHAR(255) NOT NULL,
     description TEXT,
     deployment VARCHAR(255),
@@ -85,8 +81,9 @@ CREATE TABLE sampling_event_type (
 CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
 --    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
-    sampling_event_type VARCHAR(255),
+    sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id
     campaign_id INTEGER REFERENCES campaign(campaign_id),
+    name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
     start_time TIMESTAMP,
     end_time TIMESTAMP,
