@@ -4,20 +4,20 @@
 
 CREATE EXTENSION Postgis;
 
-CREATE TABLE ontology (
-    ontology_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    description TEXT,
-    purl TEXT UNIQUE NOT NULL
-);
+--CREATE TABLE ontology (
+--    ontology_id SERIAL PRIMARY KEY,
+--    name VARCHAR(255) UNIQUE NOT NULL,
+--    description TEXT,
+--    purl TEXT UNIQUE NOT NULL
+--);
 
-CREATE TABLE ontology_term (
-    ontology_term_id SERIAL PRIMARY KEY,
-    ontology_id INTEGER NOT NULL REFERENCES ontology(ontology_id),
-    label VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    purl TEXT UNIQUE NOT NULL
-);
+--CREATE TABLE ontology_term (
+--    ontology_term_id SERIAL PRIMARY KEY,
+--    ontology_id INTEGER NOT NULL REFERENCES ontology(ontology_id),
+--    label VARCHAR(255) NOT NULL,
+--    description TEXT NOT NULL,
+--    purl TEXT UNIQUE NOT NULL
+--);
 
 CREATE TABLE schema (
     schema_id SERIAL PRIMARY KEY,
@@ -44,8 +44,8 @@ CREATE TABLE field (
     field_id SERIAL PRIMARY KEY,
     field_source_id INTEGER NOT NULL REFERENCES field_source(field_source_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
-    unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
+--    ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
+--    unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
     name VARCHAR(255) NOT NULL,
     type field_type NOT NULL,
     position INTEGER NOT NULL
