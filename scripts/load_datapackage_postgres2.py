@@ -416,15 +416,18 @@ def main(args=None):
     if 'deleteall' in args:
         delete_all(conn)
 
-    package = Package(args['filepath'])
-    print('Package name: ', package.descriptor['name'])
-    if not package.valid:
-        print(package.errors)
+    print(args['filepath'])
 
-    campaigns = load_campaigns(conn, package)
-    sampling_events = load_sampling_events(conn, package)
-    samples = load_samples(conn, package, sampling_events)
-    insert_project(conn, package, samples)
+    for filepath in args['filepath']:
+        package = Package(filepath)
+        print('Package:', package.descriptor['name'], '(' + filepath + ')')
+        if not package.valid:
+            print(package.errors)
+
+        campaigns = load_campaigns(conn, package)
+        sampling_events = load_sampling_events(conn, package)
+        samples = load_samples(conn, package, sampling_events)
+        insert_project(conn, package, samples)
 
 
 if __name__ == "__main__":
@@ -434,6 +437,6 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--password')
     parser.add_argument('-r', '--resource')
     parser.add_argument('-x', '--deleteall', action='store_true')
-    parser.add_argument('filepath')
+    parser.add_argument('filepath', nargs='+')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
