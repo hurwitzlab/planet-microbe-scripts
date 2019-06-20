@@ -13,7 +13,11 @@ from tableschema import Table
 import psycopg2
 from shapely.geometry import MultiPoint
 from shapely import wkb
+from pint import UnitRegistry
 
+
+ureg = UnitRegistry()
+Q_ = ureg.Quantity
 
 CAMPAIGN_CRUISE_DB_SCHEMA = {
     "name": "http://purl.obolibrary.org/obo/PMO_00000060",
@@ -280,20 +284,22 @@ def load_samples(db, package, sampling_events):
         for val in valuesBySampleId[id]:
             type = allFields[i]['type']
             rdfType = allFields[i]['rdfType']
+            unitRdfType = allFields[i]['pm:unitRdfType']
             searchable = allFields[i]['pm:searchable']
             if type == 'number':
                 if val == None:  # no data
                     numberVals.append(None)
                 else:
-                    numberVals.append(float(val))
+                    val = float(val) #convert_units(unitRdfType, float(val))
+                    numberVals.append(val)
                     try:
                         if LATITUDE_PURLS.index(rdfType) >= 0 and searchable:
-                            latitudeVals.append(float(val))
+                            latitudeVals.append(val)
                     except ValueError:
                         pass
                     try:
                         if LONGITUDE_PURLS.index(rdfType) >= 0 and searchable:
-                            longitudeVals.append(float(val))
+                            longitudeVals.append(val)
                     except ValueError:
                         pass
                 stringVals.append(None)
@@ -341,6 +347,15 @@ def load_samples(db, package, sampling_events):
     return samples
 
 
+def convert_units(unitRdfType, val):
+    if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
+        home = Q_(val, ureg.kelvin)
+        print("convert: ", val, home.to('degC').magnitude)
+        return home.to('degC').magnitude
+
+    return val
+
+
 def insert_schema(db, name, schema):
     cursor = db.cursor()
     print('Loading schema "%s"' % name)
@@ -385,8 +400,21 @@ def insert_project(db, package, samples):
     db.commit()
 
 
+def delete_all(db):
+    print("Deleting all tables ...")
+    cursor = db.cursor()
+    cursor.execute("delete from project_to_sample; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;")
+    db.commit()
+
+
 def main(args=None):
-    conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
+    if 'password' in args:
+        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
+    else:
+        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
+
+    if 'deleteall' in args:
+        delete_all(conn)
 
     package = Package(args['filepath'])
     print('Package name: ', package.descriptor['name'])
@@ -405,6 +433,7 @@ if __name__ == "__main__":
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
     parser.add_argument('-r', '--resource')
+    parser.add_argument('-x', '--deleteall', action='store_true')
     parser.add_argument('filepath')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
