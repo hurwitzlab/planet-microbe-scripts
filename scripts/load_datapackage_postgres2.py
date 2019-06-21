@@ -341,15 +341,16 @@ def load_samples(db, package, sampling_events):
         sample_id = cursor.fetchone()[0]
         samples[sample_id] = valuesBySampleId[id]
 
-        for eventId in sampleIdToSampleEventId[id]:
-            for eventId2 in sampling_events:
-                if sampling_events[eventId2]['sampling_event_id'][0] == eventId:
-                    stmt = cursor.mogrify(
-                        "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
-                        [sample_id, eventId2]
-                    )
-                    cursor.execute(stmt)
-                    break
+        if id in sampleIdToSampleEventId:
+            for eventId in sampleIdToSampleEventId[id]:
+                for eventId2 in sampling_events:
+                    if sampling_events[eventId2]['sampling_event_id'][0] == eventId:
+                        stmt = cursor.mogrify(
+                            "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
+                            [sample_id, eventId2]
+                        )
+                        cursor.execute(stmt)
+                        break
 
         db.commit()
         count += 1
