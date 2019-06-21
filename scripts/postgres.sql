@@ -96,7 +96,6 @@ CREATE TABLE sampling_event (
 
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
-    sampling_event_id INTEGER REFERENCES sampling_event(sampling_event_id),
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     accn VARCHAR(255),
 --    name VARCHAR(255) NOT NULL,
@@ -109,6 +108,12 @@ CREATE TABLE sample (
 );
 
 --CREATE INDEX sample_locations_gix ON sample USING GIST (locations);
+
+CREATE TABLE sample_to_sampling_event (
+    sample_to_sampling_event_id SERIAL PRIMARY KEY,
+    sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id)
+);
 
 CREATE TABLE project_type (
     project_type_id SERIAL PRIMARY KEY,

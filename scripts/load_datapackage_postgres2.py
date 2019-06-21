@@ -127,7 +127,7 @@ def load_campaigns(db, package):
 
 
 def insert_campaign(db, tableName, obj):
-    #print("insert_campaign:", obj)
+    print("insert_campaign:", obj)
     if not obj['name']:
         raise Exception("Missing campaign name")
     if not obj['deployment']:
@@ -252,8 +252,8 @@ def load_samples(db, package, sampling_events):
             for row in resource.read():
                 sampleId = row[sampleIdPos]
                 if sampleEventIdPos != None:
-                    sampleEventId = row[sampleEventIdPos]
-                    sampleIdToSampleEventId[sampleId] = sampleEventId
+                    sampleEventIds = row[sampleEventIdPos].split(';')
+                    sampleIdToSampleEventId[sampleId] = sampleEventIds
                 if i > 0:
                     del row[sampleIdPos]
                     if sampleEventIdPos != None:
@@ -319,12 +319,13 @@ def load_samples(db, package, sampling_events):
                 datetimeVals.append(None)
             i += 1
 
-        sampling_event_id = None
-        if sampleEventIdPos != None:
-            for eventId in sampling_events:
-                if sampling_events[eventId]['sampling_event_id'][0] == sampleIdToSampleEventId[id]:
-                    sampling_event_id = eventId
-                    break
+        # sampling_event_id = None
+        # if sampleEventIdPos != None:
+        #     for eventId in sampling_events:
+        #         for eventId2 in sampleIdToSampleEventId:
+        #             if sampling_events[eventId]['sampling_event_id'][0] == eventId2:
+        #                 sampling_event_id = eventId
+        #                 break
 
         # print("accn:", id)
         # print("lats:", latitudeVals)
@@ -333,12 +334,23 @@ def load_samples(db, package, sampling_events):
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
-            "INSERT INTO sample (schema_id,accn,sampling_event_id,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
-            [schema_id, id, sampling_event_id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
+            "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
+            [schema_id, id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         sample_id = cursor.fetchone()[0]
         samples[sample_id] = valuesBySampleId[id]
+
+        for eventId in sampleIdToSampleEventId[id]:
+            for eventId2 in sampling_events:
+                if sampling_events[eventId2]['sampling_event_id'][0] == eventId:
+                    stmt = cursor.mogrify(
+                        "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
+                        [sample_id, eventId2]
+                    )
+                    cursor.execute(stmt)
+                    break
+
         db.commit()
         count += 1
         print('\rLoading samples', count, end='')

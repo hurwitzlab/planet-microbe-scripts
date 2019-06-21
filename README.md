@@ -34,6 +34,6 @@ Create Python virtual environment and run load script:
 ```
 virtualenv -p /usr/bin/python3.6 python3
 source python3/bin/activate
-pip install simplejson datapackage psycopg2 shapely
+pip install simplejson datapackage psycopg2 shapely pint
 scripts/load_datapackage_postgres2.py -d planetmicrobe -u planetmicrobe -p <password>  ../planet-microbe-datapackages/HOT-Chisholm/datapackage.json
 ```
