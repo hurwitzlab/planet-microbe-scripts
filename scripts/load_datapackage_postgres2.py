@@ -127,7 +127,7 @@ def load_campaigns(db, package):
 
 
 def insert_campaign(db, tableName, obj):
-    print("insert_campaign:", obj)
+    #print("insert_campaign:", obj)
     if not obj['name']:
         raise Exception("Missing campaign name")
     if not obj['deployment']:
@@ -415,7 +415,7 @@ def insert_project(db, package, samples):
 def delete_all(db):
     print("Deleting all tables ...")
     cursor = db.cursor()
-    cursor.execute("delete from project_to_sample; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;")
+    cursor.execute("delete from project_to_sample; delete from sample_to_sampling_event; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;")
     db.commit()
 
 
