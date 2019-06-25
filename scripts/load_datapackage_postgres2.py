@@ -180,7 +180,7 @@ def insert_sampling_event(db, tableName, obj):
     if obj['sampling_event_type']:
         samplingEventType = obj['sampling_event_type'][0]
     else:
-        samplingEventType = None
+        samplingEventType = "Unknown"
 
     latitudeVals = []
     longitudeVals = []
@@ -203,7 +203,7 @@ def insert_sampling_event(db, tableName, obj):
     # print("zip:", list(zip(longitudeVals, latitudeVals)))
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
-    #print('insert_sampling_event:', obj)
+    #print('Loading', samplingEventId)
     cursor.execute(
         'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
         [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
@@ -345,6 +345,7 @@ def load_samples(db, package, sampling_events):
             for eventId in sampleIdToSampleEventId[id]:
                 for eventId2 in sampling_events:
                     if sampling_events[eventId2]['sampling_event_id'][0] == eventId:
+                        #print("Linking", sample_id, eventId2)
                         stmt = cursor.mogrify(
                             "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
                             [sample_id, eventId2]
