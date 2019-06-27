@@ -1,5 +1,5 @@
 -- Load:
--- psql -d pm_test -f postgres.sql
+-- psql -d <db_name> -f postgres.sql
 -- delete from project_to_sample; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;
 
 CREATE EXTENSION Postgis;
@@ -26,30 +26,30 @@ CREATE TABLE schema (
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE field_source_category (
-    field_source_category_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    description TEXT
-);
-
-CREATE TABLE field_source (
-    field_source_id SERIAL PRIMARY KEY,
-    field_source_category_id INTEGER NOT NULL REFERENCES field_source_category(field_source_category_id),
-    url TEXT UNIQUE NOT NULL
-);
-
-CREATE TYPE field_type AS ENUM ('number', 'string', 'datetime');
-
-CREATE TABLE field (
-    field_id SERIAL PRIMARY KEY,
-    field_source_id INTEGER NOT NULL REFERENCES field_source(field_source_id),
-    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
---    ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
---    unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
-    name VARCHAR(255) NOT NULL,
-    type field_type NOT NULL,
-    position INTEGER NOT NULL
-);
+--CREATE TABLE field_source_category (
+--    field_source_category_id SERIAL PRIMARY KEY,
+--    name VARCHAR(255) UNIQUE NOT NULL,
+--    description TEXT
+--);
+--
+--CREATE TABLE field_source (
+--    field_source_id SERIAL PRIMARY KEY,
+--    field_source_category_id INTEGER NOT NULL REFERENCES field_source_category(field_source_category_id),
+--    url TEXT UNIQUE NOT NULL
+--);
+--
+--CREATE TYPE field_type AS ENUM ('number', 'string', 'datetime');
+--
+--CREATE TABLE field (
+--    field_id SERIAL PRIMARY KEY,
+--    field_source_id INTEGER NOT NULL REFERENCES field_source(field_source_id),
+--    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+----    ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
+----    unit_ontology_term_id INTEGER NOT NULL REFERENCES ontology_term(ontology_term_id),
+--    name VARCHAR(255) NOT NULL,
+--    type field_type NOT NULL,
+--    position INTEGER NOT NULL
+--);
 
 CREATE TABLE campaign_type (
     campaign_type_id SERIAL PRIMARY KEY,
@@ -81,7 +81,7 @@ CREATE TABLE sampling_event_type (
 CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
 --    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
-    sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id
+    sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id and NOT NULL
     campaign_id INTEGER REFERENCES campaign(campaign_id),
     name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
