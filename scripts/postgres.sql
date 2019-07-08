@@ -149,17 +149,11 @@ CREATE TABLE organization (
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE experiment_type (
-    experiment_type_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    description TEXT
-);
-
 CREATE TABLE experiment (
     experiment_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
-    experiment_type_id INTEGER NOT NULL REFERENCES experiment_type(experiment_type_id),
     name VARCHAR(255) NOT NULL,
+    accn VARCHAR(255) NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -172,10 +166,12 @@ CREATE TABLE library (
 
 CREATE TABLE run (
     run_id SERIAL PRIMARY KEY,
-    library_id INTEGER NOT NULL REFERENCES library(library_id),
-    num_spots BIGINT NOT NULL,
-    total_size BIGINT NOT NULL,
-    avg_read_len SMALLINT NOT NULL,
+    experiment_id INTEGER NOT NULL REFERENCES experiment(experiment_id),
+    accn VARCHAR(255) NOT NULL,
+    total_spots BIGINT NOT NULL,
+    total_bases BIGINT NOT NULL,
+    total_size BIGINT,
+    avg_read_len SMALLINT,
     gc_content REAL,
     time_of_run TIMESTAMP
 );
