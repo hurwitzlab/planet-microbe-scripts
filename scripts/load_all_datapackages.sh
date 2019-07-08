@@ -1,8 +1,8 @@
 #!/bin/bash
 
-USERNAME=$1
-DBNAME=$2
-PASSWORD=$3
+USERNAME="$1"
+DBNAME="$2"
+PASSWORD="$3"
 DELETEALL="-x"
 
 for path in `ls -d ../../planet-microbe-datapackages/*`
