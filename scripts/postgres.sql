@@ -160,8 +160,14 @@ CREATE TABLE experiment (
 
 CREATE TABLE library (
     library_id SERIAL PRIMARY KEY,
-    experiment_id INTEGER NOT NULL REFERENCES experiment(experiment_id)
-    --TODO
+    experiment_id INTEGER NOT NULL REFERENCES experiment(experiment_id),
+    name VARCHAR(255),
+    strategy VARCHAR(255),
+    source VARCHAR(255),
+    selection VARCHAR(255),
+    protocol TEXT,
+    layout VARCHAR(255),
+    length INTEGER
 );
 
 CREATE TABLE run (

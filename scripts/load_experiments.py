@@ -60,19 +60,43 @@ def getExperimentsFromSRA(sampleAccn):
                 'runs': []
             }
 
+            name = doc.find(".//Library_descriptor/LIBRARY_NAME")
+            strategy = doc.find(".//Library_descriptor/LIBRARY_STRATEGY")
+            source = doc.find(".//Library_descriptor/LIBRARY_SOURCE")
+            selection = doc.find(".//Library_descriptor/LIBRARY_SELECTION")
+            protocol = doc.find(".//Library_descriptor/LIBRARY_CONSTRUCTION_PROTOCOL")
+            paired = doc.find(".//Library_descriptor/LIBRARY_LAYOUT/PAIRED")
+            single = doc.find(".//Library_descriptor/LIBRARY_LAYOUT/SINGLE")
+            if paired != None:
+                length = paired.attrib['NOMINAL_LENGTH'] if 'NOMINAL_LENGTH' in paired.attrib else None
+                layout = 'paired'
+            elif single != None:
+                length = single.attrib['NOMINAL_LENGTH'] if 'NOMINAL_LENGTH' in single.attrib else None
+                layout = 'single'
+            else:
+                raise Exception('Missing library layout')
+            experiment['library'] = {
+                'name': name.text if name != None else None,
+                'strategy': strategy.text,
+                'source': source.text,
+                'selection': selection.text,
+                'protocol': protocol.text if protocol != None else None,
+                'layout': layout,
+                'length': length
+            }
+
             doc = ET.fromstring('<root>' + record['Runs'] + '</root>')
-            run = doc.find(".//Run")
-            accn = run.attrib['acc']
-            totalSpots = run.attrib['total_spots']
-            totalBases = run.attrib['total_bases']
-            # print("run accn:", accn)
-            # print("total spots:", totalSpots)
-            # print("total bases:", totalBases)
-            experiment['runs'].append({
-                'accn': accn,
-                'spots': totalSpots,
-                'bases': totalBases
-            })
+            runs = doc.findall(".//Run")
+            for run in runs:
+                accn = run.attrib['acc']
+                totalSpots = run.attrib['total_spots']
+                totalBases = run.attrib['total_bases']
+                # print("run accn:", acc, "total spots:", totalSpots, "total bases:", totalBases)
+                experiment['runs'].append({
+                    'accn': accn,
+                    'spots': totalSpots,
+                    'bases': totalBases
+                })
 
             experiments.append(experiment)
 
@@ -92,6 +116,10 @@ def loadExperiments(db):
             cursor.execute('INSERT INTO experiment (sample_id,name,accn) VALUES (%s,%s,%s) RETURNING experiment_id',
                            [sampleId, exp['name'], exp['accn']])
             experimentId = cursor.fetchone()[0]
+
+            lib = exp['library']
+            cursor.execute('INSERT INTO library (experiment_id,name,strategy,source,selection,protocol,layout,length) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING library_id',
+                           [experimentId, lib['name'], lib['strategy'], lib['source'], lib['selection'], lib['protocol'], lib['layout'], lib['length']])
 
             for run in exp['runs']:
                 cursor.execute('INSERT INTO run (experiment_id,accn,total_spots,total_bases) VALUES (%s,%s,%s,%s) RETURNING experiment_id',

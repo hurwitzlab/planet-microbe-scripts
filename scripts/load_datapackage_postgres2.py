@@ -14,8 +14,6 @@ import psycopg2
 from shapely.geometry import MultiPoint
 from shapely import wkb
 from pint import UnitRegistry
-from Bio import Entrez
-import xml.etree.ElementTree as ET
 
 
 ureg = UnitRegistry()
@@ -372,98 +370,6 @@ def convert_units(unitRdfType, val):
     return val
 
 
-def esearch(db, accn):
-    handle = Entrez.esearch(db=db, term=accn)
-    result = Entrez.read(handle)
-    handle.close()
-    if int(result['Count']) == 0:
-        raise Exception(db + " accn not found:", accn)
-    return result['IdList']
-
-
-def getSummary(db, accn):
-    idList = esearch(db, accn)
-    # print(idList)
-    handle = Entrez.esummary(db=db, id=','.join(idList), retmode='xml')
-    result = Entrez.read(handle)
-    handle.close()
-    return result
-
-
-def getExperimentsFromSRA(sampleAccn):
-    experiments = []
-    print("BioSample accn:", sampleAccn)
-    result = getSummary('biosample', sampleAccn)
-    docs = result['DocumentSummarySet']['DocumentSummary']
-    if len(docs) > 1:
-        raise Exception("More than one BioSample result found for", accn, result['IdList'])
-    for summary in docs:
-        # NCBIXML raises error "AttributeError: 'StringElement' object has no attribute 'read'"
-        # for record in NCBIXML.read(summary['SampleData']):
-        #     print(record)
-
-        record = ET.fromstring(summary['SampleData'])
-        attr = record.find(".//Id[@db='SRA']")
-        if attr == None:
-            raise Exception("Could not parse SRA accn for BioSample:", sampleAccn)
-        sraAccn = attr.text
-        # print("sample SRA accn:", sraAccn)
-
-        result = getSummary('sra', sraAccn)
-        for record in result:
-            doc = ET.fromstring('<root>' + record['ExpXml'] + '</root>')
-            exp = doc.find(".//Experiment")
-            name = exp.attrib['name']
-            accn = exp.attrib['acc']
-            # print("experiment accn:", accn)
-            # print("experiment name:", name)
-            experiment = {
-                'accn': accn,
-                'name': name,
-                'runs': []
-            }
-
-            doc = ET.fromstring('<root>' + record['Runs'] + '</root>')
-            run = doc.find(".//Run")
-            accn = run.attrib['acc']
-            totalSpots = run.attrib['total_spots']
-            totalBases = run.attrib['total_bases']
-            # print("run accn:", accn)
-            # print("total spots:", totalSpots)
-            # print("total bases:", totalBases)
-            experiment['runs'].append({
-                'accn': accn,
-                'spots': totalSpots,
-                'bases': totalBases
-            })
-
-            experiments.append(experiment)
-
-    return experiments
-
-
-def load_experiments(db, key, email, samples):
-    cursor = db.cursor()
-    Entrez.api_key = key
-    Entrez.email = email
-    for sampleId in samples:
-        cursor.execute('SELECT accn FROM sample WHERE sample_id=%s', [sampleId]) #TODO pull accn directly from sample object
-        sampleAccn = cursor.fetchone()[0]
-
-        experiments = getExperimentsFromSRA(sampleAccn)
-        print(experiments)
-        for exp in experiments:
-            cursor.execute('INSERT INTO experiment (sample_id,name,accn) VALUES (%s,%s,%s) RETURNING experiment_id',
-                           [sampleId, exp['name'], exp['accn']])
-            experimentId = cursor.fetchone()[0]
-
-            for run in exp['runs']:
-                cursor.execute('INSERT INTO run (experiment_id,accn,total_spots,total_bases) VALUES (%s,%s,%s,%s) RETURNING experiment_id',
-                               [experimentId, run['accn'], run['spots'], run['bases']])
-
-            db.commit()
-
-
 def insert_schema(db, name, schema):
     cursor = db.cursor()
     print('Loading schema "%s"' % name)
@@ -512,7 +418,7 @@ def insert_project(db, package, samples):
 def delete_all(db):
     print("Deleting all tables ...")
     cursor = db.cursor()
-    cursor.execute("delete from project_to_sample; delete from sample_to_sampling_event; delete from run; delete from experiment; delete from sample; delete from project; delete from schema; delete from sampling_event; delete from campaign;")
+    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
     db.commit()
 
 
@@ -536,17 +442,12 @@ def main(args=None):
         samples = load_samples(conn, package, sampling_events)
         insert_project(conn, package, samples)
 
-        if 'key' in args and 'email' in args:
-            load_experiments(conn, args['key'], args['email'], samples)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load datapackage into database.')
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
-    parser.add_argument('-k', '--key')  # For NCBI Entrez calls
-    parser.add_argument('-e', '--email') # For NCBI Entrez calls
     parser.add_argument('-r', '--resource')
     parser.add_argument('-x', '--deleteall', action='store_true')
     parser.add_argument('filepath', nargs='+')
