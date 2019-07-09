@@ -12,15 +12,13 @@ def esearch(db, accn):
     result = Entrez.read(handle)
     handle.close()
     if int(result['Count']) == 0:
-        raise Exception("BioSample accn not found:", accn)
-    if int(result['Count']) > 1:
-        raise Exception("More than one BioSample found for", accn)
-    return result['IdList'][0]
+        raise Exception(db + " accn not found:", accn)
+    return result['IdList']
 
 
 def getSummary(db, accn):
-    id = esearch(db, accn)
-    handle = Entrez.esummary(db=db, id=id, retmode='xml')
+    idList = esearch(db, accn)
+    handle = Entrez.esummary(db=db, id=','.join(idList), retmode='xml')
     result = Entrez.read(handle)
     handle.close()
     return result
@@ -28,8 +26,14 @@ def getSummary(db, accn):
 
 def getExperimentsFromSRA(sampleAccn):
     experiments = []
+
+    print("BioSample accn:", sampleAccn)
     result = getSummary('biosample', sampleAccn)
-    for summary in result['DocumentSummarySet']['DocumentSummary']:
+    docs = result['DocumentSummarySet']['DocumentSummary']
+    if len(docs) > 1:
+        raise Exception("More than one BioSample result found for", accn, result['IdList'])
+
+    for summary in docs:
         # NCBIXML raises error "AttributeError: 'StringElement' object has no attribute 'read'"
         # for record in NCBIXML.read(summary['SampleData']):
         #     print(record)
@@ -40,7 +44,7 @@ def getExperimentsFromSRA(sampleAccn):
             print(summary['SampleData'])
             raise Exception("Could not parse SRA accn for BioSample:", sampleAccn)
         sraAccn = attr.text
-        print("sample SRA accn:", sraAccn)
+        print("SRA accn:", sraAccn)
 
         result = getSummary('sra', sraAccn)
         for record in result:
@@ -48,8 +52,8 @@ def getExperimentsFromSRA(sampleAccn):
             exp = doc.find(".//Experiment")
             name = exp.attrib['name']
             accn = exp.attrib['acc']
-            print("experiment accn:", accn)
-            print("experiment name:", name)
+            # print("experiment accn:", accn)
+            # print("experiment name:", name)
             experiment = {
                 'accn': accn,
                 'name': name,
@@ -61,9 +65,9 @@ def getExperimentsFromSRA(sampleAccn):
             accn = run.attrib['acc']
             totalSpots = run.attrib['total_spots']
             totalBases = run.attrib['total_bases']
-            print("run accn:", accn)
-            print("total spots:", totalSpots)
-            print("total bases:", totalBases)
+            # print("run accn:", accn)
+            # print("total spots:", totalSpots)
+            # print("total bases:", totalBases)
             experiment['runs'].append({
                 'accn': accn,
                 'spots': totalSpots,
@@ -72,6 +76,7 @@ def getExperimentsFromSRA(sampleAccn):
 
             experiments.append(experiment)
 
+    print(experiments)
     return experiments
 
 
@@ -83,7 +88,6 @@ def loadExperiments(db):
         sampleAccn = row[1]
 
         experiments = getExperimentsFromSRA(sampleAccn)
-        print(experiments)
         for exp in experiments:
             cursor.execute('INSERT INTO experiment (sample_id,name,accn) VALUES (%s,%s,%s) RETURNING experiment_id',
                            [sampleId, exp['name'], exp['accn']])
@@ -98,6 +102,9 @@ def loadExperiments(db):
 
 def main(args=None):
     if 'accn' in args: # for debug
+        if ('key' in args) and ('email' in args):
+            Entrez.api_key = args['key']
+            Entrez.email = args['email']
         getExperimentsFromSRA(args['accn'])
     else: # load all experiments and runs into db
         if 'password' in args:

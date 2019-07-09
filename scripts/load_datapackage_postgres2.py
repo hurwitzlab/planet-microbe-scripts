@@ -377,15 +377,14 @@ def esearch(db, accn):
     result = Entrez.read(handle)
     handle.close()
     if int(result['Count']) == 0:
-        raise Exception("BioSample accn not found:", accn)
-    if int(result['Count']) > 1:
-        raise Exception("More than one BioSample found for", accn)
-    return result['IdList'][0]
+        raise Exception(db + " accn not found:", accn)
+    return result['IdList']
 
 
 def getSummary(db, accn):
-    id = esearch(db, accn)
-    handle = Entrez.esummary(db=db, id=id, retmode='xml')
+    idList = esearch(db, accn)
+    # print(idList)
+    handle = Entrez.esummary(db=db, id=','.join(idList), retmode='xml')
     result = Entrez.read(handle)
     handle.close()
     return result
@@ -393,8 +392,12 @@ def getSummary(db, accn):
 
 def getExperimentsFromSRA(sampleAccn):
     experiments = []
+    print("BioSample accn:", sampleAccn)
     result = getSummary('biosample', sampleAccn)
-    for summary in result['DocumentSummarySet']['DocumentSummary']:
+    docs = result['DocumentSummarySet']['DocumentSummary']
+    if len(docs) > 1:
+        raise Exception("More than one BioSample result found for", accn, result['IdList'])
+    for summary in docs:
         # NCBIXML raises error "AttributeError: 'StringElement' object has no attribute 'read'"
         # for record in NCBIXML.read(summary['SampleData']):
         #     print(record)
