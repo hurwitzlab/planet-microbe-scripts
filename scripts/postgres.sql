@@ -195,12 +195,12 @@ CREATE TABLE file_format (
     extensions VARCHAR(10) []
 );
 
-CREATE TABLE sequence_file (
-    sequence_file_id SERIAL PRIMARY KEY,
+CREATE TABLE "file" (
+    file_id SERIAL PRIMARY KEY,
     run_id INTEGER NOT NULL REFERENCES run(run_id),
     file_type_id INTEGER NOT NULL REFERENCES file_type(file_type_id),
     file_format_id INTEGER NOT NULL REFERENCES file_format(file_format_id),
-    url TEXT NOT NULL -- path, e.g. datastore:/iplant/home/...
+    url TEXT NOT NULL -- url or path, e.g. /iplant/home/...
 );
 
 CREATE TABLE "user" (
