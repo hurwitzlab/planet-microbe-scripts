@@ -58,7 +58,7 @@ def fetch_run_id(db, accn):
 def import_data(db, accn, stagingdir, targetdir):
     cursor = db.cursor()
 
-    fileList = fastq_dump(accn, stagingdir)
+    fileList = sorted(fastq_dump(accn, stagingdir))
     print("files:", fileList)
 
     fileTypeId = insert_file_type(db, 'sequence')
