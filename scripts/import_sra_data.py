@@ -16,10 +16,10 @@ def get_runs(db):
 def fastq_dump(accn, stagingdir):
     print("Downloading", accn)
 
-    # try:
-    #     subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
-    # except subprocess.CalledProcessError as e:
-    #     raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+    try:
+        subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
     return glob.glob(stagingdir + "/" + accn + "*.fasta.gz")
 
@@ -71,6 +71,8 @@ def import_data(db, accn, stagingdir, targetdir):
         irodsPath = targetdir + "/" + os.path.basename(f)
         cursor.execute('INSERT INTO file (run_id,file_type_id,file_format_id,url) VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING',
                        [runId, fileTypeId, fileFormatId, irodsPath])
+
+        os.remove(f)
 
     db.commit()
 
