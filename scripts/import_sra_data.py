@@ -34,18 +34,14 @@ def iput(srcPath, destPath):
 
 def insert_file_type(db, name):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT DO NOTHING", [name])
-    cursor.execute('SELECT file_type_id FROM file_type WHERE name=%s', [name])
-    row = cursor.fetchone()
-    return row[0]
+    cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_type_id", [name])
+    return cursor.fetchone()[0]
 
 
 def insert_file_format(db, name):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT DO NOTHING", [name])
-    cursor.execute('SELECT file_format_id FROM file_format WHERE name=%s', [name])
-    row = cursor.fetchone()
-    return row[0]
+    cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_format_id", [name])
+    return cursor.fetchone()[0]
 
 
 def fetch_run_id(db, accn):
@@ -69,8 +65,13 @@ def import_data(db, accn, stagingdir, targetdir):
 
         runId = fetch_run_id(db, accn)
         irodsPath = targetdir + "/" + os.path.basename(f)
-        cursor.execute('INSERT INTO file (run_id,file_type_id,file_format_id,url) VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING',
-                       [runId, fileTypeId, fileFormatId, irodsPath])
+        cursor.execute('INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+                       [fileTypeId, fileFormatId, irodsPath])
+        fileId = cursor.fetchone()[0]
+        cursor.execute(
+            'INSERT INTO run_to_file (run_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
+            [runId, fileId]
+        )
 
         os.remove(f)
 

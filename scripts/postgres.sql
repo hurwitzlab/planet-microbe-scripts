@@ -87,7 +87,6 @@ CREATE TABLE sampling_event (
     locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
     start_time TIMESTAMP,
     end_time TIMESTAMP,
-    data_url TEXT NOT NULL, -- path to CSV file, e.g. datastore:/iplant/home/...
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -197,31 +196,42 @@ CREATE TABLE file_format (
 
 CREATE TABLE "file" (
     file_id SERIAL PRIMARY KEY,
-    run_id INTEGER NOT NULL REFERENCES run(run_id),
     file_type_id INTEGER NOT NULL REFERENCES file_type(file_type_id),
     file_format_id INTEGER NOT NULL REFERENCES file_format(file_format_id),
     url TEXT NOT NULL -- url or path, e.g. /iplant/home/...
 );
 
-CREATE TABLE "user" (
-    user_id SERIAL PRIMARY KEY,
-    user_name VARCHAR(50) UNIQUE NOT NULL,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    email VARCHAR(255),
-    role SMALLINT, -- normal user 0, power user 1, admin 127
-    orcid VARCHAR(30),
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE run_to_file (
+    run_to_file_id SERIAL PRIMARY KEY,
+    run_id INTEGER NOT NULL REFERENCES run(run_id),
+    file_id INTEGER NOT NULL REFERENCES "file"(file_id)
 );
 
-CREATE TABLE organization_to_user (
-    organization_to_user_id SERIAL PRIMARY KEY,
-    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
-    user_id INTEGER NOT NULL REFERENCES "user"(user_id)
+CREATE TABLE project_to_file (
+    project_to_file_id SERIAL PRIMARY KEY,
+    project_id INTEGER NOT NULL REFERENCES project(project_id),
+    file_id INTEGER NOT NULL REFERENCES "file"(file_id)
 );
 
-CREATE TABLE organization_to_project (
-    organization_to_project_id SERIAL PRIMARY KEY,
-    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
-    project_id INTEGER NOT NULL REFERENCES project(project_id)
-);
+--CREATE TABLE "user" (
+--    user_id SERIAL PRIMARY KEY,
+--    user_name VARCHAR(50) UNIQUE NOT NULL,
+--    first_name VARCHAR(50),
+--    last_name VARCHAR(50),
+--    email VARCHAR(255),
+--    role SMALLINT, -- normal user 0, power user 1, admin 127
+--    orcid VARCHAR(30),
+--    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--);
+--
+--CREATE TABLE organization_to_user (
+--    organization_to_user_id SERIAL PRIMARY KEY,
+--    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
+--    user_id INTEGER NOT NULL REFERENCES "user"(user_id)
+--);
+--
+--CREATE TABLE organization_to_project (
+--    organization_to_project_id SERIAL PRIMARY KEY,
+--    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
+--    project_id INTEGER NOT NULL REFERENCES project(project_id)
+--);

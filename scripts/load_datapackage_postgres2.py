@@ -6,7 +6,9 @@ load_datapackage_postgres2.py -d <database> -u <username> -p <password> datapack
 """
 
 import sys
+import os
 import argparse
+import subprocess
 import simplejson as json
 from datapackage import Package, Resource
 from tableschema import Table
@@ -62,6 +64,8 @@ LONGITUDE_PURLS = [
     "http://purl.obolibrary.org/obo/PMO_00000077",
     "http://purl.obolibrary.org/obo/PMO_00000078"
 ]
+
+DATASTORE_CTD_AND_NISKING_PATH = "/iplant/home/planetmicrobe/ctd_and_niskin"
 
 
 def get_resources_by_type(type, resources):
@@ -161,6 +165,7 @@ def load_sampling_events(db, package):
     print("Sampling event:", resources[0].name)
     sampling_events = load_resource(db, resources[0], SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
     db.commit()
+
     return sampling_events
 
 
@@ -413,12 +418,84 @@ def insert_project(db, package, samples):
         cursor.execute('INSERT INTO project_to_sample (project_id,sample_id) VALUES (%s,%s)', [project_id, sampleId])
 
     db.commit()
+    return project_id
+
+
+def store_niskin_and_ctd(db, projectId, packagePath, package):
+    cursor = db.cursor()
+    projectPath = DATASTORE_CTD_AND_NISKING_PATH + "/" + str(projectId)
+    imkdir(projectPath)
+
+    ctdFileTypeId = insert_file_type(db, "CTD Profile")
+    niskinFileTypeId = insert_file_type(db, "Niskin Profile")
+    tsvFileFormatId = insert_file_format(db, "TSV")
+
+    resources = get_resources_by_type("ctd", package.resources)
+    for r in resources:
+        path = r.descriptor['path']
+        iput(packagePath + "/" + path, projectPath)
+
+        cursor.execute(
+            'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+            [ctdFileTypeId, tsvFileFormatId, projectPath + "/" + path]
+        )
+        fileId = cursor.fetchone()[0]
+
+        cursor.execute(
+            'INSERT INTO project_to_file (project_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
+            [projectId, fileId]
+        )
+
+    resources = get_resources_by_type("niskin", package.resources)
+    for r in resources:
+        path = r.descriptor['path']
+        iput(packagePath + "/" + path, projectPath)
+
+        cursor.execute(
+            'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+            [niskinFileTypeId, tsvFileFormatId, projectPath + "/" + path]
+        )
+        fileId = cursor.fetchone()[0]
+
+        cursor.execute(
+            'INSERT INTO project_to_file (project_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
+            [projectId, fileId]
+        )
+
+    db.commit()
+
+
+def iput(srcPath, destPath):
+    print("Transferring to IRODS", srcPath, destPath)
+    try:
+        subprocess.run(["iput", "-Tf", srcPath, destPath])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+
+
+def imkdir(path):
+    try:
+        subprocess.run(["imkdir", "-p", path])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+
+
+def insert_file_type(db, name):
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_type_id", [name])
+    return cursor.fetchone()[0]
+
+
+def insert_file_format(db, name):
+    cursor = db.cursor()
+    cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_format_id", [name])
+    return cursor.fetchone()[0]
 
 
 def delete_all(db):
     print("Deleting all tables ...")
     cursor = db.cursor()
-    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
+    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM file_type; DELETE FROM file_format; DELETE FROM project_to_file; DELETE FROM file; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
     db.commit()
 
 
@@ -440,7 +517,8 @@ def main(args=None):
         campaigns = load_campaigns(conn, package)
         sampling_events = load_sampling_events(conn, package)
         samples = load_samples(conn, package, sampling_events)
-        insert_project(conn, package, samples)
+        projectId = insert_project(conn, package, samples)
+        store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), package)
 
 
 if __name__ == "__main__":
