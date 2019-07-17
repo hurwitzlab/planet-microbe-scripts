@@ -210,8 +210,8 @@ def insert_sampling_event(db, tableName, obj):
 
     #print('Loading', samplingEventId)
     cursor.execute(
-        'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time,data_url) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s) RETURNING sampling_event_id',
-        [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0], "FIXME"]
+        'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s) RETURNING sampling_event_id',
+        [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0]]
     )
     return cursor.fetchone()[0]
 
