@@ -482,13 +482,13 @@ def imkdir(path):
 
 def insert_file_type(db, name):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_type_id", [name])
+    cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name RETURNING file_type_id", [name])
     return cursor.fetchone()[0]
 
 
 def insert_file_format(db, name):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING file_format_id", [name])
+    cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name RETURNING file_format_id", [name])
     return cursor.fetchone()[0]
 
 
