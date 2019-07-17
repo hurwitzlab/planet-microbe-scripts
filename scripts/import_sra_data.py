@@ -51,7 +51,7 @@ def fetch_run_id(db, accn):
     return row[0]
 
 
-def import_data(db, accn, stagingdir, targetdir):
+def import_data(db, accn, stagingdir, targetdir, skipIput):
     cursor = db.cursor()
 
     fileList = sorted(fastq_dump(accn, stagingdir))
@@ -61,11 +61,12 @@ def import_data(db, accn, stagingdir, targetdir):
     fileFormatId = insert_file_format(db, 'fasta')
 
     for f in fileList:
-        iput(f, targetdir)
+        if not skipIput:
+            iput(f, targetdir)
 
         runId = fetch_run_id(db, accn)
         irodsPath = targetdir + "/" + os.path.basename(f)
-        cursor.execute('INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+        cursor.execute('INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
                        [fileTypeId, fileFormatId, irodsPath])
         fileId = cursor.fetchone()[0]
         cursor.execute(
@@ -90,7 +91,7 @@ def main(args=None):
         accnList = get_runs(conn)
         print("accn:", accnList)
         for accn in accnList:
-            import_data(conn, accn, args['stagingdir'], args['targetdir'])
+            import_data(conn, accn, args['stagingdir'], args['targetdir'], 'skipirods' in args)
 
 
 if __name__ == "__main__":
@@ -101,5 +102,6 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--stagingdir')
     parser.add_argument('-t', '--targetdir')
     parser.add_argument('-a', '--accn')
+    parser.add_argument('-x', '--skipirods', action='store_true')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
