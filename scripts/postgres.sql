@@ -213,17 +213,27 @@ CREATE TABLE project_to_file (
     file_id INTEGER NOT NULL REFERENCES "file"(file_id)
 );
 
---CREATE TABLE "user" (
---    user_id SERIAL PRIMARY KEY,
---    user_name VARCHAR(50) UNIQUE NOT NULL,
---    first_name VARCHAR(50),
---    last_name VARCHAR(50),
---    email VARCHAR(255),
---    role SMALLINT, -- normal user 0, power user 1, admin 127
---    orcid VARCHAR(30),
---    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
---);
---
+CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');
+
+CREATE TABLE app (
+  app_id SERIAL PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  is_maintenance BOOLEAN NOT NULL DEFAULT FALSE,
+  provider provider
+);
+
+CREATE TABLE "user" (
+    user_id SERIAL PRIMARY KEY,
+    user_name VARCHAR(50) UNIQUE NOT NULL,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(255),
+    role SMALLINT, -- normal user 0, power user 1, admin 127
+    orcid VARCHAR(30),
+    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 --CREATE TABLE organization_to_user (
 --    organization_to_user_id SERIAL PRIMARY KEY,
 --    organization_id INTEGER NOT NULL REFERENCES organization(organization_id),
