@@ -215,14 +215,6 @@ CREATE TABLE project_to_file (
 
 CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');
 
-CREATE TABLE app (
-  app_id SERIAL PRIMARY KEY,
-  name varchar(50) NOT NULL,
-  is_active BOOLEAN NOT NULL DEFAULT TRUE,
-  is_maintenance BOOLEAN NOT NULL DEFAULT FALSE,
-  provider provider
-);
-
 CREATE TABLE "user" (
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(50) UNIQUE NOT NULL,
@@ -232,6 +224,28 @@ CREATE TABLE "user" (
     role SMALLINT, -- normal user 0, power user 1, admin 127
     orcid VARCHAR(30),
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE login (
+  login_id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+  login_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE app (
+  app_id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  is_maintenance BOOLEAN NOT NULL DEFAULT FALSE,
+  provider provider
+);
+
+CREATE TABLE app_run (
+  app_run_id SERIAL PRIMARY KEY,
+  app_id INTEGER NOT NULL REFERENCES app(app_id),
+  user_id INTEGER NOT NULL REFERENCES "user"(user_id),
+  run_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  params TEXT
 );
 
 --CREATE TABLE organization_to_user (
