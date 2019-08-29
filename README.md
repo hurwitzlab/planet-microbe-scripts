@@ -14,6 +14,11 @@ The JSON was then hand-edited to add missing information and correct names, type
 
 For more information on FD Table Schemas see http://frictionlessdata.io/specs/table-schema/ 
 
+## Validating Data Packages
+```
+scripts/validate_datapackage.py [-r resource] <path_to_datapackage.json>
+```
+
 ## Loading Data Packages
 
 Make sure you have a database and schema:
@@ -34,9 +39,4 @@ virtualenv -p /usr/bin/python3.6 python3
 source python3/bin/activate
 pip install simplejson datapackage psycopg2 shapely pint biopython
 scripts/load_datapackage_postgres2.py -d planetmicrobe -u planetmicrobe -p <password>  ../planet-microbe-datapackages/HOT-Chisholm/datapackage.json
-```
-
-## Validating Data Packages:
-```
-scripts/validate_datapackage.py [-r resource] <path_to_datapackage.json>
 ```
