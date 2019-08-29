@@ -36,7 +36,7 @@ pip install simplejson datapackage psycopg2 shapely pint biopython
 scripts/load_datapackage_postgres2.py -d planetmicrobe -u planetmicrobe -p <password>  ../planet-microbe-datapackages/HOT-Chisholm/datapackage.json
 ```
 
-Validating Data Packages:
+## Validating Data Packages:
 ```
 scripts/validate_datapackage.py [-r resource] <path_to_datapackage.json>
 ```
