@@ -84,7 +84,7 @@ CREATE TABLE sampling_event (
     sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id and NOT NULL
     campaign_id INTEGER REFERENCES campaign(campaign_id),
     name VARCHAR(255) NOT NULL,
-    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
+    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
