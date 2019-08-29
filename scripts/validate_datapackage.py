@@ -3,23 +3,8 @@
 Validate Data Package data files against schema
 """
 
-import sys
-import simplejson as json
-import decimal
 import argparse
-from datetime import date, datetime
-from datapackage import Package, Resource
-from tableschema import Table
-
-
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
-
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    if isinstance(obj, decimal.Decimal):
-        return (str(obj) for obj in [obj])
-    raise TypeError("Type %s not serializable" % type(obj))
+from datapackage import Package
 
 
 def main(args=None):
@@ -35,7 +20,6 @@ def main(args=None):
 
         resource = package.get_resource(rname)
         #print('Validating resource', rname)
-        schema = resource.schema
 
         totalCount = 0
         try:
@@ -52,8 +36,8 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Load datapackage into database.')
-    parser.add_argument('-r', '--resource')
-    parser.add_argument('filepath', nargs=1)
+    parser = argparse.ArgumentParser(description='Validate data package and show errors')
+    parser.add_argument('-r', '--resource', help='optional resource name to restrict validation to, otherwise validate entire package')
+    parser.add_argument('filepath', nargs=1, help='path to datapackage.json file')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
