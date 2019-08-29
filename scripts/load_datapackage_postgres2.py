@@ -121,13 +121,16 @@ def load_campaigns(db, package):
     if not resources:
         print("No campaign resource found") #raise Exception("No campaign resource found")
         return
-    elif len(resources) > 1:
-        raise Exception("More than one campaign resource found")
 
-    print("Campaign resource:", resources[0].name)
-    campaigns = load_resource(db, resources[0], CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
-    db.commit()
-    return campaigns
+    allCampaigns = []
+    for i in range(len(resources)):
+        resource = resources[i]
+        print("Campaign resource:", resource.name)
+        campaigns = load_resource(db, resource, CAMPAIGN_CRUISE_DB_SCHEMA, "campaign", insert_campaign)
+        allCampaigns.append(campaigns)
+        db.commit()
+
+    return allCampaigns
 
 
 def insert_campaign(db, tableName, obj):
@@ -159,23 +162,20 @@ def load_sampling_events(db, package):
     resources = get_resources_by_type("sampling_event", package.resources)
     if not resources:
         raise Exception("No sampling_event resource found")
-    elif len(resources) > 1:
-        raise Exception("More than one sampling_event resource found")
 
-    print("Sampling event:", resources[0].name)
-    sampling_events = load_resource(db, resources[0], SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
-    db.commit()
+    allSamplingEvents = []
+    for i in range(len(resources)):
+        resource = resources[i]
+        print("Sampling event:", resource.name)
+        samplingEvents = load_resource(db, resource, SAMPLING_EVENT_DB_SCHEMA, "sampling_event", insert_sampling_event)
+        allSamplingEvents.append(samplingEvents)
+        db.commit()
 
-    return sampling_events
+    return allSamplingEvents
 
 
 def insert_sampling_event(db, tableName, obj):
     cursor = db.cursor()
-    cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', obj['campaign_id']) # FIXME campaign name may not be unique
-    if cursor.rowcount > 0:
-        campaignId = cursor.fetchone()[0]
-    else:
-        campaignId = None
 
     if obj['sampling_event_id']:
         samplingEventId = obj['sampling_event_id'][0]
@@ -186,6 +186,17 @@ def insert_sampling_event(db, tableName, obj):
         samplingEventType = obj['sampling_event_type'][0]
     else:
         samplingEventType = "Unknown"
+
+    if obj['campaign_id']:
+        campaignAccn = obj['campaign_id'][0]
+    else:
+        campaignAccn = None
+
+    campaignId = None
+    if campaignAccn:
+        cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', [campaignAccn]) # FIXME campaign name may not be unique
+        if cursor.rowcount > 0:
+            campaignId = cursor.fetchone()[0]
 
     latitudeVals = []
     longitudeVals = []
@@ -199,19 +210,23 @@ def insert_sampling_event(db, tableName, obj):
         latitudeVals.append(obj['end_latitude'][0])
         longitudeVals.append(obj['end_longitude'][0])
 
-    if len(latitudeVals) == 0 or len(longitudeVals) == 0 or len(latitudeVals) != len(longitudeVals):
+    if len(latitudeVals) != len(longitudeVals):
         raise Exception("Invalid lat/lng values for sampling event")
+
+    if obj['start_time']:
+        startTime = obj['start_time'][0]
+    else:
+        startTime = None
 
     # print("accn:", samplingEventId)
     # print("lats:", latitudeVals)
     # print("lngs:", longitudeVals)
-    # print("zip:", list(zip(longitudeVals, latitudeVals)))
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
     #print('Loading', samplingEventId)
     cursor.execute(
         'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s) RETURNING sampling_event_id',
-        [samplingEventId, samplingEventType, campaignId, locations.wkb_hex, obj['start_time'][0]]
+        [samplingEventId, samplingEventType, campaignId, locations.wkb_hex if len(locations) else None, startTime]
     )
     return cursor.fetchone()[0]
 
