@@ -219,8 +219,6 @@ def insert_sampling_event(db, tableName, obj):
         startTime = None
 
     # print("accn:", samplingEventId)
-    # print("lats:", latitudeVals)
-    # print("lngs:", longitudeVals)
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
     #print('Loading', samplingEventId)
@@ -237,55 +235,55 @@ def load_samples(db, package, sampling_events):
         raise Exception("No sample resources found")
 
     # Join schema and data for all sample resources
-    allFields = []
-    valuesBySampleId = {}
-    sampleIdToSampleEventId = {}
-    for i in range(len(resources)):
-        resource = resources[i]
-        print("Sample resource:", resource.name)
-        # for f in resource.schema.fields:
-        #     print(f)
-        #     print(f.name)
+    allFields, valuesBySampleId, sampleIdToSampleEventId = join_samples(resources)
 
-        # Determine position of Sample ID fields
-        fields = resource.schema.descriptor['fields']
-        rdfTypes = list(map(lambda f: f['rdfType'], fields))
-
-        if not SAMPLE_ID_PURL in rdfTypes:
-            raise Exception("Missing sample identifier")
-        sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
-
-        # Index sample event IDs and remove redundant fields
-        if SAMPLE_EVENT_ID_PURL in rdfTypes:
-            sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
-        else:
-            sampleEventIdPos = None
-
-        # Remove redundant Sample ID and Sample Event ID fields
-        if i > 0:
-            del fields[sampleIdPos]
-            if sampleEventIdPos != None:
-                del fields[sampleEventIdPos]
-        allFields.extend(fields)
-
-        try:
-            for row in resource.read():
-                sampleId = row[sampleIdPos]
-                if sampleEventIdPos != None:
-                    sampleEventIds = row[sampleEventIdPos].split(';')
-                    sampleIdToSampleEventId[sampleId] = sampleEventIds
-                if i > 0:
-                    del row[sampleIdPos]
-                    if sampleEventIdPos != None:
-                        del row[sampleEventIdPos]
-
-                if not sampleId in valuesBySampleId:
-                    valuesBySampleId[sampleId] = []
-                valuesBySampleId[sampleId].extend(row)
-        except Exception as e:
-            print(e)
-            if e.errors:
-                print(*e.errors, sep='\n')
+    # allFields = []
+    # valuesBySampleId = {}
+    # sampleIdToSampleEventId = {}
+    #
+    # for i in range(len(resources)):
+    #     resource = resources[i]
+    #     print("Sample resource:", resource.name)
+    #
+    #     # Determine position of Sample ID fields
+    #     fields = resource.schema.descriptor['fields']
+    #     rdfTypes = list(map(lambda f: f['rdfType'], fields))
+    #
+    #     if not SAMPLE_ID_PURL in rdfTypes:
+    #         raise Exception("Missing sample identifier")
+    #     sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
+    #
+    #     # Index sample event IDs and remove redundant fields
+    #     if SAMPLE_EVENT_ID_PURL in rdfTypes:
+    #         sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
+    #     else:
+    #         sampleEventIdPos = None
+    #
+    #     # Remove redundant Sample ID and Sample Event ID fields
+    #     if i > 0:
+    #         del fields[sampleIdPos]
+    #         if sampleEventIdPos != None:
+    #             del fields[sampleEventIdPos]
+    #     allFields.extend(fields)
+    #
+    #     try:
+    #         for row in resource.read():
+    #             sampleId = row[sampleIdPos]
+    #             if sampleEventIdPos != None:
+    #                 sampleEventIds = row[sampleEventIdPos].split(';')
+    #                 sampleIdToSampleEventId[sampleId] = sampleEventIds
+    #             if i > 0:
+    #                 del row[sampleIdPos]
+    #                 if sampleEventIdPos != None:
+    #                     del row[sampleEventIdPos]
+    #
+    #             if not sampleId in valuesBySampleId:
+    #                 valuesBySampleId[sampleId] = []
+    #             valuesBySampleId[sampleId].extend(row)
+    #     except Exception as e:
+    #         print(e)
+    #         if e.errors:
+    #             print(*e.errors, sep='\n')
 
     # Load schema
     schema_id = insert_schema(db, package.descriptor['name'], { "fields": allFields })
@@ -302,16 +300,25 @@ def load_samples(db, package, sampling_events):
         datetimeVals = []
         i = 0
         for val in valuesBySampleId[id]:
+            name = allFields[i]['name']
             type = allFields[i]['type']
             rdfType = allFields[i]['rdfType']
             unitRdfType = allFields[i]['pm:unitRdfType']
             searchable = allFields[i]['pm:searchable']
+
+            # print("\"%s\", %s, \"%s\"" % (name, type, val))
+
             if type == 'number':
                 if val == None:  # no data
                     numberVals.append(None)
                 else:
-                    val = float(val) #convert_units(unitRdfType, float(val))
+                    try:
+                        val = float(val) #convert_units(unitRdfType, float(val))
+                    except ValueError:
+                        print("Error converting to float at column %s (%s) in sample %s" % (i, name, id))
+                        raise
                     numberVals.append(val)
+
                     try:
                         if LATITUDE_PURLS.index(rdfType) >= 0 and searchable:
                             latitudeVals.append(val)
@@ -324,7 +331,7 @@ def load_samples(db, package, sampling_events):
                         pass
                 stringVals.append(None)
                 datetimeVals.append(None)
-            elif type == 'string':
+            elif type == 'string' or type == 'duration': #FIXME should convert duration into something searchable
                 stringVals.append(str(val))
                 numberVals.append(None)
                 datetimeVals.append(None)
@@ -348,14 +355,11 @@ def load_samples(db, package, sampling_events):
         #                 break
 
         # print("accn:", id)
-        # print("lats:", latitudeVals)
-        # print("lngs:", longitudeVals)
-        # print("zip:", list(zip(longitudeVals, latitudeVals)))
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
             "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
-            [schema_id, id, locations.wkb_hex, numberVals, stringVals, datetimeVals]
+            [schema_id, id, locations.wkb_hex if len(locations) else None, numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         sample_id = cursor.fetchone()[0]
@@ -363,15 +367,17 @@ def load_samples(db, package, sampling_events):
 
         if id in sampleIdToSampleEventId:
             for eventId in sampleIdToSampleEventId[id]:
-                for eventId2 in sampling_events:
-                    if sampling_events[eventId2]['sampling_event_id'][0] == eventId:
-                        #print("Linking", sample_id, eventId2)
-                        stmt = cursor.mogrify(
-                            "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
-                            [sample_id, eventId2]
-                        )
-                        cursor.execute(stmt)
-                        break
+                for events in sampling_events:
+                    for eventId2 in events:
+                        # print("foo!!!!!!!", eventId, eventId2)
+                        if events[eventId2]['sampling_event_id'][0] == eventId:
+                            print("Linking", sample_id, eventId2)
+                            stmt = cursor.mogrify(
+                                "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
+                                [sample_id, eventId2]
+                            )
+                            cursor.execute(stmt)
+                            break
 
         db.commit()
         count += 1
@@ -379,6 +385,70 @@ def load_samples(db, package, sampling_events):
     print()
 
     return samples
+
+
+def join_samples(resources):
+    allFields = []
+    valuesBySampleId = {}
+    sampleIdToSampleEventId = {}
+    fieldSeen = {}
+
+    for resource in resources:
+        print("Sample resource:", resource.name)
+
+        fields = resource.schema.descriptor['fields']
+
+        # Each resource must have a sample ID field to join on
+        rdfTypes = list(map(lambda f: f['rdfType'], fields))
+        if not SAMPLE_ID_PURL in rdfTypes:
+            raise Exception("Missing sample identifier")
+        sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
+
+        # Find optional sample event IDs
+        if SAMPLE_EVENT_ID_PURL in rdfTypes:
+            sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
+        else:
+            sampleEventIdPos = None
+
+        # Append only new fields not yet seen
+        columns = []
+        for i in range(len(fields)):
+            f = fields[i]
+            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
+            if key in fieldSeen:
+                print("Skipping redundant field", i, key)
+            else:
+                fieldSeen[key] = 1
+                allFields.append(f)
+                columns.append(i)
+
+        # Append values for new fields
+        try:
+            for row in resource.read():
+                print(len(row), row)
+
+                sampleId = row[sampleIdPos]
+
+                if sampleEventIdPos != None:
+                    sampleEventIds = row[sampleEventIdPos].split(';')
+                    sampleIdToSampleEventId[sampleId] = sampleEventIds
+
+                newRow = []
+                for j in columns:
+                    newRow.append(row[j])
+
+                if not sampleId in valuesBySampleId:
+                    valuesBySampleId[sampleId] = []
+                valuesBySampleId[sampleId].extend(newRow)
+
+        except Exception as e:
+            print(e)
+            if e.errors:
+                print(*e.errors, sep='\n')
+
+    for f in allFields:
+        print(f['name'])
+    return allFields, valuesBySampleId, sampleIdToSampleEventId
 
 
 def convert_units(unitRdfType, val):
@@ -510,7 +580,7 @@ def insert_file_format(db, name):
 def delete_all(db):
     print("Deleting all tables ...")
     cursor = db.cursor()
-    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM file_type; DELETE FROM file_format; DELETE FROM project_to_file; DELETE FROM file; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
+    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM project_to_file; DELETE FROM run_to_file; DELETE FROM file; DELETE FROM file_type; DELETE FROM file_format; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
     db.commit()
 
 
