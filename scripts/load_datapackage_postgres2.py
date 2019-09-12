@@ -218,7 +218,6 @@ def insert_sampling_event(db, tableName, obj):
     else:
         startTime = None
 
-    # print("accn:", samplingEventId)
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
     #print('Loading', samplingEventId)
@@ -236,54 +235,6 @@ def load_samples(db, package, sampling_events):
 
     # Join schema and data for all sample resources
     allFields, valuesBySampleId, sampleIdToSampleEventId = join_samples(resources)
-
-    # allFields = []
-    # valuesBySampleId = {}
-    # sampleIdToSampleEventId = {}
-    #
-    # for i in range(len(resources)):
-    #     resource = resources[i]
-    #     print("Sample resource:", resource.name)
-    #
-    #     # Determine position of Sample ID fields
-    #     fields = resource.schema.descriptor['fields']
-    #     rdfTypes = list(map(lambda f: f['rdfType'], fields))
-    #
-    #     if not SAMPLE_ID_PURL in rdfTypes:
-    #         raise Exception("Missing sample identifier")
-    #     sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
-    #
-    #     # Index sample event IDs and remove redundant fields
-    #     if SAMPLE_EVENT_ID_PURL in rdfTypes:
-    #         sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
-    #     else:
-    #         sampleEventIdPos = None
-    #
-    #     # Remove redundant Sample ID and Sample Event ID fields
-    #     if i > 0:
-    #         del fields[sampleIdPos]
-    #         if sampleEventIdPos != None:
-    #             del fields[sampleEventIdPos]
-    #     allFields.extend(fields)
-    #
-    #     try:
-    #         for row in resource.read():
-    #             sampleId = row[sampleIdPos]
-    #             if sampleEventIdPos != None:
-    #                 sampleEventIds = row[sampleEventIdPos].split(';')
-    #                 sampleIdToSampleEventId[sampleId] = sampleEventIds
-    #             if i > 0:
-    #                 del row[sampleIdPos]
-    #                 if sampleEventIdPos != None:
-    #                     del row[sampleEventIdPos]
-    #
-    #             if not sampleId in valuesBySampleId:
-    #                 valuesBySampleId[sampleId] = []
-    #             valuesBySampleId[sampleId].extend(row)
-    #     except Exception as e:
-    #         print(e)
-    #         if e.errors:
-    #             print(*e.errors, sep='\n')
 
     # Load schema
     schema_id = insert_schema(db, package.descriptor['name'], { "fields": allFields })
@@ -303,10 +254,8 @@ def load_samples(db, package, sampling_events):
             name = allFields[i]['name']
             type = allFields[i]['type']
             rdfType = allFields[i]['rdfType']
-            unitRdfType = allFields[i]['pm:unitRdfType']
+            #unitRdfType = allFields[i]['pm:unitRdfType']
             searchable = allFields[i]['pm:searchable']
-
-            # print("\"%s\", %s, \"%s\"" % (name, type, val))
 
             if type == 'number':
                 if val == None:  # no data
@@ -346,14 +295,6 @@ def load_samples(db, package, sampling_events):
                 datetimeVals.append(None)
             i += 1
 
-        # sampling_event_id = None
-        # if sampleEventIdPos != None:
-        #     for eventId in sampling_events:
-        #         for eventId2 in sampleIdToSampleEventId:
-        #             if sampling_events[eventId]['sampling_event_id'][0] == eventId2:
-        #                 sampling_event_id = eventId
-        #                 break
-
         # print("accn:", id)
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
@@ -365,11 +306,11 @@ def load_samples(db, package, sampling_events):
         sample_id = cursor.fetchone()[0]
         samples[sample_id] = valuesBySampleId[id]
 
+        # Link sample to sampling events
         if id in sampleIdToSampleEventId:
             for eventId in sampleIdToSampleEventId[id]:
                 for events in sampling_events:
                     for eventId2 in events:
-                        # print("foo!!!!!!!", eventId, eventId2)
                         if events[eventId2]['sampling_event_id'][0] == eventId:
                             print("Linking", sample_id, eventId2)
                             stmt = cursor.mogrify(
