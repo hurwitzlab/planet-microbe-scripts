@@ -98,7 +98,7 @@ CREATE TABLE sample (
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     accn VARCHAR(255),
 --    name VARCHAR(255) NOT NULL,
-    locations GEOGRAPHY(MULTIPOINT,4326) NOT NULL, -- can't use LINESTRING because they require at least two points
+    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
     number_vals REAL [],
     string_vals TEXT [],
     datetime_vals TIMESTAMP [],
@@ -247,6 +247,13 @@ CREATE TABLE app_run (
   run_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   params TEXT
 );
+
+CREATE TABLE app_result (
+  app_result_id SERIAL PRIMARY KEY,
+  app_id INTEGER NOT NULL REFERENCES app(app_id),
+  app_data_type_id int(10) unsigned NOT NULL,
+  path varchar(255) DEFAULT NULL
+)
 
 --CREATE TABLE organization_to_user (
 --    organization_to_user_id SERIAL PRIMARY KEY,
