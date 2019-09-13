@@ -65,7 +65,7 @@ LONGITUDE_PURLS = [
     "http://purl.obolibrary.org/obo/PMO_00000078"
 ]
 
-DATASTORE_CTD_AND_NISKING_PATH = "/iplant/home/planetmicrobe/ctd_and_niskin"
+DATASTORE_CTD_AND_NISKING_PATH = "/iplant/home/shared/planetmicrobe/ctd_and_niskin"
 
 
 def get_resources_by_type(type, resources):
