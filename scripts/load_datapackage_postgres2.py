@@ -151,6 +151,11 @@ def insert_campaign(db, tableName, obj):
         raise Exception("Missing campaign urls")
 
     cursor = db.cursor()
+
+    cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', obj['name'])
+    if cursor.rowcount > 0:
+        return cursor.fetchone()[0]
+
     cursor.execute(
         'INSERT INTO campaign (campaign_type,name,deployment,start_location,end_location,start_time,end_time,urls) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING campaign_id',
         ['cruise', obj['name'][0], obj['deployment'][0], obj['start_location'][0], obj['end_location'][0], obj['start_time'][0], obj['end_time'][0], obj['urls']]
@@ -177,10 +182,9 @@ def load_sampling_events(db, package):
 def insert_sampling_event(db, tableName, obj):
     cursor = db.cursor()
 
-    if obj['sampling_event_id']:
-        samplingEventId = obj['sampling_event_id'][0]
-    else:
-        samplingEventId = None
+    if not obj['sampling_event_id']:
+        raise Exception("Missing sampling event name")
+    samplingEventId = obj['sampling_event_id'][0]
 
     if obj['sampling_event_type']:
         samplingEventType = obj['sampling_event_type'][0]
@@ -194,7 +198,7 @@ def insert_sampling_event(db, tableName, obj):
 
     campaignId = None
     if campaignAccn:
-        cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', [campaignAccn]) # FIXME campaign name may not be unique
+        cursor.execute('SELECT campaign_id FROM campaign WHERE name=%s', [campaignAccn])
         if cursor.rowcount > 0:
             campaignId = cursor.fetchone()[0]
 
@@ -211,7 +215,15 @@ def insert_sampling_event(db, tableName, obj):
         longitudeVals.append(obj['end_longitude'][0])
 
     if len(latitudeVals) != len(longitudeVals):
-        raise Exception("Invalid lat/lng values for sampling event")
+        raise Exception("Mismatched lat/lng values for sampling event")
+
+    for lat in latitudeVals:
+        if not valid_latitude(lat):
+            raise Exception("Invalid latitude value:", lat, samplingEventId)
+
+    for lng in longitudeVals:
+        if not valid_longitude(lng):
+            raise Exception("Invalid longitde value:", lng, samplingEventId)
 
     if obj['start_time']:
         startTime = obj['start_time'][0]
@@ -220,7 +232,10 @@ def insert_sampling_event(db, tableName, obj):
 
     locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
-    #print('Loading', samplingEventId)
+    cursor.execute('SELECT sampling_event_id FROM sampling_event WHERE name=%s', [samplingEventId])
+    if cursor.rowcount > 0:
+        return cursor.fetchone()[0]
+
     cursor.execute(
         'INSERT INTO sampling_event (name,sampling_event_type,campaign_id,locations,start_time) VALUES (%s,%s,%s,ST_SetSRID(%s::geography, 4326),%s) RETURNING sampling_event_id',
         [samplingEventId, samplingEventType, campaignId, locations.wkb_hex if len(locations) else None, startTime]
@@ -243,19 +258,24 @@ def load_samples(db, package, sampling_events):
     cursor = db.cursor()
     samples = {}
     count = 0
-    for id in valuesBySampleId:
+    for sampleId in valuesBySampleId:
         latitudeVals = []
         longitudeVals = []
         numberVals = []
         stringVals = []
         datetimeVals = []
-        i = 0
-        for val in valuesBySampleId[id]:
-            name = allFields[i]['name']
-            type = allFields[i]['type']
-            rdfType = allFields[i]['rdfType']
-            #unitRdfType = allFields[i]['pm:unitRdfType']
-            searchable = allFields[i]['pm:searchable']
+        for f in allFields:
+            name = f['name']
+            type = f['type']
+            rdfType = f['rdfType']
+            #unitRdfType = f['pm:unitRdfType']
+            searchable = f['pm:searchable']
+
+            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
+            if key in valuesBySampleId[sampleId]:
+                val = valuesBySampleId[sampleId][key]
+            else:
+                val = None
 
             if type == 'number':
                 if val == None:  # no data
@@ -264,7 +284,7 @@ def load_samples(db, package, sampling_events):
                     try:
                         val = float(val) #convert_units(unitRdfType, float(val))
                     except ValueError:
-                        print("Error converting to float at column %s (%s) in sample %s" % (i, name, id))
+                        print("Error converting %s to float at column %s in sample %s" % (val, name, sampleId))
                         raise
                     numberVals.append(val)
 
@@ -293,26 +313,34 @@ def load_samples(db, package, sampling_events):
                 stringVals.append(None)
                 numberVals.append(None)
                 datetimeVals.append(None)
-            i += 1
 
-        # print("accn:", id)
+        if len(latitudeVals) != len(longitudeVals):
+            raise Exception("Mismatched lat/lng values for sampling event")
+
+        for lat in latitudeVals:
+            if not valid_latitude(lat):
+                raise Exception("Invalid latitude value:", lat, sampleId)
+
+        for lng in longitudeVals:
+            if not valid_longitude(lng):
+                raise Exception("Invalid longitde value:", lng, sampleId)
+
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
             "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
-            [schema_id, id, locations.wkb_hex if len(locations) else None, numberVals, stringVals, datetimeVals]
+            [schema_id, sampleId, locations.wkb_hex if len(locations) else None, numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         sample_id = cursor.fetchone()[0]
-        samples[sample_id] = valuesBySampleId[id]
+        samples[sample_id] = valuesBySampleId[sampleId]
 
         # Link sample to sampling events
-        if id in sampleIdToSampleEventId:
-            for eventId in sampleIdToSampleEventId[id]:
+        if sampleId in sampleIdToSampleEventId:
+            for eventId in sampleIdToSampleEventId[sampleId]:
                 for events in sampling_events:
                     for eventId2 in events:
                         if events[eventId2]['sampling_event_id'][0] == eventId:
-                            print("Linking", sample_id, eventId2)
                             stmt = cursor.mogrify(
                                 "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
                                 [sample_id, eventId2]
@@ -320,75 +348,75 @@ def load_samples(db, package, sampling_events):
                             cursor.execute(stmt)
                             break
 
-        db.commit()
         count += 1
         print('\rLoading samples', count, end='')
     print()
+    db.commit()
 
     return samples
 
 
 def join_samples(resources):
     allFields = []
-    valuesBySampleId = {}
     sampleIdToSampleEventId = {}
     fieldSeen = {}
+    valuesBySampleId = {}
 
     for resource in resources:
         print("Sample resource:", resource.name)
 
-        fields = resource.schema.descriptor['fields']
-
         # Each resource must have a sample ID field to join on
+        fields = resource.schema.descriptor['fields']
         rdfTypes = list(map(lambda f: f['rdfType'], fields))
         if not SAMPLE_ID_PURL in rdfTypes:
             raise Exception("Missing sample identifier")
         sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
 
-        # Find optional sample event IDs
+        # Find optional sample event ID
         if SAMPLE_EVENT_ID_PURL in rdfTypes:
             sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
         else:
             sampleEventIdPos = None
 
         # Append only new fields not yet seen
-        columns = []
         for i in range(len(fields)):
             f = fields[i]
             key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
-            if key in fieldSeen:
-                print("Skipping redundant field", i, key)
-            else:
+            if not key in fieldSeen:
                 fieldSeen[key] = 1
-                allFields.append(f)
-                columns.append(i)
+                allFields.append(f) # maintain order
 
         # Append values for new fields
         try:
             for row in resource.read():
-                print(len(row), row)
-
                 sampleId = row[sampleIdPos]
+                if not sampleId:
+                    raise Exception("Invalid sample identifier:", row[sampleIdPos])
 
                 if sampleEventIdPos != None:
-                    sampleEventIds = row[sampleEventIdPos].split(';')
+                    sampleEventIds = row[sampleEventIdPos].split(';') # sample event ID can be semi-colon delimited list
                     sampleIdToSampleEventId[sampleId] = sampleEventIds
 
-                newRow = []
-                for j in columns:
-                    newRow.append(row[j])
+                for i in range(len(fields)):
+                    f = fields[i]
+                    key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
 
-                if not sampleId in valuesBySampleId:
-                    valuesBySampleId[sampleId] = []
-                valuesBySampleId[sampleId].extend(newRow)
+                    if not sampleId in valuesBySampleId:
+                        valuesBySampleId[sampleId] = {}
+
+                    if not key in valuesBySampleId[sampleId]:
+                        valuesBySampleId[sampleId][key] = row[i]
+
+                    # elif row[i] != fieldSeen[key][sampleId]:
+                    #     print("Value mismatch!!!!", i, key, sampleId)
+
+                    #TODO detect unit mismatch
 
         except Exception as e:
             print(e)
             if e.errors:
                 print(*e.errors, sep='\n')
 
-    for f in allFields:
-        print(f['name'])
     return allFields, valuesBySampleId, sampleIdToSampleEventId
 
 
@@ -516,6 +544,14 @@ def insert_file_format(db, name):
     cursor = db.cursor()
     cursor.execute("INSERT INTO file_format (name) VALUES (%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name RETURNING file_format_id", [name])
     return cursor.fetchone()[0]
+
+
+def valid_latitude(lat):
+    return (lat >= -90 and lat <= 90)
+
+
+def valid_longitude(lng):
+    return (lng >= -180 and lng <= 180)
 
 
 def delete_all(db):
