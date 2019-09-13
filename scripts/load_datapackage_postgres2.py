@@ -487,7 +487,9 @@ def store_niskin_and_ctd(db, projectId, packagePath, package):
     resources = get_resources_by_type("ctd", package.resources)
     for r in resources:
         path = r.descriptor['path']
-        iput(packagePath + "/" + path, projectPath)
+        destPath = os.path.dirname(projectPath + "/" + path)
+        imkdir(destPath)
+        iput(packagePath + "/" + path, destPath)
 
         cursor.execute(
             'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
@@ -503,7 +505,9 @@ def store_niskin_and_ctd(db, projectId, packagePath, package):
     resources = get_resources_by_type("niskin", package.resources)
     for r in resources:
         path = r.descriptor['path']
-        iput(packagePath + "/" + path, projectPath)
+        destPath = os.path.dirname(projectPath + "/" + path)
+        imkdir(destPath)
+        iput(packagePath + "/" + path, destPath)
 
         cursor.execute(
             'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
