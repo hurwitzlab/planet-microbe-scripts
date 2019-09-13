@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 USERNAME="$1"
 DBNAME="$2"
