@@ -62,7 +62,7 @@ CREATE TABLE campaign (
     campaign_id SERIAL PRIMARY KEY,
 --    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
     campaign_type VARCHAR(255), --TODO change to campaign_type_id
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     deployment VARCHAR(255),
     start_location VARCHAR(255),
@@ -83,7 +83,7 @@ CREATE TABLE sampling_event (
 --    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
     sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id and NOT NULL
     campaign_id INTEGER REFERENCES campaign(campaign_id),
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
     start_time TIMESTAMP,
     end_time TIMESTAMP,
@@ -96,7 +96,7 @@ CREATE TABLE sampling_event (
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    accn VARCHAR(255),
+    accn VARCHAR(255) UNIQUE NOT NULL,
 --    name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
     number_vals REAL [],
@@ -123,8 +123,8 @@ CREATE TABLE project_type (
 CREATE TABLE project (
     project_id SERIAL PRIMARY KEY,
     project_type_id INTEGER NOT NULL REFERENCES project_type(project_type_id),
-    accn VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
+    accn VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     url VARCHAR(255),
     private BOOLEAN NOT NULL DEFAULT TRUE,
@@ -152,7 +152,7 @@ CREATE TABLE experiment (
     experiment_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
     name VARCHAR(255) NOT NULL,
-    accn VARCHAR(255) NOT NULL,
+    accn VARCHAR(255) UNIQUE NOT NULL,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -172,7 +172,7 @@ CREATE TABLE library (
 CREATE TABLE run (
     run_id SERIAL PRIMARY KEY,
     experiment_id INTEGER NOT NULL REFERENCES experiment(experiment_id),
-    accn VARCHAR(255) NOT NULL,
+    accn VARCHAR(255) UNIQUE NOT NULL,
     total_spots BIGINT NOT NULL,
     total_bases BIGINT NOT NULL,
     total_size BIGINT,
@@ -248,12 +248,12 @@ CREATE TABLE app_run (
   params TEXT
 );
 
-CREATE TABLE app_result (
-  app_result_id SERIAL PRIMARY KEY,
-  app_id INTEGER NOT NULL REFERENCES app(app_id),
-  app_data_type_id int(10) unsigned NOT NULL,
-  path varchar(255) DEFAULT NULL
-)
+--CREATE TABLE app_result (
+--  app_result_id SERIAL PRIMARY KEY,
+--  app_id INTEGER NOT NULL REFERENCES app(app_id),
+--  app_data_type_id INTEGER unsigned NOT NULL,
+--  path VARCHAR(255) DEFAULT NULL
+--);
 
 --CREATE TABLE organization_to_user (
 --    organization_to_user_id SERIAL PRIMARY KEY,
