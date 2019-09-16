@@ -31,7 +31,7 @@ def getExperimentsFromSRA(sampleAccn):
     result = getSummary('biosample', sampleAccn)
     docs = result['DocumentSummarySet']['DocumentSummary']
     if len(docs) > 1:
-        raise Exception("More than one BioSample result found for", accn, result['IdList'])
+        raise Exception("More than one BioSample result found for", sampleAccn, docs)
 
     for summary in docs:
         # NCBIXML raises error "AttributeError: 'StringElement' object has no attribute 'read'"
@@ -39,7 +39,7 @@ def getExperimentsFromSRA(sampleAccn):
         #     print(record)
 
         record = ET.fromstring(summary['SampleData'])
-        attr = record.find(".//Id[@db='SRA']")
+        attr = record.find(".//Attribute[@attribute_name='SRA accession']") #record.find(".//Id[@db='SRA']")
         if attr == None:
             print(summary['SampleData'])
             raise Exception("Could not parse SRA accn for BioSample:", sampleAccn)
@@ -100,7 +100,7 @@ def getExperimentsFromSRA(sampleAccn):
 
             experiments.append(experiment)
 
-    print(experiments)
+    #print(experiments)
     return experiments
 
 
@@ -113,6 +113,7 @@ def loadExperiments(db):
 
         experiments = getExperimentsFromSRA(sampleAccn)
         for exp in experiments:
+            print("Experiment accn:", exp['accn'])
             cursor.execute('INSERT INTO experiment (sample_id,name,accn) VALUES (%s,%s,%s) RETURNING experiment_id',
                            [sampleId, exp['name'], exp['accn']])
             experimentId = cursor.fetchone()[0]
@@ -122,8 +123,12 @@ def loadExperiments(db):
                            [experimentId, lib['name'], lib['strategy'], lib['source'], lib['selection'], lib['protocol'], lib['layout'], lib['length']])
 
             for run in exp['runs']:
-                cursor.execute('INSERT INTO run (experiment_id,accn,total_spots,total_bases) VALUES (%s,%s,%s,%s) RETURNING experiment_id',
-                               [experimentId, run['accn'], run['spots'], run['bases']])
+                if run['spots'] == '' or run['bases'] == '': # added for run ERR1718568 in sample SAMEA2732304 (Tara Oceans)
+                    print("Warning: skipping run with missing spots/bases, run ", run['accn'], " sample", sampleAccn, ":", run)
+                else:
+                    print("Run accn:", run['accn'])
+                    cursor.execute('INSERT INTO run (experiment_id,accn,total_spots,total_bases) VALUES (%s,%s,%s,%s) RETURNING experiment_id',
+                                   [experimentId, run['accn'], run['spots'], run['bases']])
 
             db.commit()
 
@@ -153,8 +158,8 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
-    parser.add_argument('-k', '--key')  # For NCBI Entrez calls
+    parser.add_argument('-k', '--key')   # For NCBI Entrez calls
     parser.add_argument('-e', '--email') # For NCBI Entrez calls
-    parser.add_argument('-a', '--accn')
+    parser.add_argument('-a', '--accn')  # optional single accn to load (for debugging)
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
