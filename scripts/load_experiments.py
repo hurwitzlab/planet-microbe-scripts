@@ -31,12 +31,17 @@ def getExperimentsFromSRA(sampleAccn):
     result = getSummary('biosample', sampleAccn)
     docs = result['DocumentSummarySet']['DocumentSummary']
     if len(docs) > 1:
-        raise Exception("More than one BioSample result found for", sampleAccn, docs)
+        #raise Exception("More than one BioSample result found for", sampleAccn, docs)
+        print("Warning: more than one BioSample result found for", sampleAccn)
 
     for summary in docs:
         # NCBIXML raises error "AttributeError: 'StringElement' object has no attribute 'read'"
         # for record in NCBIXML.read(summary['SampleData']):
         #     print(record)
+
+        if summary['Accession'] != sampleAccn:
+            print("Warning: skipping extra BioSample", summary['Accession'])
+            continue
 
         record = ET.fromstring(summary['SampleData'])
         attr = record.find(".//Attribute[@attribute_name='SRA accession']") #record.find(".//Id[@db='SRA']")
