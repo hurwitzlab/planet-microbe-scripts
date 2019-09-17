@@ -32,6 +32,17 @@ def iput(srcPath, destPath):
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
 
+def iexists(path, accn):
+    try:
+        output = subprocess.check_output(['ils', path])
+        str = output.decode('UTF-8')
+        if str.find(accn + '_') >= 0:
+            return True
+        return False
+    except subprocess.CalledProcessError as e:
+        return False
+
+
 def insert_file_type(db, name):
     cursor = db.cursor()
     cursor.execute("INSERT INTO file_type (name) VALUES (%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name RETURNING file_type_id", [name])
@@ -52,6 +63,10 @@ def fetch_run_id(db, accn):
 
 
 def import_data(db, accn, stagingdir, targetdir, skipIput):
+    if iexists(targetdir, accn):
+        print("Skipping already imported", accn)
+        return
+
     cursor = db.cursor()
 
     fileList = sorted(fastq_dump(accn, stagingdir))
@@ -65,6 +80,7 @@ def import_data(db, accn, stagingdir, targetdir, skipIput):
             iput(f, targetdir)
 
         runId = fetch_run_id(db, accn)
+
         irodsPath = targetdir + "/" + os.path.basename(f)
         cursor.execute('INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
                        [fileTypeId, fileFormatId, irodsPath])
@@ -86,7 +102,7 @@ def main(args=None):
         conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
 
     if 'accn' in args: # for debug
-        import_data(conn, args['accn'], args['stagingdir'], args['targetdir'])
+        import_data(conn, args['accn'], args['stagingdir'], args['targetdir'], False)
     else: # load all experiments and runs into db
         accnList = get_runs(conn)
         print("accn:", accnList)
@@ -99,9 +115,9 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
-    parser.add_argument('-s', '--stagingdir')
-    parser.add_argument('-t', '--targetdir')
-    parser.add_argument('-a', '--accn')
-    parser.add_argument('-x', '--skipirods', action='store_true')
+    parser.add_argument('-s', '--stagingdir') # temporary staging path
+    parser.add_argument('-t', '--targetdir')  # target path in Data Store
+    parser.add_argument('-a', '--accn')       # optional single accn to load (for debugging)
+    parser.add_argument('-x', '--skipirods', action='store_true') # load DB but don't copy files to Data Store
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
