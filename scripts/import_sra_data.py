@@ -32,15 +32,8 @@ def iput(srcPath, destPath):
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
 
-def iexists(path, accn):
-    try:
-        output = subprocess.check_output(['ils', path])
-        str = output.decode('UTF-8')
-        if str.find(accn + '_') >= 0:
-            return True
-        return False
-    except subprocess.CalledProcessError as e:
-        return False
+def ils(path):
+    return subprocess.check_output(['ils', path]).decode('UTF-8').split('\n')
 
 
 def insert_file_type(db, name):
@@ -62,35 +55,49 @@ def fetch_run_id(db, accn):
     return row[0]
 
 
-def import_data(db, accn, stagingdir, targetdir, skipIput):
-    if iexists(targetdir, accn):
-        print("Skipping already imported", accn)
-        return
+def import_data(db, accn, stagingdir, targetdir, skipIput, listing):
+    exists = []
+    for line in listing:
+        line = line.strip()
+        if line.find(accn + '_') >= 0:
+            exists.append(line)
 
+    if len(exists) > 0:
+        print("Found previously imported files", exists)
+        for f in exists:
+            irodsPath = targetdir + "/" + f
+            insert_file(db, accn, irodsPath)
+    else:
+        fileList = sorted(fastq_dump(accn, stagingdir))
+        print("files:", fileList)
+
+        for f in fileList:
+            if not skipIput:
+                iput(f, targetdir)
+
+            irodsPath = targetdir + "/" + os.path.basename(f)
+            insert_file(db, accn, irodsPath)
+
+            os.remove(f)
+
+
+def insert_file(db, accn, irodsPath):
     cursor = db.cursor()
-
-    fileList = sorted(fastq_dump(accn, stagingdir))
-    print("files:", fileList)
 
     fileTypeId = insert_file_type(db, 'sequence')
     fileFormatId = insert_file_format(db, 'fasta')
 
-    for f in fileList:
-        if not skipIput:
-            iput(f, targetdir)
+    runId = fetch_run_id(db, accn)
 
-        runId = fetch_run_id(db, accn)
+    cursor.execute(
+        'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+        [fileTypeId, fileFormatId, irodsPath])
+    fileId = cursor.fetchone()[0]
 
-        irodsPath = targetdir + "/" + os.path.basename(f)
-        cursor.execute('INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
-                       [fileTypeId, fileFormatId, irodsPath])
-        fileId = cursor.fetchone()[0]
-        cursor.execute(
-            'INSERT INTO run_to_file (run_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
-            [runId, fileId]
-        )
-
-        os.remove(f)
+    cursor.execute(
+        'INSERT INTO run_to_file (run_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
+        [runId, fileId]
+    )
 
     db.commit()
 
@@ -101,13 +108,15 @@ def main(args=None):
     else:
         conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
 
+    listing = ils(args['targetdir'])
+
     if 'accn' in args: # for debug
-        import_data(conn, args['accn'], args['stagingdir'], args['targetdir'], False)
+        import_data(conn, args['accn'], args['stagingdir'], args['targetdir'], False, listing)
     else: # load all experiments and runs into db
         accnList = get_runs(conn)
         print("accn:", accnList)
         for accn in accnList:
-            import_data(conn, accn, args['stagingdir'], args['targetdir'], 'skipirods' in args)
+            import_data(conn, accn, args['stagingdir'], args['targetdir'], 'skipirods' in args, listing)
 
 
 if __name__ == "__main__":
