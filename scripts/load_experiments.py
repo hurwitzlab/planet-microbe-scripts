@@ -44,7 +44,9 @@ def getExperimentsFromSRA(sampleAccn):
             continue
 
         record = ET.fromstring(summary['SampleData'])
-        attr = record.find(".//Attribute[@attribute_name='SRA accession']") #record.find(".//Id[@db='SRA']")
+        attr = record.find(".//Attribute[@attribute_name='SRA accession']")
+        if attr == None:
+            attr = record.find(".//Id[@db='SRA']")
         if attr == None:
             print(summary['SampleData'])
             raise Exception("Could not parse SRA accn for BioSample:", sampleAccn)
