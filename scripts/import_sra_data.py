@@ -5,6 +5,7 @@ import glob
 import argparse
 import subprocess
 import psycopg2
+import json
 
 
 def get_runs(db):
@@ -120,7 +121,13 @@ def main(args=None):
     if 'accn' in args: # for debug
         import_data(conn, accn, args, listing)
     else: # load all experiments and runs into db
-        accnList = get_runs(conn)
+        if 'accnfile' in args:
+            with open(args['accnfile'], 'r') as data_file:
+                json_data = data_file.read()
+            accnList = json.loads(json_data, strict=False)
+        else:
+            accnList = get_runs(conn)
+
         print("accn:", accnList)
         for accn in accnList:
             import_data(conn, accn, args, listing)
@@ -134,6 +141,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--stagingdir') # temporary staging path
     parser.add_argument('-t', '--targetdir')  # target path in Data Store
     parser.add_argument('-a', '--accn')       # optional single accn to load (for debugging)
+    parser.add_argument('-f', '--accnfile')   # optional file containing a JSON list of accn's to load (for debugging)
     parser.add_argument('-x', '--skipirods', action='store_true') # don't copy files to Data Store
     parser.add_argument('-y', '--skipdb', action='store_true')    # don't load files into DB
 
