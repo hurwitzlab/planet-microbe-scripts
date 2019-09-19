@@ -55,7 +55,12 @@ def fetch_run_id(db, accn):
     return row[0]
 
 
-def import_data(db, accn, stagingdir, targetdir, skipIput, listing):
+def import_data(db, accn, args, listing):
+    stagingdir = args['stagingdir']
+    targetdir = args['targetdir']
+    skipIput = 'skipirods' in args
+    skipDB = 'skipdb' in args
+
     exists = []
     for line in listing:
         line = line.strip()
@@ -64,9 +69,10 @@ def import_data(db, accn, stagingdir, targetdir, skipIput, listing):
 
     if len(exists) > 0:
         print("Found previously imported files", exists)
-        for f in exists:
-            irodsPath = targetdir + "/" + f
-            insert_file(db, accn, irodsPath)
+        if not skipDB:
+            for f in exists:
+                irodsPath = targetdir + "/" + f
+                insert_file(db, accn, irodsPath)
     else:
         fileList = sorted(fastq_dump(accn, stagingdir))
         print("files:", fileList)
@@ -76,7 +82,8 @@ def import_data(db, accn, stagingdir, targetdir, skipIput, listing):
                 iput(f, targetdir)
 
             irodsPath = targetdir + "/" + os.path.basename(f)
-            insert_file(db, accn, irodsPath)
+            if not skipDB:
+                insert_file(db, accn, irodsPath)
 
             os.remove(f)
 
@@ -111,12 +118,12 @@ def main(args=None):
     listing = ils(args['targetdir'])
 
     if 'accn' in args: # for debug
-        import_data(conn, args['accn'], args['stagingdir'], args['targetdir'], False, listing)
+        import_data(conn, accn, args, listing)
     else: # load all experiments and runs into db
         accnList = get_runs(conn)
         print("accn:", accnList)
         for accn in accnList:
-            import_data(conn, accn, args['stagingdir'], args['targetdir'], 'skipirods' in args, listing)
+            import_data(conn, accn, args, listing)
 
 
 if __name__ == "__main__":
@@ -127,6 +134,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--stagingdir') # temporary staging path
     parser.add_argument('-t', '--targetdir')  # target path in Data Store
     parser.add_argument('-a', '--accn')       # optional single accn to load (for debugging)
-    parser.add_argument('-x', '--skipirods', action='store_true') # load DB but don't copy files to Data Store
+    parser.add_argument('-x', '--skipirods', action='store_true') # don't copy files to Data Store
+    parser.add_argument('-y', '--skipdb', action='store_true')    # don't load files into DB
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
