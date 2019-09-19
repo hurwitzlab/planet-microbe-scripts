@@ -111,10 +111,12 @@ def insert_file(db, accn, irodsPath):
 
 
 def main(args=None):
-    if 'password' in args:
-        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
-    else:
-        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
+    conn = None
+    if not 'skipdb' in args:
+        if 'password' in args:
+            conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
+        else:
+            conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
 
     listing = ils(args['targetdir'])
 
