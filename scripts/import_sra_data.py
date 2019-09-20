@@ -18,11 +18,12 @@ def fastq_dump(accn, stagingdir):
     print("Downloading", accn)
 
     try:
-        subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
+        # subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
+        subprocess.run(["fasterq-dump", "--split-3", "--outdir", stagingdir, accn])
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
-    return glob.glob(stagingdir + "/" + accn + "*.fasta.gz")
+    return glob.glob(stagingdir + "/" + accn + "*.fastq")
 
 
 def iput(srcPath, destPath):
@@ -93,7 +94,7 @@ def insert_file(db, accn, irodsPath):
     cursor = db.cursor()
 
     fileTypeId = insert_file_type(db, 'sequence')
-    fileFormatId = insert_file_format(db, 'fasta')
+    fileFormatId = insert_file_format(db, 'fastq')
 
     runId = fetch_run_id(db, accn)
 
