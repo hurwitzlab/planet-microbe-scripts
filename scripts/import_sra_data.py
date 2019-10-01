@@ -26,6 +26,17 @@ def fastq_dump(accn, stagingdir):
     return glob.glob(stagingdir + "/" + accn + "*.fastq")
 
 
+def gzip(path):
+    print("Compressing", path)
+
+    try:
+        subprocess.run(["gzip", path])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+
+    return path + ".gz"
+
+
 def iput(srcPath, destPath):
     print("Transferring to IRODS", srcPath, destPath)
     try:
@@ -66,7 +77,7 @@ def import_data(db, accn, args, listing):
     exists = []
     for line in listing:
         line = line.strip()
-        if line.find(accn + '_') >= 0:
+        if line.find(accn + '_') >= 0 or line.find(accn + '.') >= 0:
             exists.append(line)
 
     if len(exists) > 0:
@@ -80,6 +91,8 @@ def import_data(db, accn, args, listing):
         print("files:", fileList)
 
         for f in fileList:
+            f = gzip(f)
+
             if not skipIput:
                 iput(f, targetdir)
 
