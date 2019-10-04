@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import argparse
+import time
 from Bio import Entrez
 # from Bio.Blast import NCBIXML
 import xml.etree.ElementTree as ET
@@ -106,6 +107,7 @@ def getExperimentsFromSRA(sampleAccn):
                 })
 
             experiments.append(experiment)
+            time.sleep(0.1) # added to keep from making NCBI angry
 
     #print(experiments)
     return experiments
