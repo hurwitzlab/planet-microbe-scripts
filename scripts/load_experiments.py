@@ -111,9 +111,14 @@ def getExperimentsFromSRA(sampleAccn):
     return experiments
 
 
-def loadExperiments(db):
+def loadExperiments(db, projectId):
     cursor = db.cursor()
-    cursor.execute('SELECT sample_id,accn FROM sample')
+
+    if projectId:
+        cursor.execute('SELECT s.sample_id,s.accn FROM project_to_sample pts JOIN sample s ON s.sample_id=pts.sample_id WHERE pts.project_id=%s', (projectId,))
+    else:
+        cursor.execute('SELECT sample_id,accn FROM sample')
+
     for row in cursor.fetchall():
         sampleId = row[0]
         sampleAccn = row[1]
@@ -141,20 +146,16 @@ def loadExperiments(db):
 
 
 def main(args=None):
+    if not ('key' in args) or not ('email' in args):
+        raise ("Missing required key and email args")
+    Entrez.api_key = args['key']
+    Entrez.email = args['email']
+
     if 'accn' in args: # for debug
-        if ('key' in args) and ('email' in args):
-            Entrez.api_key = args['key']
-            Entrez.email = args['email']
         getExperimentsFromSRA(args['accn'])
     else: # load all experiments and runs into db
         conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'] if 'password' in args else None)
-
-        if not ('key' in args) or not ('email' in args):
-            raise("Missing required key and email args")
-        Entrez.api_key = args['key']
-        Entrez.email = args['email']
-
-        loadExperiments(conn)
+        loadExperiments(conn, args['projectId'] if 'projectId' in args else None)
 
 
 if __name__ == "__main__":
@@ -164,6 +165,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--password')
     parser.add_argument('-k', '--key')   # For NCBI Entrez calls
     parser.add_argument('-e', '--email') # For NCBI Entrez calls
+    parser.add_argument('-pid', '--projectId')  # optional project ID
     parser.add_argument('-a', '--accn')  # optional single accn to load (for debugging)
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
