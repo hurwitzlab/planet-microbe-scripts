@@ -147,10 +147,7 @@ def main(args=None):
             Entrez.email = args['email']
         getExperimentsFromSRA(args['accn'])
     else: # load all experiments and runs into db
-        if 'password' in args:
-            conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
-        else:
-            conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
+        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'] if 'password' in args else None)
 
         if not ('key' in args) or not ('email' in args):
             raise("Missing required key and email args")
