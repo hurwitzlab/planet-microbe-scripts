@@ -43,6 +43,11 @@ def delete_project(db, projectId, irodsPath):
         cursor.execute("DELETE FROM sample_to_sampling_event WHERE sample_id=%s", (sampleId,))
         cursor.execute("DELETE FROM sample WHERE sample_id=%s", (sampleId,))
 
+    cursor.execute("SELECT file_id FROM project_to_file WHERE project_id=%s", (projectId,))
+    for row in cursor.fetchall():
+        fileId = row[0]
+        cursor.execute("DELETE FROM project_to_file WHERE project_id=%s AND file_id=%s", (projectId,fileId))
+        cursor.execute("DELETE FROM file WHERE file_id=%s", (fileId,))
     cursor.execute("DELETE FROM project WHERE project_id=%s", (projectId,))
 
     cursor.execute("""
