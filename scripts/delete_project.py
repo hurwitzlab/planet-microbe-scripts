@@ -7,6 +7,7 @@ delete_project.py -d <database> -u <username> -p <password> <project_id>
 
 import sys
 import argparse
+import subprocess
 import psycopg2
 
 
@@ -17,7 +18,7 @@ def delete_all(db):
     db.commit()
 
 
-def delete_project(db, projectId):
+def delete_project(db, projectId, irodsPath):
     print("Deleting project", projectId)
     cursor = db.cursor()
 
@@ -50,6 +51,17 @@ def delete_project(db, projectId):
 
     db.commit()
 
+    if irodsPath:
+        irmdir(irodsPath + '/' + projectId)
+
+
+def irmdir(path):
+    print("Removing from IRODS", path)
+    try:
+        subprocess.run(["irm", "-r", path])
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+
 
 def get_project_by_accn(db, accn):
     cursor = db.cursor()
@@ -64,13 +76,15 @@ def main(args=None):
     else:
         conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
 
+    irodsPath = args['irodspath'] if 'irodspath' in args else None
+
     if 'deleteall' in args:
         delete_all(conn)
-    elif 'id' in args:
-        delete_project(conn, args['id'])
+    elif 'projectId' in args:
+        delete_project(conn, args['projectId'], irodsPath)
     elif 'accn' in args:
         id = get_project_by_accn(conn, args['accn'])
-        delete_project(conn, id)
+        delete_project(conn, id, irodsPath)
     else:
         print("Specify -x, -i, or -n")
 
@@ -81,7 +95,8 @@ if __name__ == "__main__":
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
     parser.add_argument('-x', '--deleteall', action='store_true')
-    parser.add_argument('-i', '--id')
+    parser.add_argument('-pid', '--projectId')
+    parser.add_argument('-i', '--irodspath')  # optional IRODS path to store CTD and Niskin files
     parser.add_argument('-n', '--accn')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
