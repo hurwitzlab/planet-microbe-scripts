@@ -10,7 +10,7 @@ for path in `ls -d ../../planet-microbe-datapackages/*`
 do
     file=$path/datapackage.json
     if test -f $file; then
-        ./load_datapackage_postgres2.py $DELETEALL -u $USERNAME -d $DBNAME -p $PASSWORD $file
+        ./load_datapackage_postgres2.py $DELETEALL -u $USERNAME -d $DBNAME -p $PASSWORD -i /iplant/home/shared/planetmicrobe/ctd_and_niskin $file
     fi
     DELETEALL=""
 done

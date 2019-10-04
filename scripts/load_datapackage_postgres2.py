@@ -15,11 +15,12 @@ from tableschema import Table
 import psycopg2
 from shapely.geometry import MultiPoint
 from shapely import wkb
-from pint import UnitRegistry
+# from pint import UnitRegistry
 
 
-ureg = UnitRegistry()
-Q_ = ureg.Quantity
+# ureg = UnitRegistry()
+# Q_ = ureg.Quantity
+
 
 CAMPAIGN_CRUISE_DB_SCHEMA = {
     "name": "http://purl.obolibrary.org/obo/PMO_00000060",
@@ -64,8 +65,6 @@ LONGITUDE_PURLS = [
     "http://purl.obolibrary.org/obo/PMO_00000077",
     "http://purl.obolibrary.org/obo/PMO_00000078"
 ]
-
-DATASTORE_CTD_AND_NISKING_PATH = "/iplant/home/shared/planetmicrobe/ctd_and_niskin"
 
 
 def get_resources_by_type(type, resources):
@@ -420,13 +419,13 @@ def join_samples(resources):
     return allFields, valuesBySampleId, sampleIdToSampleEventId
 
 
-def convert_units(unitRdfType, val):
-    if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
-        home = Q_(val, ureg.kelvin)
-        print("convert: ", val, home.to('degC').magnitude)
-        return home.to('degC').magnitude
-
-    return val
+# def convert_units(unitRdfType, val):
+#     if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
+#         home = Q_(val, ureg.kelvin)
+#         print("convert: ", val, home.to('degC').magnitude)
+#         return home.to('degC').magnitude
+#
+#     return val
 
 
 def insert_schema(db, name, schema):
@@ -475,9 +474,9 @@ def insert_project(db, package, samples):
     return project_id
 
 
-def store_niskin_and_ctd(db, projectId, packagePath, package):
+def store_niskin_and_ctd(db, projectId, packagePath, irodsPath, package):
     cursor = db.cursor()
-    projectPath = DATASTORE_CTD_AND_NISKING_PATH + "/" + str(projectId)
+    projectPath = irodsPath + "/" + str(projectId)
     imkdir(projectPath)
 
     ctdFileTypeId = insert_file_type(db, "CTD Profile")
@@ -566,10 +565,7 @@ def delete_all(db):
 
 
 def main(args=None):
-    if 'password' in args:
-        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'])
-    else:
-        conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'])
+    conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'] if 'password' in args else None)
 
     if 'deleteall' in args:
         delete_all(conn)
@@ -584,8 +580,10 @@ def main(args=None):
         sampling_events = load_sampling_events(conn, package)
         samples = load_samples(conn, package, sampling_events)
         projectId = insert_project(conn, package, samples)
-        store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), package)
-
+        if 'irodspath' in args:
+            store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), args['irodspath'], package)
+        else:
+            print("Skipping store of CTD and Niskin files (see --irodspath option)")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load datapackage into database.')
@@ -594,6 +592,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--password')
     parser.add_argument('-r', '--resource')
     parser.add_argument('-x', '--deleteall', action='store_true')
+    parser.add_argument('-i', '--irodspath') # optional IRODS path to store CTD and Niskin files
     parser.add_argument('filepath', nargs='+')
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
