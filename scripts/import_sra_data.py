@@ -13,7 +13,7 @@ def fastq_dump(accn, stagingdir):
 
     try:
         # subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
-        subprocess.run(["fasterq-dump", "--split-3", "--outdir", stagingdir, accn])
+        subprocess.run(["fasterq-dump", "--split-3", "--progress", "--temp", stagingdir, "--outdir", stagingdir, accn])
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
