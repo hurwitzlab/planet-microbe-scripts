@@ -380,10 +380,12 @@ def join_samples(resources):
         # Append only new fields not yet seen
         for i in range(len(fields)):
             f = fields[i]
-            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
+            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType'] #TODO add unit and source purls
             if not key in fieldSeen:
                 fieldSeen[key] = 1
                 allFields.append(f) # maintain order
+            else:
+                print('Warning: removing redundant field (' + key + ') in resource ' + resource.name)
 
         # Append values for new fields
         try:
@@ -398,18 +400,19 @@ def join_samples(resources):
 
                 for i in range(len(fields)):
                     f = fields[i]
-                    key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
+                    key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType'] #TODO add unit and source purls
 
                     if not sampleId in valuesBySampleId:
                         valuesBySampleId[sampleId] = {}
 
                     if not key in valuesBySampleId[sampleId]:
                         valuesBySampleId[sampleId][key] = row[i]
-
-                    # elif row[i] != fieldSeen[key][sampleId]:
-                    #     print("Value mismatch!!!!", i, key, sampleId)
-
-                    #TODO detect unit mismatch
+                    elif row[i] != valuesBySampleId[sampleId][key]:
+                        if row[i] != None:
+                            if valuesBySampleId[sampleId][key] == None:
+                                valuesBySampleId[sampleId][key] = row[i]
+                            else:
+                                print("Warning: value mismatch!!!!", i, key, sampleId, row[i], valuesBySampleId[sampleId][key])
 
         except Exception as e:
             print(e)
