@@ -111,7 +111,8 @@ CREATE TABLE sample (
 CREATE TABLE sample_to_sampling_event (
     sample_to_sampling_event_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
-    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id)
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    UNIQUE(sample_id, sampling_event_id)
 );
 
 CREATE TABLE project_type (
@@ -135,18 +136,19 @@ CREATE TABLE project (
 CREATE TABLE project_to_sample (
     project_to_sample_id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES project(project_id),
-    sample_id INTEGER NOT NULL REFERENCES sample(sample_id)
+    sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
+    UNIQUE(project_id, sample_id)
 );
 
 -- replaces project_group in iMicrobe
-CREATE TABLE organization (
-    organization_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    description TEXT,
-    url VARCHAR(255),
-    private BOOLEAN NOT NULL DEFAULT TRUE,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+--CREATE TABLE organization (
+--    organization_id SERIAL PRIMARY KEY,
+--    name VARCHAR(255) UNIQUE NOT NULL,
+--    description TEXT,
+--    url VARCHAR(255),
+--    private BOOLEAN NOT NULL DEFAULT TRUE,
+--    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--);
 
 CREATE TABLE experiment (
     experiment_id SERIAL PRIMARY KEY,
@@ -204,13 +206,15 @@ CREATE TABLE "file" (
 CREATE TABLE run_to_file (
     run_to_file_id SERIAL PRIMARY KEY,
     run_id INTEGER NOT NULL REFERENCES run(run_id),
-    file_id INTEGER NOT NULL REFERENCES "file"(file_id)
+    file_id INTEGER NOT NULL REFERENCES "file"(file_id),
+    UNIQUE(run_id, file_id)
 );
 
 CREATE TABLE project_to_file (
     project_to_file_id SERIAL PRIMARY KEY,
     project_id INTEGER NOT NULL REFERENCES project(project_id),
-    file_id INTEGER NOT NULL REFERENCES "file"(file_id)
+    file_id INTEGER NOT NULL REFERENCES "file"(file_id),
+    UNIQUE(project_id, file_id)
 );
 
 CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');
