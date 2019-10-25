@@ -270,7 +270,7 @@ def load_samples(db, package, sampling_events):
             #unitRdfType = f['pm:unitRdfType']
             searchable = f['pm:searchable']
 
-            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType']
+            key = fieldUniqueKey(f)
             if key in valuesBySampleId[sampleId]:
                 val = valuesBySampleId[sampleId][key]
             else:
@@ -341,7 +341,7 @@ def load_samples(db, package, sampling_events):
                     for eventId2 in events:
                         if events[eventId2]['sampling_event_id'][0] == eventId:
                             stmt = cursor.mogrify(
-                                "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s)",
+                                "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s) ON CONFLICT(sample_id,sampling_event_id) DO NOTHING",
                                 [sample_id, eventId2]
                             )
                             cursor.execute(stmt)
@@ -380,12 +380,12 @@ def join_samples(resources):
         # Append only new fields not yet seen
         for i in range(len(fields)):
             f = fields[i]
-            key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType'] #TODO add unit and source purls
+            key = fieldUniqueKey(f)
             if not key in fieldSeen:
                 fieldSeen[key] = 1
                 allFields.append(f) # maintain order
             else:
-                print('Warning: removing redundant field (' + key + ') in resource ' + resource.name)
+                print('Warning: removing redundant field ("' + f['name'] + '" ' + key + ')', 'in resource', resource.name)
 
         # Append values for new fields
         try:
@@ -400,7 +400,7 @@ def join_samples(resources):
 
                 for i in range(len(fields)):
                     f = fields[i]
-                    key = f['name'] + ' ' + f['type'] + ' ' + f['rdfType'] #TODO add unit and source purls
+                    key = fieldUniqueKey(f)
 
                     if not sampleId in valuesBySampleId:
                         valuesBySampleId[sampleId] = {}
@@ -411,8 +411,8 @@ def join_samples(resources):
                         if row[i] != None:
                             if valuesBySampleId[sampleId][key] == None:
                                 valuesBySampleId[sampleId][key] = row[i]
-                            else:
-                                print("Warning: value mismatch!!!!", i, key, sampleId, row[i], valuesBySampleId[sampleId][key])
+                            elif f['pm:searchable']:
+                                print("Warning: value mismatch!!!!", f['name'], key, sampleId, row[i], "!=", valuesBySampleId[sampleId][key], 'in resource', resource.name)
 
         except Exception as e:
             print(e)
@@ -420,6 +420,22 @@ def join_samples(resources):
                 print(*e.errors, sep='\n')
 
     return allFields, valuesBySampleId, sampleIdToSampleEventId
+
+
+def fieldUniqueKey(field):
+    rdfType = field['name']
+    if 'rdfType' in field and field['rdfType']:
+        rdfType = field['rdfType']
+
+    sourceUrl = 'unknown'
+    if 'pm:sourceUrl' in field and field['pm:sourceUrl']:
+        sourceUrl = field['pm:sourceUrl']
+
+    measurementSourceRdfType = 'unknown'
+    if 'pm:measurementSourceRdfType' in field and field['pm:measurementSourceRdfType']:
+        measurementSourceRdfType = field['pm:measurementSourceRdfType']
+
+    return field['type'] + ' ' + str(field['pm:searchable']) + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
 
 
 # def convert_units(unitRdfType, val):
