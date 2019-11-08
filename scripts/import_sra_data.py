@@ -118,7 +118,7 @@ def insert_file(db, accn, irodsPath):
     runId = fetch_run_id(db, accn)
 
     cursor.execute(
-        'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT(url) DO NOTHING RETURNING file_id',
+        'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT(url) DO UPDATE SET file_type_id=EXCLUDED.file_type_id,file_format_id=EXCLUDED.file_format_id  RETURNING file_id',
         [fileTypeId, fileFormatId, irodsPath])
     fileId = cursor.fetchone()[0]
 
