@@ -78,6 +78,7 @@ def import_data(db, accn, args, listing):
     targetdir = args['targetdir']
     skipIput = 'skipirods' in args
     skipDB = 'skipdb' in args
+    skipMissing = 'skipmissing' in args
 
     exists = []
     for line in listing:
@@ -91,7 +92,7 @@ def import_data(db, accn, args, listing):
             for f in exists:
                 irodsPath = targetdir + "/" + f
                 insert_file(db, accn, irodsPath)
-    else:
+    elif not skipMissing:
         fileList = sorted(fastq_dump(accn, stagingdir))
         print("files:", fileList)
 
@@ -162,7 +163,8 @@ if __name__ == "__main__":
     parser.add_argument('-pid', '--projectId') # optional project ID
     parser.add_argument('-a', '--accn')        # optional single accn to load (for debugging)
     parser.add_argument('-f', '--accnfile')    # optional file containing a JSON list of accn's to load (for debugging)
-    parser.add_argument('-x', '--skipirods', action='store_true') # don't copy files to Data Store
-    parser.add_argument('-y', '--skipdb', action='store_true')    # don't load files into DB
+    parser.add_argument('-x', '--skipirods', action='store_true')   # don't copy files to Data Store
+    parser.add_argument('-y', '--skipdb', action='store_true')      # don't load files into DB
+    parser.add_argument('-m', '--skipmissing', action='store_true') # don't download missing files from SRA
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
