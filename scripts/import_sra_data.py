@@ -117,12 +117,12 @@ def insert_file(db, accn, irodsPath):
     runId = fetch_run_id(db, accn)
 
     cursor.execute(
-        'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
+        'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT(url) DO NOTHING RETURNING file_id',
         [fileTypeId, fileFormatId, irodsPath])
     fileId = cursor.fetchone()[0]
 
     cursor.execute(
-        'INSERT INTO run_to_file (run_id,file_id) VALUES (%s,%s) ON CONFLICT DO NOTHING',
+        'INSERT INTO run_to_file (run_id,file_id) VALUES (%s,%s) ON CONFLICT(run_id,file_id) DO NOTHING',
         [runId, fileId]
     )
 
