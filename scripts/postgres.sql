@@ -127,6 +127,7 @@ CREATE TABLE project (
     accn VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
+    datapackage_url VARCHAR(255),
     url VARCHAR(255),
     private BOOLEAN NOT NULL DEFAULT TRUE,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
