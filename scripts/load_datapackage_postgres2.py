@@ -99,7 +99,7 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
 
     results = {}
     try:
-        for row in resource.read(keyed=True):
+        for row in resource.iter(keyed=True):
             #print(row)
             obj = {}
             for k,fields in fieldMap.items():
@@ -283,7 +283,7 @@ def load_samples(db, package, sampling_events):
                     try:
                         val = float(val) #convert_units(unitRdfType, float(val))
                     except ValueError:
-                        print("Error converting %s to float at column %s in sample %s" % (val, name, sampleId))
+                        print("Error converting '%s' to float at column %s in sample %s" % (val, name, sampleId))
                         raise
                     numberVals.append(val)
 
@@ -377,6 +377,11 @@ def join_samples(resources):
         else:
             sampleEventIdPos = None
 
+        # Alias below detection limit values
+        bdlValues = []
+        if 'belowDetectionLimitValues' in resource.schema.descriptor:
+            bdlValues = resource.schema.descriptor['belowDetectionLimitValues']
+
         # Append only new fields not yet seen
         for i in range(len(fields)):
             f = fields[i]
@@ -389,31 +394,41 @@ def join_samples(resources):
 
         # Append values for new fields
         try:
-            for row in resource.read():
+            for row in resource.iter(cast=False):
+                # Handle "Below Detection Limit" values -- this is why casting is disabled in line above
+                for i in range(len(row)):
+                    if row[i] in bdlValues:
+                        row[i] = float('nan')
+                row = resource.schema.cast_row(row)
+                #print(row)
+
+                # Verify Sample ID
                 sampleId = row[sampleIdPos]
                 if not sampleId:
                     raise Exception("Invalid sample identifier:", row[sampleIdPos])
 
+                # Get Sample Event ID(s)
                 if sampleEventIdPos != None:
                     sampleEventIds = row[sampleEventIdPos].split(';') # sample event ID can be semi-colon delimited list
                     sampleIdToSampleEventId[sampleId] = sampleEventIds
 
+                # Index values by unique signature to remove duplicate fields
                 for i in range(len(fields)):
                     f = fields[i]
                     key = fieldUniqueKey(f)
+                    val = row[i]
 
                     if not sampleId in valuesBySampleId:
                         valuesBySampleId[sampleId] = {}
 
                     if not key in valuesBySampleId[sampleId]:
-                        valuesBySampleId[sampleId][key] = row[i]
-                    elif row[i] != valuesBySampleId[sampleId][key]:
-                        if row[i] != None:
+                        valuesBySampleId[sampleId][key] = val
+                    elif val != valuesBySampleId[sampleId][key]:
+                        if val != None:
                             if valuesBySampleId[sampleId][key] == None:
-                                valuesBySampleId[sampleId][key] = row[i]
+                                valuesBySampleId[sampleId][key] = val
                             elif f['pm:searchable']:
-                                print("Warning: value mismatch!!!!", f['name'], key, sampleId, row[i], "!=", valuesBySampleId[sampleId][key], 'in resource', resource.name)
-
+                                print("Warning: value mismatch!!!!", f['name'], key, sampleId, val, "!=", valuesBySampleId[sampleId][key], 'in resource', resource.name)
         except Exception as e:
             print(e)
             if e.errors:
