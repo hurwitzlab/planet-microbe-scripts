@@ -614,10 +614,11 @@ def main(args=None):
         sampling_events = load_sampling_events(conn, package)
         samples = load_samples(conn, package, sampling_events)
         projectId = insert_project(conn, package, samples)
-        if 'irodspath' in args:
+        if 'irodspath' in args and args['irodspath']:
             store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), args['irodspath'], package)
         else:
             print("Skipping store of CTD and Niskin files (see --irodspath option)")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load datapackage into database.')
