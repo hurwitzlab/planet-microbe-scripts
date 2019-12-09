@@ -268,7 +268,7 @@ def load_samples(db, package, sampling_events):
             type = f['type']
             rdfType = f['rdfType']
             #unitRdfType = f['pm:unitRdfType']
-            searchable = f['pm:searchable']
+            #searchable = f['pm:searchable']
 
             key = fieldUniqueKey(f)
             if key in valuesBySampleId[sampleId]:
@@ -288,12 +288,12 @@ def load_samples(db, package, sampling_events):
                     numberVals.append(val)
 
                     try:
-                        if LATITUDE_PURLS.index(rdfType) >= 0 and searchable:
+                        if LATITUDE_PURLS.index(rdfType) >= 0: # and searchable:
                             latitudeVals.append(val)
                     except ValueError:
                         pass
                     try:
-                        if LONGITUDE_PURLS.index(rdfType) >= 0 and searchable:
+                        if LONGITUDE_PURLS.index(rdfType) >= 0: # and searchable:
                             longitudeVals.append(val)
                     except ValueError:
                         pass
@@ -427,7 +427,7 @@ def join_samples(resources):
                         if val != None:
                             if valuesBySampleId[sampleId][key] == None:
                                 valuesBySampleId[sampleId][key] = val
-                            elif f['pm:searchable']:
+                            else: #elif f['pm:searchable']:
                                 print("Warning: value mismatch!!!!", f['name'], key, sampleId, val, "!=", valuesBySampleId[sampleId][key], 'in resource', resource.name)
         except Exception as e:
             print(e)
@@ -450,7 +450,8 @@ def fieldUniqueKey(field):
     if 'pm:measurementSourceRdfType' in field and field['pm:measurementSourceRdfType']:
         measurementSourceRdfType = field['pm:measurementSourceRdfType']
 
-    return field['type'] + ' ' + str(field['pm:searchable']) + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
+    #return field['type'] + ' ' + str(field['pm:searchable']) + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
+    return field['type'] + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
 
 
 # def convert_units(unitRdfType, val):
