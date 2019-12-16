@@ -149,8 +149,12 @@ def main(args=None):
 
         print("accn:", accnList)
         print(len(accnList), "runs")
+
+        count = 0
         for accn in accnList:
             import_data(conn, accn, args, listing)
+            count += 1
+            print('Imported', count, 'of', len(accnList))
 
 
 if __name__ == "__main__":
