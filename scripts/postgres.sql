@@ -102,17 +102,43 @@ CREATE TABLE sample (
     number_vals REAL [],
     string_vals TEXT [],
     datetime_vals TIMESTAMP [],
+--    purl_index JSON,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 
 --CREATE INDEX sample_locations_gix ON sample USING GIST (locations);
 
+--CREATE TABLE sample_data (
+--    sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
+--    purl VARCHAR(255) NOT NULL,
+--    type VARCHAR(255) NOT NULL,
+--    number_vals REAL [],
+--    string_vals TEXT [],
+--    datetime_vals TIMESTAMP [],
+--    UNIQUE(sample_id, purl, type)
+--);
+
 CREATE TABLE sample_to_sampling_event (
     sample_to_sampling_event_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
     sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
     UNIQUE(sample_id, sampling_event_id)
+);
+
+CREATE TABLE taxonomy (
+  tax_id INTEGER UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL DEFAULT ''
+);
+
+CREATE TABLE centrifuge (
+  centrifuge_id SERIAL PRIMARY KEY,
+  run_id INTEGER NOT NULL REFERENCES run(run_id),
+  tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
+  num_reads INTEGER NOT NULL,
+  num_unique_reads INTEGER NOT NULL,
+  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
+  UNIQUE(run_id, tax_id)
 );
 
 CREATE TABLE project_type (
