@@ -158,7 +158,7 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Load datapackage into database.')
+    parser = argparse.ArgumentParser(description='Import SRA files into Data Store and database.')
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
