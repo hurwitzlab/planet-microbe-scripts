@@ -270,7 +270,7 @@ def load_samples(db, package, sampling_events):
             #unitRdfType = f['pm:unitRdfType']
             #searchable = f['pm:searchable']
 
-            key = fieldUniqueKey(f)
+            key = field_unique_key(f)
             if key in valuesBySampleId[sampleId]:
                 val = valuesBySampleId[sampleId][key]
             else:
@@ -373,7 +373,7 @@ def join_samples(resources):
         fields = resource.schema.descriptor['fields']
         rdfTypes = list(map(lambda f: f['rdfType'], fields))
         if not SAMPLE_ID_PURL in rdfTypes:
-            raise Exception("Missing sample identifier")
+            raise Exception("Missing sample identifier (" + SAMPLE_ID_PURL + ") for resource " + resource.name)
         sampleIdPos = rdfTypes.index(SAMPLE_ID_PURL)
 
         # Find optional sample event ID
@@ -382,35 +382,39 @@ def join_samples(resources):
         else:
             sampleEventIdPos = None
 
-        # Alias below detection limit values
+        # Alias "below detection limit" values
         bdlValues = []
         if 'belowDetectionLimitValues' in resource.schema.descriptor:
             bdlValues = resource.schema.descriptor['belowDetectionLimitValues']
 
-        # Append only new fields not yet seen
+        # Append fields
         for i in range(len(fields)):
             f = fields[i]
-            key = fieldUniqueKey(f)
-            if not key in fieldSeen:
-                fieldSeen[key] = 1
-                allFields.append(f) # maintain order
-            else:
-                print('Warning: removing redundant field ("' + f['name'] + '" ' + key + ')', 'in resource', resource.name)
 
-        # Append values for new fields
+            # Prevent redundant fields
+            key = field_unique_key(f)
+            if key in fieldSeen:
+                print('Warning: removing redundant field ("' + f['name'] + '" ' + key + ')', 'in resource', resource.name)
+                continue
+
+            # Append new field, maintaining the order
+            fieldSeen[key] = 1
+            allFields.append(f)
+
+        # Append values for fields
         try:
             for row in resource.iter(cast=False):
-                # Handle "Below Detection Limit" values -- this is why casting is disabled in line above
+                # Handle "Below Detection Limit" values
+                # This is why casting is disabled in line above.  Have to manually cast here.
                 for i in range(len(row)):
                     if row[i] in bdlValues:
                         row[i] = float('nan')
                 row = resource.schema.cast_row(row)
-                #print(row)
 
-                # Verify Sample ID
+                # Verify Sample ID value
                 sampleId = row[sampleIdPos]
-                if not sampleId:
-                    raise Exception("Invalid sample identifier:", row[sampleIdPos])
+                if not sampleId or sampleId.lower() == "none":
+                    raise Exception("Invalid sample ID value '" + row[sampleIdPos] + "' in resource " + resource.name)
 
                 # Get Sample Event ID(s)
                 if sampleEventIdPos != None:
@@ -420,7 +424,7 @@ def join_samples(resources):
                 # Index values by unique signature to remove duplicate fields
                 for i in range(len(fields)):
                     f = fields[i]
-                    key = fieldUniqueKey(f)
+                    key = field_unique_key(f)
                     val = row[i]
 
                     if not sampleId in valuesBySampleId:
@@ -442,10 +446,14 @@ def join_samples(resources):
     return allFields, valuesBySampleId, sampleIdToSampleEventId
 
 
-def fieldUniqueKey(field):
+def field_unique_key(field):
     rdfType = field['name']
     if 'rdfType' in field and field['rdfType']:
         rdfType = field['rdfType']
+
+    # Prevent multiple Sample ID fields regardless of source
+    if rdfType == SAMPLE_ID_PURL:
+        return field['type'] + ' ' + rdfType
 
     sourceUrl = 'unknown'
     if 'pm:sourceUrl' in field and field['pm:sourceUrl']:
@@ -455,7 +463,6 @@ def fieldUniqueKey(field):
     if 'pm:measurementSourceRdfType' in field and field['pm:measurementSourceRdfType']:
         measurementSourceRdfType = field['pm:measurementSourceRdfType']
 
-    #return field['type'] + ' ' + str(field['pm:searchable']) + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
     return field['type'] + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
 
 
