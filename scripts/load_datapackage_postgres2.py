@@ -327,8 +327,12 @@ def load_samples(db, package, sampling_events):
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
-            "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) RETURNING sample_id",
-            [schema_id, sampleId, locations.wkb_hex if len(locations) else None, numberVals, stringVals, datetimeVals]
+            "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) "
+            "VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) "
+            "RETURNING sample_id",
+            [schema_id, sampleId,
+             locations.wkb_hex if len(locations) else None,
+             numberVals, stringVals, datetimeVals]
         )
         cursor.execute(stmt)
         sample_id = cursor.fetchone()[0]
@@ -341,7 +345,8 @@ def load_samples(db, package, sampling_events):
                     for eventId2 in events:
                         if events[eventId2]['sampling_event_id'][0] == eventId:
                             stmt = cursor.mogrify(
-                                "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) VALUES(%s,%s) ON CONFLICT(sample_id,sampling_event_id) DO NOTHING",
+                                "INSERT INTO sample_to_sampling_event (sample_id,sampling_event_id) "
+                                "VALUES(%s,%s) ON CONFLICT(sample_id,sampling_event_id) DO NOTHING",
                                 [sample_id, eventId2]
                             )
                             cursor.execute(stmt)
@@ -595,7 +600,25 @@ def valid_longitude(lng):
 def delete_all(db):
     print("Deleting all tables ...")
     cursor = db.cursor()
-    cursor.execute("DELETE FROM project_to_sample; DELETE FROM sample_to_sampling_event; DELETE FROM project_to_file; DELETE FROM run_to_file; DELETE FROM file; DELETE FROM file_type; DELETE FROM file_format; DELETE FROM run; DELETE FROM library; DELETE FROM experiment; DELETE FROM sample; DELETE FROM project; DELETE FROM schema; DELETE FROM sampling_event; DELETE FROM campaign;")
+    cursor.execute(
+        "DELETE FROM project_to_sample;"
+        "DELETE FROM sample_to_sampling_event;"
+        "DELETE FROM project_to_file;"
+        "DELETE FROM run_to_file;"
+        "DELETE FROM file;"
+        "DELETE FROM file_type;"
+        "DELETE FROM file_format;"
+        "DELETE FROM centrifuge;" 
+        "DELETE FROM taxonomy;"
+        "DELETE FROM run;"
+        "DELETE FROM library;"
+        "DELETE FROM experiment;"
+        "DELETE FROM sample;"
+        "DELETE FROM project;"
+        "DELETE FROM schema;"
+        "DELETE FROM sampling_event;"
+        "DELETE FROM campaign;"
+    )
     db.commit()
 
 
