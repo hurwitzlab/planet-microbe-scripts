@@ -14,8 +14,8 @@ DATAPACKAGES="\
 ../../planet-microbe-datapackages/HOT-DeLong \
 ../../planet-microbe-datapackages/HOT_Delong_metatranscriptomes \
 ../../planet-microbe-datapackages/OSD \
-../../planet-microbe-datapackages/Tara_Oceans"
-
+../../planet-microbe-datapackages/Tara_Oceans \
+../../planet-microbe-datapackages/Tara_Oceans_Polar"
 
 #for path in `ls -d ../../planet-microbe-datapackages/*`
 for path in $DATAPACKAGES
