@@ -99,18 +99,24 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
 
     results = {}
     try:
+        i = 0
         for row in resource.iter(keyed=True):
-            #print(row)
+            i += 1
             obj = {}
             for k,fields in fieldMap.items():
                 vals = list(filter(lambda v: v != None, map(lambda f: row[f.name], fields)))
                 obj[k] = vals
+
+            if len(obj.keys()) != len(fieldMap):
+                raise Exception('Error: row length mismatch at row {:d}: {:d} != {:d}'.format(i, len(obj.keys()), len(fieldMap)))
+
             id = insertMethod(db, tableName, obj)
             results[id] = obj
     except Exception as e:
         print(e)
-        if e.errors:
+        if 'errors' in e:
             print(*e.errors, sep='\n')
+        raise
 
     return results
 
@@ -413,7 +419,7 @@ def join_samples(resources):
 
                 # Verify Sample ID value
                 sampleId = row[sampleIdPos]
-                if not sampleId or sampleId.lower() == "none":
+                if not sampleId:
                     raise Exception("Invalid sample ID value '" + row[sampleIdPos] + "' in resource " + resource.name)
 
                 # Get Sample Event ID(s)
@@ -442,6 +448,7 @@ def join_samples(resources):
             print(e)
             if e.errors:
                 print(*e.errors, sep='\n')
+            raise
 
     return allFields, valuesBySampleId, sampleIdToSampleEventId
 
