@@ -90,11 +90,6 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
         else:
             fields = get_fields_by_type(v, resource.schema.fields)
 
-        # if not fields:
-        #     raise Exception("Missing field ", v)
-        # elif len(fields) > 1 and not isinstance(fields, list):
-        #     raise Exception("Too many values found for ", v)
-
         fieldMap[k] = fields
 
     results = {}
@@ -139,7 +134,6 @@ def load_campaigns(db, package):
 
 
 def insert_campaign(db, tableName, obj):
-    #print("insert_campaign:", obj)
     if not obj['name']:
         raise Exception("Missing campaign name")
     if not obj['deployment']:
