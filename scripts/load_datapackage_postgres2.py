@@ -519,13 +519,12 @@ def insert_project(db, package, samples):
         cursor.execute('INSERT INTO project_to_sample (project_id,sample_id) VALUES (%s,%s)', [project_id, sampleId])
 
     db.commit()
-    return project_id
+    return project_id, title
 
 
-def store_niskin_and_ctd(db, projectId, packagePath, irodsPath, package):
+def store_niskin_and_ctd(db, projectId, packagePath, targetPath, package):
     cursor = db.cursor()
-    projectPath = irodsPath + "/" + str(projectId)
-    imkdir(projectPath)
+    imkdir(targetPath)
 
     ctdFileTypeId = insert_file_type(db, "CTD Profile")
     niskinFileTypeId = insert_file_type(db, "Niskin Profile")
@@ -534,13 +533,13 @@ def store_niskin_and_ctd(db, projectId, packagePath, irodsPath, package):
     resources = get_resources_by_type("ctd", package.resources)
     for r in resources:
         path = r.descriptor['path']
-        destPath = os.path.dirname(projectPath + "/" + path)
+        destPath = os.path.dirname(targetPath + "/" + path)
         imkdir(destPath)
         iput(packagePath + "/" + path, destPath)
 
         cursor.execute(
             'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
-            [ctdFileTypeId, tsvFileFormatId, projectPath + "/" + path]
+            [ctdFileTypeId, tsvFileFormatId, targetPath + "/" + path]
         )
         fileId = cursor.fetchone()[0]
 
@@ -552,13 +551,13 @@ def store_niskin_and_ctd(db, projectId, packagePath, irodsPath, package):
     resources = get_resources_by_type("niskin", package.resources)
     for r in resources:
         path = r.descriptor['path']
-        destPath = os.path.dirname(projectPath + "/" + path)
+        destPath = os.path.dirname(targetPath + "/" + path)
         imkdir(destPath)
         iput(packagePath + "/" + path, destPath)
 
         cursor.execute(
             'INSERT INTO file (file_type_id,file_format_id,url) VALUES (%s,%s,%s) ON CONFLICT DO NOTHING RETURNING file_id',
-            [niskinFileTypeId, tsvFileFormatId, projectPath + "/" + path]
+            [niskinFileTypeId, tsvFileFormatId, targetPath + "/" + path]
         )
         fileId = cursor.fetchone()[0]
 
@@ -645,9 +644,10 @@ def main(args=None):
         campaigns = load_campaigns(conn, package)
         sampling_events = load_sampling_events(conn, package)
         samples = load_samples(conn, package, sampling_events)
-        projectId = insert_project(conn, package, samples)
+        projectId, projectTitle = insert_project(conn, package, samples)
         if 'irodspath' in args and args['irodspath']:
-            store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), args['irodspath'], package)
+            targetPath = args['irodspath'] + '/' + projectTitle.replace(' ', '_')
+            store_niskin_and_ctd(conn, projectId, os.path.dirname(filepath), targetPath, package)
         else:
             print("Skipping store of CTD and Niskin files (see --irodspath option)")
 
