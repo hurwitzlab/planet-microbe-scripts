@@ -126,21 +126,6 @@ CREATE TABLE sample_to_sampling_event (
     UNIQUE(sample_id, sampling_event_id)
 );
 
-CREATE TABLE taxonomy (
-  tax_id INTEGER UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL DEFAULT ''
-);
-
-CREATE TABLE centrifuge (
-  centrifuge_id SERIAL PRIMARY KEY,
-  run_id INTEGER NOT NULL REFERENCES run(run_id),
-  tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
-  num_reads INTEGER NOT NULL,
-  num_unique_reads INTEGER NOT NULL,
-  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
-  UNIQUE(run_id, tax_id)
-);
-
 CREATE TABLE project_type (
     project_type_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
@@ -242,6 +227,21 @@ CREATE TABLE project_to_file (
     project_id INTEGER NOT NULL REFERENCES project(project_id),
     file_id INTEGER NOT NULL REFERENCES "file"(file_id),
     UNIQUE(project_id, file_id)
+);
+
+CREATE TABLE taxonomy (
+  tax_id INTEGER UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL DEFAULT ''
+);
+
+CREATE TABLE centrifuge (
+  centrifuge_id SERIAL PRIMARY KEY,
+  run_id INTEGER NOT NULL REFERENCES run(run_id),
+  tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
+  num_reads INTEGER NOT NULL,
+  num_unique_reads INTEGER NOT NULL,
+  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
+  UNIQUE(run_id, tax_id)
 );
 
 CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');
