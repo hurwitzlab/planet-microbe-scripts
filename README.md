@@ -23,6 +23,13 @@ source python3/bin/activate
 pip install datapackage 
 ```
 
+Alternatively create a conda environment:
+```
+conda create --name planet_microbe
+conda activate planet_microbe
+conda install -c conda-forge datapackage
+```
+
 Run the validation script:
 ```
 scripts/validate_datapackage.py [-r resource] <path_to_datapackage.json>
