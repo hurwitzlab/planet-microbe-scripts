@@ -3,6 +3,7 @@
 Validate Data Package data files against schema
 """
 
+import sys
 import argparse
 from datapackage import Package
 
@@ -14,12 +15,26 @@ def main(args=None):
         print(package.errors)
     #print('Resources: ', package.resource_names)
 
+    if not 'pm:projectType' in package.descriptor:
+        print('PM error: missing "pm:projectType" in package')
+        sys.exit(1)
+
     for rname in package.resource_names:
         if 'resource' in args and rname != args['resource']:
             continue
 
         resource = package.get_resource(rname)
         #print('Validating resource', rname)
+
+        if not 'pm:resourceType' in resource.descriptor:
+            print('PM error: missing "pm:resourceType" in resource', rname)
+            sys.exit(1)
+
+        for field in resource.descriptor['schema']['fields']:
+            for property in ['pm:unitRdfType', 'pm:sourceUrl', 'pm:measurementSourceRdfType', 'pm:measurementSourceProtocolUrl']:
+                if not property in field:
+                    print('PM error: missing', property, 'in resource', rname)
+                    sys.exit(1)
 
         totalCount = 0
         try:
