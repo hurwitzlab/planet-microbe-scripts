@@ -20,7 +20,7 @@ Make sure you have a Python 3 virtual environment setup:
 ```
 virtualenv -p $(which python3) python3
 source python3/bin/activate
-pip install simplejson datapackage psycopg2 shapely pint biopython
+pip install datapackage 
 ```
 
 Run the validation script:
