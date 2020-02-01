@@ -13,6 +13,7 @@ DATAPACKAGES="\
 ../../planet-microbe-datapackages/HOT-Chisholm \
 ../../planet-microbe-datapackages/HOT-DeLong \
 ../../planet-microbe-datapackages/HOT_Delong_metatranscriptomes \
+../../planet-microbe-datapackages/HOT_DeLong_Timedepth_series \
 ../../planet-microbe-datapackages/OSD \
 ../../planet-microbe-datapackages/Tara_Oceans \
 ../../planet-microbe-datapackages/Tara_Oceans_Polar"
