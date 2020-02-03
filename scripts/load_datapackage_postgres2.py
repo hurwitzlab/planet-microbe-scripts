@@ -15,9 +15,10 @@ from tableschema import Table
 import psycopg2
 from shapely.geometry import MultiPoint
 from shapely import wkb
+import csv
+
+
 # from pint import UnitRegistry
-
-
 # ureg = UnitRegistry()
 # Q_ = ureg.Quantity
 
@@ -109,7 +110,7 @@ def load_resource(db, resource, dbSchema, tableName, insertMethod):
             results[id] = obj
     except Exception as e:
         print(e)
-        if 'errors' in e:
+        if hasattr(e, 'errors'):
             print(*e.errors, sep='\n')
         raise
 
@@ -247,6 +248,9 @@ def load_samples(db, package, sampling_events):
     if not resources:
         raise Exception("No sample resources found")
 
+    # Load unit conversions file
+    unitMap = load_unit_conversions('./unit_conversions.tsv') #FIXME hardcoded path
+
     # Join schema and data for all sample resources
     allFields, valuesBySampleId, sampleIdToSampleEventId = join_samples(resources)
 
@@ -267,7 +271,7 @@ def load_samples(db, package, sampling_events):
             name = f['name']
             type = f['type']
             rdfType = f['rdfType']
-            #unitRdfType = f['pm:unitRdfType']
+            unitRdfType = f['pm:unitRdfType']
             #searchable = f['pm:searchable']
 
             key = field_unique_key(f)
@@ -281,7 +285,7 @@ def load_samples(db, package, sampling_events):
                     numberVals.append(None)
                 else:
                     try:
-                        val = float(val) #convert_units(unitRdfType, float(val))
+                        unitRdfType, val = convert_units(unitMap, rdfType, unitRdfType, float(val))
                     except ValueError:
                         print("Error converting '%s' to float at column %s in sample %s" % (val, name, sampleId))
                         raise
@@ -299,11 +303,11 @@ def load_samples(db, package, sampling_events):
                         pass
                 stringVals.append(None)
                 datetimeVals.append(None)
-            elif type == 'string' or type == 'duration': #FIXME should convert duration into something searchable
+            elif type == 'string' or type == 'duration' or type == 'time': #FIXME should convert duration/time into something searchable?
                 stringVals.append(str(val))
                 numberVals.append(None)
                 datetimeVals.append(None)
-            elif type == 'datetime' or type == 'date':  # TODO handle time zone # TODO handle type 'time'
+            elif type == 'datetime' or type == 'date':  # assume UTC time zone
                 stringVals.append(None)
                 numberVals.append(None)
                 datetimeVals.append(val)
@@ -403,7 +407,10 @@ def join_samples(resources):
 
         # Append values for fields
         try:
+            lineNum = 0
             for row in resource.iter(cast=False):
+                lineNum += 1
+
                 # Handle "Below Detection Limit" values
                 # This is why casting is disabled in line above.  Have to manually cast here.
                 for i in range(len(row)):
@@ -414,10 +421,12 @@ def join_samples(resources):
                 # Verify Sample ID value
                 sampleId = row[sampleIdPos]
                 if not sampleId:
-                    raise Exception("Invalid sample ID value '" + row[sampleIdPos] + "' in resource " + resource.name)
+                    raise Exception("Invalid sample ID value " + str(row[sampleIdPos]) + " on line " + str(lineNum) + " in resource " + resource.name)
 
                 # Get Sample Event ID(s)
                 if sampleEventIdPos != None:
+                    if not row[sampleEventIdPos]:
+                        raise Exception("Invalid sample event ID value " + str(row[sampleEventIdPos]) + " on line " + str(lineNum) + " in resource " + resource.name)
                     sampleEventIds = row[sampleEventIdPos].split(';') # sample event ID can be semi-colon delimited list
                     sampleIdToSampleEventId[sampleId] = sampleEventIds
 
@@ -440,7 +449,7 @@ def join_samples(resources):
                                 print("Warning: value mismatch!!!!", f['name'], key, sampleId, val, "!=", valuesBySampleId[sampleId][key], 'in resource', resource.name)
         except Exception as e:
             print(e)
-            if e.errors:
+            if hasattr(e, 'errors'):
                 print(*e.errors, sep='\n')
             raise
 
@@ -467,13 +476,56 @@ def field_unique_key(field):
     return field['type'] + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
 
 
-# def convert_units(unitRdfType, val):
-#     if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
-#         home = Q_(val, ureg.kelvin)
-#         print("convert: ", val, home.to('degC').magnitude)
-#         return home.to('degC').magnitude
+# def convert_units(fieldPurl, unitPurl, val):
+#     # if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
+#     #     home = Q_(val, ureg.kelvin)
+#     #     print("convert: ", val, home.to('degC').magnitude)
+#     #     return home.to('degC').magnitude
 #
-#     return val
+#     # WARNING: unit mismatch for term http://purl.obolibrary.org/obo/ENVO_3100009 (concentration of chlorophyll b in water):
+#     # http://purl.obolibrary.org/obo/PMO_00000155 (nanogram per liter) != http://purl.obolibrary.org/obo/UO_0000301 (microgram per liter)
+#
+#     if unitPurl in unitMap:
+#         unitLabel = unitDef[unitPurl]
+#         preferredUnitPurl = unitMap[fieldPurl] # get preferred unit purl for field purl
+#         preferredUnitLabel = unitDef[preferredUnitPurl]
+#
+#         home = Q_(val, ureg.parse_expression(unitLabel))
+#         newVal = home.to(preferredUnitLabel).magnitude
+#         print('convert: ', val, newVal, unitLabel, preferredUnitLabel)
+#         return unitPurl, newVal
+#
+#     return unitPurl, val # no change
+
+
+def convert_units(unitMap, purl, sourceUnitPurl, val):
+    if purl in unitMap and sourceUnitPurl in unitMap[purl]:
+        newVal = val * unitMap[purl][sourceUnitPurl]['conversionFactor']
+        print('Converting', sourceUnitPurl, 'to', unitMap[purl][sourceUnitPurl]['preferredUnitPurl'], val, newVal)
+        return unitMap[purl][sourceUnitPurl]['preferredUnitPurl'], newVal
+
+    return sourceUnitPurl, val
+
+
+def load_unit_conversions(path):
+    unitMap = {}
+    with open(path, newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter='\t')
+        for row in reader:
+            if row[0].startswith('#'):
+                continue
+
+            purl = row[0]
+            preferredUnitPurl = row[1]
+            sourceUnitPurl = row[2]
+            conversionFactor = row[3]
+            if not purl in unitMap:
+                unitMap[purl] = {}
+            unitMap[purl][sourceUnitPurl] = {
+                'preferredUnitPurl': preferredUnitPurl,
+                'conversionFactor': float(conversionFactor)
+            }
+    return unitMap
 
 
 def insert_schema(db, name, schema):
