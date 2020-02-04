@@ -23,7 +23,7 @@ for path in $DATAPACKAGES
 do
     file=$path/datapackage.json
     if test -f $file; then
-        ./load_datapackage_postgres2.py $DELETEALL -u $USERNAME -d $DBNAME $PASSWORD $IRODSPATH $file
+        ./load_datapackage_postgres.py --nowarn $DELETEALL -u $USERNAME -d $DBNAME $PASSWORD $IRODSPATH $file
         DELETEALL=""
     fi
 done
