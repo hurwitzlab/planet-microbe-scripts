@@ -16,7 +16,8 @@ DATAPACKAGES="\
 ../../planet-microbe-datapackages/HOT_DeLong_Timedepth_series \
 ../../planet-microbe-datapackages/OSD \
 ../../planet-microbe-datapackages/Tara_Oceans \
-../../planet-microbe-datapackages/Tara_Oceans_Polar"
+../../planet-microbe-datapackages/Tara_Oceans_Polar \
+../../planet-microbe-datapackages/CDEBI_mid_range"
 
 #for path in `ls -d ../../planet-microbe-datapackages/*`
 for path in $DATAPACKAGES
