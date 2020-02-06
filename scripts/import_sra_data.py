@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""
+Download FASTQ data files for all projects (or specified project), record in the database, and copy to the
+CyVerse Data Store.
+
+The enaBrowserTools (https://github.com/enasequence/enaBrowserTools) are required for the FASTQ download.
+"""
+
 import sys
 import os
 import glob
@@ -8,16 +15,28 @@ import psycopg2
 import json
 
 
-def fastq_dump(accn, stagingdir):
+# Replaced with ena_data_get() method, much faster and more reliable
+# def fastq_dump(accn, stagingdir):
+#     print("Downloading", accn)
+#
+#     try:
+#         # subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
+#         subprocess.run(["fasterq-dump", "--split-3", "--progress", "--temp", stagingdir, "--outdir", stagingdir, accn])
+#     except subprocess.CalledProcessError as e:
+#         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+#
+#     return glob.glob(stagingdir + "/" + accn + "*.fastq")
+
+
+def ena_data_get(accn, stagingdir):
     print("Downloading", accn)
 
     try:
-        # subprocess.run(["fastq-dump", "--split-files", "--fasta", "--gzip", "--accession", accn, "--outdir", stagingdir])
-        subprocess.run(["fasterq-dump", "--split-3", "--progress", "--temp", stagingdir, "--outdir", stagingdir, accn])
+        subprocess.run(["enaDataGet", "--format", "fastq", "--dest", stagingdir, accn])
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
 
-    return glob.glob(stagingdir + "/" + accn + "*.fastq")
+    return glob.glob(stagingdir + "/" + accn + "/*.fastq.gz")
 
 
 def gzip(path):
@@ -93,11 +112,11 @@ def import_data(db, accn, args, listing):
                 irodsPath = targetdir + "/" + f
                 insert_file(db, accn, irodsPath)
     elif not skipMissing:
-        fileList = sorted(fastq_dump(accn, stagingdir))
+        fileList = sorted(ena_data_get(accn, stagingdir)) #sorted(fastq_dump(accn, stagingdir))
         print("files:", fileList)
 
         for f in fileList:
-            f = gzip(f)
+            # f = gzip(f)
 
             if not skipIput:
                 iput(f, targetdir)
@@ -138,7 +157,7 @@ def main(args=None):
     listing = ils(args['targetdir'])
 
     if 'accn' in args: # for debug
-        import_data(conn, accn, args, listing)
+        import_data(conn, args['accn'], args, listing)
     else: # load all experiments and runs into db
         if 'accnfile' in args:
             with open(args['accnfile'], 'r') as data_file:
