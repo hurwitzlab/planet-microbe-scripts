@@ -256,7 +256,7 @@ def load_samples(db, package, sampling_events):
     allFields, valuesBySampleId, sampleIdToSampleEventId = join_samples(resources)
 
     # Load schema
-    schema_id = insert_schema(db, package.descriptor['name'], { "fields": allFields })
+    schemaId = insert_schema(db, package.descriptor['name'], { "fields": allFields })
 
     # Load sample values
     cursor = db.cursor()
@@ -286,7 +286,7 @@ def load_samples(db, package, sampling_events):
                     numberVals.append(None)
                 else:
                     try:
-                        unitRdfType, val = convert_units(unitMap, rdfType, unitRdfType, float(val))
+                        _, val = convert_units(unitMap, rdfType, unitRdfType, float(val))
                     except ValueError:
                         print("Error converting '%s' to float at column %s in sample %s" % (val, name, sampleId))
                         raise
@@ -335,7 +335,7 @@ def load_samples(db, package, sampling_events):
             "INSERT INTO sample (schema_id,accn,locations,number_vals,string_vals,datetime_vals) "
             "VALUES(%s,%s,ST_SetSRID(%s::geography, 4326),%s,%s,%s::timestamp[]) "
             "RETURNING sample_id",
-            [schema_id, sampleId,
+            [schemaId, sampleId,
              locations.wkb_hex if len(locations) else None,
              numberVals, stringVals, datetimeVals]
         )
@@ -360,6 +360,14 @@ def load_samples(db, package, sampling_events):
         count += 1
         print('\rLoading samples', count, end='')
     print()
+
+    # Update schema with new units
+    for f in allFields:
+        unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
+        if unit:
+            f['pm:unitRdfType'] = unit['preferredUnitPurl']
+    insert_schema(db, package.descriptor['name'], { 'fields': allFields })
+
     db.commit()
 
     return samples
@@ -500,12 +508,24 @@ def field_unique_key(field):
 
 
 def convert_units(unitMap, purl, sourceUnitPurl, val):
-    if purl in unitMap and sourceUnitPurl in unitMap[purl]:
-        newVal = val * unitMap[purl][sourceUnitPurl]['conversionFactor']
-        logging.debug('Converting %s to %s: %s to %s for %s', sourceUnitPurl, unitMap[purl][sourceUnitPurl]['preferredUnitPurl'], val, newVal, purl)
-        return unitMap[purl][sourceUnitPurl]['preferredUnitPurl'], newVal
+    unit = get_preferred_unit(unitMap, purl, sourceUnitPurl)
+    if unit:
+        preferredUnitPurl = unit['preferredUnitPurl']
+        conversionFactor = unit['conversionFactor']
+        newVal = val * conversionFactor
+        logging.debug('Converting %s to %s: %s to %s for %s', sourceUnitPurl, preferredUnitPurl, val, newVal, purl)
+        return preferredUnitPurl, newVal
 
     return sourceUnitPurl, val
+
+
+def get_preferred_unit(unitMap, purl, sourceUnitPurl):
+    if sourceUnitPurl in unitMap['*']:
+        purl = '*'
+    if purl in unitMap and sourceUnitPurl in unitMap[purl]:
+        return unitMap[purl][sourceUnitPurl]
+
+    return
 
 
 def load_unit_conversions(path):
@@ -532,12 +552,12 @@ def load_unit_conversions(path):
 def insert_schema(db, name, schema):
     cursor = db.cursor()
     print('Loading schema "%s"' % name)
-    cursor.execute('INSERT INTO schema (name,fields) VALUES (%s,%s) RETURNING schema_id',
+    cursor.execute('INSERT INTO schema (name,fields) VALUES (%s,%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name,fields=EXCLUDED.fields RETURNING schema_id',
                    [name, json.dumps(schema)])
-    schema_id = cursor.fetchone()[0]
+    schemaId = cursor.fetchone()[0]
     db.commit()
-    print("Added schema", schema_id)
-    return schema_id
+    print("Added schema", schemaId)
+    return schemaId
 
 
 def insert_project(db, package, samples):

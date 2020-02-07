@@ -1,13 +1,13 @@
 #purl	preferred unit	source unit	conversion factor	description
 
 # concentration of nitrate and nitrite in water
-http://purl.obolibrary.org/obo/PMO_00000018	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to umol/L
+http://purl.obolibrary.org/obo/PMO_00000018	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 
 # concentration of phosphate in water
-http://purl.obolibrary.org/obo/ENVO_3100026	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to umol/L
+http://purl.obolibrary.org/obo/ENVO_3100026	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 
 # concentration of silicic acid in water
-http://purl.obolibrary.org/obo/ENVO_3100034	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to umol/L
+http://purl.obolibrary.org/obo/ENVO_3100034	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 
 # concentration of oxygen in water
 http://purl.obolibrary.org/obo/ENVO_09200021	http://purl.obolibrary.org/obo/UO_0010004	http://purl.obolibrary.org/obo/UO_0000273	30.5306	mg/L to umol/kg
@@ -16,18 +16,21 @@ http://purl.obolibrary.org/obo/ENVO_09200021	http://purl.obolibrary.org/obo/UO_0
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	1000	ug/L to ng/L
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000132	1	mg/m^3 to ng/L
 
-# concentration of 19'-butanoyloxyfucoxanthin
-http://purl.obolibrary.org/obo/PMO_00000156	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/PMO_00000155	1.34228e-6	ng/L to umol/L
+# concentration of 19'-butanoyloxyfucoxanthinhttp://purl.obolibrary.org/obo/UO_0000301
+http://purl.obolibrary.org/obo/PMO_00000156	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.34228e-6	ng/L to micromolar
 
 # concentration of fucoxanthin in water
-http://purl.obolibrary.org/obo/ENVO_3100014	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/PMO_00000155	1.51768e-6	ng/L to umol/L
+http://purl.obolibrary.org/obo/ENVO_3100014	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.51768e-6	ng/L to micromolar
 
 # concentration of 19'-hexanoyloxyfucoxanthin in liquid water
-http://purl.obolibrary.org/obo/PMO_00000157	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/PMO_00000155	1.293661e-6	ng/L to umol/L
+http://purl.obolibrary.org/obo/PMO_00000157	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.293661e-6	ng/L to micromolar
 
 # concentration of zeaxanthin in water
-http://purl.obolibrary.org/obo/ENVO_3100029	http://purl.obolibrary.org/obo/UO_0010003	http://purl.obolibrary.org/obo/PMO_00000155	1.757778e-6	ng/L to umol/L
+http://purl.obolibrary.org/obo/ENVO_3100029	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.757778e-6	ng/L to micromolar
 
 # concentration of chlorophyll b in water
 http://purl.obolibrary.org/obo/ENVO_3100009	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	0.001	ng/L to ug/L
 http://purl.obolibrary.org/obo/ENVO_3100009	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000132	907.5	umol/L to ug/L
+
+# for all terms
+*	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010003	1	umol/L to micromolar (equivalent)
