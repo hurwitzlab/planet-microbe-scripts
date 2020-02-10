@@ -533,7 +533,7 @@ def load_unit_conversions(path):
     with open(path, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter='\t')
         for row in reader:
-            if len(row) == 0 or row[0].startswith('#'):
+            if len(row) == 0 or row[0] == '' or row[0].startswith('#'):
                 continue
 
             purl = row[0]
