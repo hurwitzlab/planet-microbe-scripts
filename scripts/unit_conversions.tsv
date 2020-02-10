@@ -47,7 +47,7 @@ http://purl.obolibrary.org/obo/ENVO_3100012	http://purl.obolibrary.org/obo/UO_00
 # concentration of carotene in water				
 http://purl.obolibrary.org/obo/ENVO_3100007	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.86E-06	ng/L to micromolar
 				
-alkalinity of water				
+# alkalinity of water
 http://purl.obolibrary.org/obo/pmo.owl/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/PMO_00000141	0.0010236	microequivalent per kilogram to milliequivalent per liter
 http://purl.obolibrary.org/obo/pmo.owl/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/UO_0010004	0.0010236	micromole per kilogram to milliequivalent per liter
 				
