@@ -597,7 +597,6 @@ def insert_project(db, package, samples):
 
 def store_niskin_and_ctd(db, projectId, packagePath, targetPath, package):
     cursor = db.cursor()
-    imkdir(targetPath)
 
     ctdFileTypeId = insert_file_type(db, "CTD Profile")
     niskinFileTypeId = insert_file_type(db, "Niskin Profile")
