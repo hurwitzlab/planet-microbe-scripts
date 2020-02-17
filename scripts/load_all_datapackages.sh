@@ -17,7 +17,12 @@ DATAPACKAGES="\
 ../../planet-microbe-datapackages/OSD \
 ../../planet-microbe-datapackages/Tara_Oceans \
 ../../planet-microbe-datapackages/Tara_Oceans_Polar \
-../../planet-microbe-datapackages/CDEBI_mid_range"
+../../planet-microbe-datapackages/CDEBI_mid_range \
+../../planet-microbe-datapackages/Amazon_continuum_metatranscriptomes_polyA \
+../../planet-microbe-datapackages/Amazon_continuum_plume \
+../../planet-microbe-datapackages/Amazon_continuum_plume_metatranscriptomes \
+../../planet-microbe-datapackages/Amazon_continuum_river \
+../../planet-microbe-datapackages/Amazon_continuum_river_metatranscriptomes"
 
 #for path in `ls -d ../../planet-microbe-datapackages/*`
 for path in $DATAPACKAGES
