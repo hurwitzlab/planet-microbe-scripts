@@ -329,6 +329,10 @@ def load_samples(db, package, sampling_events):
             if not valid_longitude(lng):
                 raise Exception("Invalid longitde value:", lng, sampleId)
 
+        if not validate_coords(longitudeVals):
+            logging.warning("Longitude coordinates %s do not match within threshold for sample %s", longitudeVals, sampleId)
+        if not validate_coords(latitudeVals):
+            logging.warning("Latitude coordinates %s do not match within threshold for sample %s", latitudeVals, sampleId)
         locations = MultiPoint(list(zip(longitudeVals, latitudeVals)))
 
         stmt = cursor.mogrify(
@@ -484,6 +488,14 @@ def field_unique_key(field):
 
     return field['type'] + ' ' + rdfType + ' ' + sourceUrl + ' ' + measurementSourceRdfType
 
+
+def validate_coords(coords):
+    THRESHOLD = 5 # degrees
+    for i in range(len(coords) - 1):
+        for j in range(1, len(coords)):
+            if i != j and abs(coords[i] - coords[j]) > THRESHOLD:
+                return False
+    return True
 
 # def convert_units(fieldPurl, unitPurl, val):
 #     # if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
