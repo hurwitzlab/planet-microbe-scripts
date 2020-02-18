@@ -9,20 +9,21 @@ IRODSPATH=$4
 if test -n "$IRODSPATH"; then IRODSPATH="-i $IRODSPATH"; fi
 DELETEALL="-x"
 DATAPACKAGES="\
+../../planet-microbe-datapackages/Amazon_continuum_plume \
+../../planet-microbe-datapackages/Amazon_continuum_plume_metatranscriptomes \
+../../planet-microbe-datapackages/Amazon_continuum_metatranscriptomes_polyA \
+../../planet-microbe-datapackages/Amazon_continuum_river \
+../../planet-microbe-datapackages/Amazon_continuum_river_metatranscriptomes \
+../../planet-microbe-datapackages/CDEBI_mid_range \
 ../../planet-microbe-datapackages/GOS_2009-10 \
+../../planet-microbe-datapackages/HOT_DeLong_Timedepth_series \
 ../../planet-microbe-datapackages/HOT-Chisholm \
 ../../planet-microbe-datapackages/HOT-DeLong \
 ../../planet-microbe-datapackages/HOT_Delong_metatranscriptomes \
-../../planet-microbe-datapackages/HOT_DeLong_Timedepth_series \
 ../../planet-microbe-datapackages/OSD \
 ../../planet-microbe-datapackages/Tara_Oceans \
 ../../planet-microbe-datapackages/Tara_Oceans_Polar \
-../../planet-microbe-datapackages/CDEBI_mid_range \
-../../planet-microbe-datapackages/Amazon_continuum_metatranscriptomes_polyA \
-../../planet-microbe-datapackages/Amazon_continuum_plume \
-../../planet-microbe-datapackages/Amazon_continuum_plume_metatranscriptomes \
-../../planet-microbe-datapackages/Amazon_continuum_river \
-../../planet-microbe-datapackages/Amazon_continuum_river_metatranscriptomes"
+"
 
 #for path in `ls -d ../../planet-microbe-datapackages/*`
 for path in $DATAPACKAGES
