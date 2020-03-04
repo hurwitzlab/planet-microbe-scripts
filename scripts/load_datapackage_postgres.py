@@ -811,10 +811,11 @@ def delete_all(db):
         "DELETE FROM experiment;"
         "DELETE FROM sample;"
         "DELETE FROM project;"
-        "DELETE FROM schema;"
+        "DELETE FROM sampling_event_to_sampling_event_data;"
         "DELETE FROM sampling_event;"
         "DELETE FROM sampling_event_data;"
         "DELETE FROM campaign;"
+        "DELETE FROM schema;"
     )
     db.commit()
 
@@ -841,8 +842,6 @@ def main(args=None):
         campaigns = load_campaigns(conn, package)
         samplingEvents = load_sampling_events(conn, package)
         load_sampling_event_data(conn, package, samplingEvents)
-        exit(1)
-
         samples = load_samples(conn, package, samplingEvents)
         projectId, projectTitle = insert_project(conn, package, samples)
         if 'irodspath' in args and args['irodspath']:
