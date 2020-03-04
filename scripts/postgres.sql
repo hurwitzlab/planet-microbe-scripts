@@ -1,5 +1,3 @@
--- psql -d <db_name> -f postgres.sql
-
 CREATE EXTENSION Postgis;
 
 CREATE TABLE schema (
@@ -30,11 +28,11 @@ CREATE TABLE campaign (
     urls TEXT []
 );
 
-CREATE TABLE sampling_event_type (
-    sampling_event_type_id SERIAL PRIMARY KEY,
+--CREATE TABLE sampling_event_type (
+--    sampling_event_type_id SERIAL PRIMARY KEY,
 --    name VARCHAR(255) UNIQUE NOT NULL,
-    description TEXT
-);
+--    description TEXT
+--);
 
 CREATE TABLE sampling_event (
     sampling_event_id SERIAL PRIMARY KEY,
@@ -49,16 +47,32 @@ CREATE TABLE sampling_event (
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Niskin/CTD data
+CREATE TYPE sampling_event_data_source AS ENUM ('niskin', 'ctd');
+
+CREATE TABLE sampling_event_data (
+    sampling_event_data_id SERIAL PRIMARY KEY,
+    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    source sampling_event_data_source,
+    number_vals REAL [],
+    string_vals TEXT [],
+    datetime_vals TIMESTAMP []
+);
+
+CREATE TABLE sampling_event_to_sampling_event_data (
+    sampling_event_to_sampling_event_data_id SERIAL PRIMARY KEY,
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    sampling_event_data_id INTEGER NOT NULL REFERENCES sampling_event_data(sampling_event_data_id)
+);
+
 CREATE TABLE sample (
     sample_id SERIAL PRIMARY KEY,
     schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
     accn VARCHAR(255) UNIQUE NOT NULL,
---    name VARCHAR(255) NOT NULL,
     locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
     number_vals REAL [],
     string_vals TEXT [],
     datetime_vals TIMESTAMP [],
---    purl_index JSON,
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 --    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );

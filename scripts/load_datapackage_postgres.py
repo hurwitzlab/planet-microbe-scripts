@@ -244,6 +244,111 @@ def insert_sampling_event(db, tableName, obj):
     return cursor.fetchone()[0]
 
 
+def load_sampling_event_data(db, package, samplingEvents):
+    resources = get_resources_by_type("ctd", package.resources)
+    resources += get_resources_by_type("niskin", package.resources)
+
+    # Load unit conversions file
+    unitMap = load_unit_conversions('./unit_conversions.tsv')  # FIXME hardcoded path
+
+    for resource in resources:
+        print("Sampling event data:", resource.name)
+
+        # Load schema
+        fields = resource.schema.descriptor['fields']
+        rdfTypes = list(map(lambda f: f['rdfType'], fields))
+        if not SAMPLE_EVENT_ID_PURL in rdfTypes:
+            raise Exception("Missing sampling event identifier (" + SAMPLE_EVENT_ID_PURL + ") for resource " + resource.name)
+        sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
+
+        schemaName = package.descriptor['name'] + ' - ' + resource.name
+        schemaId = insert_schema(db, schemaName, {"fields": fields})
+
+        # Load data
+        cursor = db.cursor()
+        lineNum = 0
+        try:
+            for row in resource.iter():
+                lineNum += 1
+
+                sampleEventId = row[sampleEventIdPos]
+                if not sampleEventId:
+                    raise Exception("Invalid sampling event identifier (" + sampleEventId + ") for resource " + resource.name)
+
+                numberVals = []
+                stringVals = []
+                datetimeVals = []
+                for i in range(len(fields)):
+                    f = fields[i]
+                    name = f['name']
+                    type = f['type']
+                    rdfType = f['rdfType']
+                    unitRdfType = f['pm:unitRdfType']
+
+                    val = row[i]
+
+                    if type == 'number':
+                        if val == None:  # no data
+                            numberVals.append(None)
+                        else:
+                            try:
+                                _, val = convert_units(unitMap, rdfType, unitRdfType, float(val))
+                            except ValueError:
+                                print("Error converting '%s' to float at column %s in sample %s" % (val, name, sampleId))
+                                raise
+                            numberVals.append(val)
+                        stringVals.append(None)
+                        datetimeVals.append(None)
+                    elif type == 'string' or type == 'duration' or type == 'time':  # FIXME should convert duration/time into something searchable?
+                        stringVals.append(str(val))
+                        numberVals.append(None)
+                        datetimeVals.append(None)
+                    elif type == 'datetime' or type == 'date':  # assume UTC time zone
+                        stringVals.append(None)
+                        numberVals.append(None)
+                        datetimeVals.append(val)
+                    else:  # TODO throw error
+                        print("\nUnknown type:", type)
+                        stringVals.append(None)
+                        numberVals.append(None)
+                        datetimeVals.append(None)
+
+                stmt = cursor.mogrify(
+                    "INSERT INTO sampling_event_data (schema_id,number_vals,string_vals,datetime_vals) "
+                    "VALUES(%s,%s,%s,%s::timestamp[]) "
+                    "RETURNING sampling_event_data_id",
+                    [schemaId, numberVals, stringVals, datetimeVals]
+                )
+                cursor.execute(stmt)
+                samplingEventDataId = cursor.fetchone()[0]
+
+                for event in samplingEvents:
+                    for id in event.keys():
+                        if sampleEventId in event[id]['sampling_event_id']:
+                            stmt = cursor.mogrify(
+                                "INSERT INTO sampling_event_to_sampling_event_data (sampling_event_id,sampling_event_data_id) "
+                                "VALUES(%s,%s)",
+                                [id,samplingEventDataId]
+                            )
+                # if not samplingEventDbId:
+                #     raise Exception("Sampling event not found (" + sampleEventId + ") for resource " + resource.name)
+
+        except Exception as e:
+            print(e)
+            if hasattr(e, 'errors'):
+                print(*e.errors, sep='\n')
+            raise
+
+            # Update schema with new units
+            # for f in allFields:
+            #     unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
+            #     if unit:
+            #         f['pm:unitRdfType'] = unit['preferredUnitPurl']
+            # insert_schema(db, package.descriptor['name'], {'fields': allFields})
+
+        db.commit()
+
+
 def load_samples(db, package, sampling_events):
     resources = get_resources_by_type("sample", package.resources)
     if not resources:
@@ -708,6 +813,7 @@ def delete_all(db):
         "DELETE FROM project;"
         "DELETE FROM schema;"
         "DELETE FROM sampling_event;"
+        "DELETE FROM sampling_event_data;"
         "DELETE FROM campaign;"
     )
     db.commit()
@@ -734,6 +840,9 @@ def main(args=None):
 
         campaigns = load_campaigns(conn, package)
         samplingEvents = load_sampling_events(conn, package)
+        load_sampling_event_data(conn, package, samplingEvents)
+        exit(1)
+
         samples = load_samples(conn, package, samplingEvents)
         projectId, projectTitle = insert_project(conn, package, samples)
         if 'irodspath' in args and args['irodspath']:
