@@ -1,23 +1,9 @@
 CREATE EXTENSION Postgis;
 
-CREATE TABLE schema (
-    schema_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    fields JSON NOT NULL,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE campaign_type (
-    campaign_type_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT
-);
-
 -- Campaign represents a cruise
 CREATE TABLE campaign (
     campaign_id SERIAL PRIMARY KEY,
---    campaign_type_id INTEGER NOT NULL REFERENCES campaign_type(campaign_type_id),
-    campaign_type VARCHAR(255), --TODO change to campaign_type_id
+    campaign_type VARCHAR(255),
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     deployment VARCHAR(255),
@@ -26,62 +12,6 @@ CREATE TABLE campaign (
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     urls TEXT []
-);
-
---CREATE TABLE sampling_event_type (
---    sampling_event_type_id SERIAL PRIMARY KEY,
---    name VARCHAR(255) UNIQUE NOT NULL,
---    description TEXT
---);
-
-CREATE TABLE sampling_event (
-    sampling_event_id SERIAL PRIMARY KEY,
---    sampling_event_type_id INTEGER NOT NULL REFERENCES sampling_event_type(sampling_event_type_id),
-    sampling_event_type VARCHAR(255), --TODO change to sampling_event_type_id and NOT NULL
-    campaign_id INTEGER REFERENCES campaign(campaign_id),
-    name VARCHAR(255) UNIQUE NOT NULL,
-    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
---    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Niskin/CTD data
-CREATE TYPE sampling_event_data_source AS ENUM ('niskin', 'ctd');
-
-CREATE TABLE sampling_event_data (
-    sampling_event_data_id SERIAL PRIMARY KEY,
-    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    source sampling_event_data_source,
-    number_vals REAL [],
-    string_vals TEXT [],
-    datetime_vals TIMESTAMP []
-);
-
-CREATE TABLE sampling_event_to_sampling_event_data (
-    sampling_event_to_sampling_event_data_id SERIAL PRIMARY KEY,
-    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
-    sampling_event_data_id INTEGER NOT NULL REFERENCES sampling_event_data(sampling_event_data_id)
-);
-
-CREATE TABLE sample (
-    sample_id SERIAL PRIMARY KEY,
-    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
-    accn VARCHAR(255) UNIQUE NOT NULL,
-    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because they require at least two points
-    number_vals REAL [],
-    string_vals TEXT [],
-    datetime_vals TIMESTAMP [],
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
---    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-);
-
-CREATE TABLE sample_to_sampling_event (
-    sample_to_sampling_event_id SERIAL PRIMARY KEY,
-    sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
-    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
-    UNIQUE(sample_id, sampling_event_id)
 );
 
 CREATE TABLE project_type (
@@ -97,10 +27,53 @@ CREATE TABLE project (
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     datapackage_url VARCHAR(255),
-    url VARCHAR(255),
-    private BOOLEAN NOT NULL DEFAULT TRUE,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
---    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    url VARCHAR(255)
+);
+
+CREATE TYPE schema_type AS ENUM ('sample', 'ctd', 'niskin', 'other');
+
+CREATE TABLE schema (
+    schema_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    type schema_type NOT NULL,
+    fields JSON NOT NULL
+);
+
+CREATE TABLE sampling_event (
+    sampling_event_id SERIAL PRIMARY KEY,
+    sampling_event_type VARCHAR(255),
+    campaign_id INTEGER REFERENCES campaign(campaign_id),
+    name VARCHAR(255) UNIQUE NOT NULL,
+    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because it requires at least two points
+    start_time TIMESTAMP,
+    end_time TIMESTAMP
+);
+
+-- CTD/Niskin data
+CREATE TABLE sampling_event_data (
+    sampling_event_data_id SERIAL PRIMARY KEY,
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    number_vals REAL [],
+    string_vals TEXT [],
+    datetime_vals TIMESTAMP []
+);
+
+CREATE TABLE sample (
+    sample_id SERIAL PRIMARY KEY,
+    schema_id INTEGER NOT NULL REFERENCES schema(schema_id),
+    accn VARCHAR(255) UNIQUE NOT NULL,
+    locations GEOGRAPHY(MULTIPOINT,4326), -- can't use LINESTRING because it requires at least two points
+    number_vals REAL [],
+    string_vals TEXT [],
+    datetime_vals TIMESTAMP []
+);
+
+CREATE TABLE sample_to_sampling_event (
+    sample_to_sampling_event_id SERIAL PRIMARY KEY,
+    sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
+    sampling_event_id INTEGER NOT NULL REFERENCES sampling_event(sampling_event_id),
+    UNIQUE(sample_id, sampling_event_id)
 );
 
 CREATE TABLE project_to_sample (
@@ -114,9 +87,7 @@ CREATE TABLE experiment (
     experiment_id SERIAL PRIMARY KEY,
     sample_id INTEGER NOT NULL REFERENCES sample(sample_id),
     name VARCHAR(255) NOT NULL,
-    accn VARCHAR(255) UNIQUE NOT NULL,
-    creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
---    update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    accn VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE library (
@@ -201,7 +172,6 @@ CREATE TABLE "user" (
     last_name VARCHAR(50),
     email VARCHAR(255),
     role SMALLINT, -- normal user 0, power user 1, admin 127
-    orcid VARCHAR(30),
     creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

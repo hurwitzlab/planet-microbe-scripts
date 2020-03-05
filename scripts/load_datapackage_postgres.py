@@ -262,15 +262,14 @@ def load_sampling_event_data(db, package, samplingEvents):
         sampleEventIdPos = rdfTypes.index(SAMPLE_EVENT_ID_PURL)
 
         schemaName = package.descriptor['name'] + ' - ' + resource.name
-        schemaId = insert_schema(db, schemaName, {"fields": fields})
+        schemaType = resource.descriptor['pm:resourceType']
+        schemaId = insert_schema(db, schemaName, schemaType, {"fields": fields})
 
         # Load data
         cursor = db.cursor()
-        lineNum = 0
+        count = 0
         try:
             for row in resource.iter():
-                lineNum += 1
-
                 sampleEventId = row[sampleEventIdPos]
                 if not sampleEventId:
                     raise Exception("Invalid sampling event identifier (" + sampleEventId + ") for resource " + resource.name)
@@ -313,25 +312,25 @@ def load_sampling_event_data(db, package, samplingEvents):
                         numberVals.append(None)
                         datetimeVals.append(None)
 
-                stmt = cursor.mogrify(
-                    "INSERT INTO sampling_event_data (schema_id,number_vals,string_vals,datetime_vals) "
-                    "VALUES(%s,%s,%s,%s::timestamp[]) "
-                    "RETURNING sampling_event_data_id",
-                    [schemaId, numberVals, stringVals, datetimeVals]
-                )
-                cursor.execute(stmt)
-                samplingEventDataId = cursor.fetchone()[0]
-
+                samplingEventDbId = None
                 for event in samplingEvents:
                     for id in event.keys():
+                        print(event[id]['sampling_event_id'])
                         if sampleEventId in event[id]['sampling_event_id']:
-                            stmt = cursor.mogrify(
-                                "INSERT INTO sampling_event_to_sampling_event_data (sampling_event_id,sampling_event_data_id) "
-                                "VALUES(%s,%s)",
-                                [id,samplingEventDataId]
-                            )
-                # if not samplingEventDbId:
-                #     raise Exception("Sampling event not found (" + sampleEventId + ") for resource " + resource.name)
+                            samplingEventDbId = id
+                if not samplingEventDbId:
+                    raise Exception("Sampling event not found (" + sampleEventId + ") for resource " + resource.name)
+
+                stmt = cursor.mogrify(
+                    "INSERT INTO sampling_event_data (sampling_event_id,schema_id,number_vals,string_vals,datetime_vals) "
+                    "VALUES(%s,%s,%s,%s,%s::timestamp[]) "
+                    "RETURNING sampling_event_data_id",
+                    [samplingEventDbId, schemaId, numberVals, stringVals, datetimeVals]
+                )
+                cursor.execute(stmt)
+
+                count += 1
+                print('\rLoading', schemaType, count, end='')
 
         except Exception as e:
             print(e)
@@ -339,12 +338,12 @@ def load_sampling_event_data(db, package, samplingEvents):
                 print(*e.errors, sep='\n')
             raise
 
-            # Update schema with new units
-            # for f in allFields:
-            #     unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
-            #     if unit:
-            #         f['pm:unitRdfType'] = unit['preferredUnitPurl']
-            # insert_schema(db, package.descriptor['name'], {'fields': allFields})
+        # Update schema with new units
+        # for f in allFields:
+        #     unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
+        #     if unit:
+        #         f['pm:unitRdfType'] = unit['preferredUnitPurl']
+        # insert_schema(db, package.descriptor['name'], {'fields': allFields})
 
         db.commit()
 
@@ -361,7 +360,8 @@ def load_samples(db, package, sampling_events):
     allFields, valuesBySampleId, sampleIdToSampleEventId = join_samples(resources)
 
     # Load schema
-    schemaId = insert_schema(db, package.descriptor['name'], { "fields": allFields })
+    schemaName = package.descriptor['name'] + ' - samples'
+    schemaId = insert_schema(db, schemaName, 'sample', { "fields": allFields })
 
     # Load sample values
     cursor = db.cursor()
@@ -475,7 +475,7 @@ def load_samples(db, package, sampling_events):
         unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
         if unit:
             f['pm:unitRdfType'] = unit['preferredUnitPurl']
-    insert_schema(db, package.descriptor['name'], { 'fields': allFields })
+    insert_schema(db, schemaName, 'sample', { 'fields': allFields })
 
     db.commit()
 
@@ -666,11 +666,11 @@ def load_unit_conversions(path):
     return unitMap
 
 
-def insert_schema(db, name, schema):
+def insert_schema(db, name, type, fields):
     cursor = db.cursor()
     print('Loading schema "%s"' % name)
-    cursor.execute('INSERT INTO schema (name,fields) VALUES (%s,%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name,fields=EXCLUDED.fields RETURNING schema_id',
-                   [name, json.dumps(schema)])
+    cursor.execute('INSERT INTO schema (name,type,fields) VALUES (%s,%s,%s) ON CONFLICT(name) DO UPDATE SET name=EXCLUDED.name,fields=EXCLUDED.fields RETURNING schema_id',
+                   [name, type, json.dumps(fields)])
     schemaId = cursor.fetchone()[0]
     db.commit()
     print("Added schema", schemaId)
@@ -811,11 +811,10 @@ def delete_all(db):
         "DELETE FROM experiment;"
         "DELETE FROM sample;"
         "DELETE FROM project;"
-        "DELETE FROM sampling_event_to_sampling_event_data;"
         "DELETE FROM sampling_event;"
         "DELETE FROM sampling_event_data;"
-        "DELETE FROM campaign;"
         "DELETE FROM schema;"
+        "DELETE FROM campaign;"
     )
     db.commit()
 
