@@ -315,7 +315,6 @@ def load_sampling_event_data(db, package, samplingEvents):
                 samplingEventDbId = None
                 for event in samplingEvents:
                     for id in event.keys():
-                        print(event[id]['sampling_event_id'])
                         if sampleEventId in event[id]['sampling_event_id']:
                             samplingEventDbId = id
                 if not samplingEventDbId:
@@ -811,8 +810,8 @@ def delete_all(db):
         "DELETE FROM experiment;"
         "DELETE FROM sample;"
         "DELETE FROM project;"
-        "DELETE FROM sampling_event;"
         "DELETE FROM sampling_event_data;"
+        "DELETE FROM sampling_event;"
         "DELETE FROM schema;"
         "DELETE FROM campaign;"
     )
