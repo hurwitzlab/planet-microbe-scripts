@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import sys
 import argparse
+import os.path
 import time
 from Bio import Entrez
 # from Bio.Blast import NCBIXML
 import xml.etree.ElementTree as ET
 import psycopg2
+import json
 
 
 def esearch(db, accn):
@@ -113,7 +115,7 @@ def getExperimentsFromSRA(sampleAccn):
     return experiments
 
 
-def loadExperiments(db, projectId):
+def loadExperiments(db, projectId, cache):
     cursor = db.cursor()
 
     if projectId:
@@ -125,7 +127,12 @@ def loadExperiments(db, projectId):
         sampleId = row[0]
         sampleAccn = row[1]
 
-        experiments = getExperimentsFromSRA(sampleAccn)
+        if sampleAccn in cache:
+            experiments = cache[sampleAccn]
+        else:
+            experiments = getExperimentsFromSRA(sampleAccn)
+            cache[sampleAccn] = experiments
+
         for exp in experiments:
             print("Experiment accn:", exp['accn'])
             cursor.execute('INSERT INTO experiment (sample_id,name,accn) VALUES (%s,%s,%s) RETURNING experiment_id',
@@ -153,21 +160,32 @@ def main(args=None):
     Entrez.api_key = args['key']
     Entrez.email = args['email']
 
+    cache = {}
+    if 'cachefile' in args and os.path.isfile(args['cachefile']) :
+        with open(args['cachefile'], 'r') as f:
+            json_data = f.read()
+        cache = json.loads(json_data, strict=False)
+
     if 'accn' in args: # for debug
         getExperimentsFromSRA(args['accn'])
     else: # load all experiments and runs into db
         conn = psycopg2.connect(host='', dbname=args['dbname'], user=args['username'], password=args['password'] if 'password' in args else None)
-        loadExperiments(conn, args['projectId'] if 'projectId' in args else None)
+        loadExperiments(conn, args['projectId'] if 'projectId' in args else None, cache)
+
+    if 'cachefile' in args:
+        with open(args['cachefile'], 'w') as f:
+            f.write(json.dumps(cache))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load datapackage into database.')
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
-    parser.add_argument('-p', '--password')
+    parser.add_argument('-p', '--password', default='')
     parser.add_argument('-k', '--key')   # For NCBI Entrez calls
     parser.add_argument('-e', '--email') # For NCBI Entrez calls
-    parser.add_argument('-pid', '--projectId')  # optional project ID
+    parser.add_argument('-pid', '--projectId', default=None)  # optional project ID
     parser.add_argument('-a', '--accn')  # optional single accn to load (for debugging)
+    parser.add_argument('-c', '--cachefile')  # cache file to prevent download of existing
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
