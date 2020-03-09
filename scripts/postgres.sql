@@ -203,3 +203,10 @@ CREATE TABLE app_run (
 --  app_data_type_id INTEGER unsigned NOT NULL,
 --  path VARCHAR(255) DEFAULT NULL
 --);
+
+-- Add default apps
+INSERT INTO app (name,provider)
+VALUES ('libra-1.0','plan-b'),
+('centrifuge-1.0.4u2','plan-b'),
+('ohana-blast-0.1.2u1','tacc-tapis'),
+('mash-all-vs-all-0.0.6u1','tacc-tapis');
