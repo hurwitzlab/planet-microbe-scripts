@@ -338,11 +338,11 @@ def load_sampling_event_data(db, package, samplingEvents):
             raise
 
         # Update schema with new units
-        # for f in allFields:
-        #     unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
-        #     if unit:
-        #         f['pm:unitRdfType'] = unit['preferredUnitPurl']
-        # insert_schema(db, package.descriptor['name'], {'fields': allFields})
+        for f in fields:
+            unit = get_preferred_unit(unitMap, f['rdfType'], f['pm:unitRdfType'])
+            if unit:
+                f['pm:unitRdfType'] = unit['preferredUnitPurl']
+        insert_schema(db, schemaName, schemaType, {'fields': fields})
 
         db.commit()
 
