@@ -695,10 +695,11 @@ def insert_project(db, package, samples):
     title = package.descriptor['title']
     description = package.descriptor['description']
     homepage = package.descriptor['homepage']
+    datapackageUrl = package.descriptor['pm:selfUrl']
 
     cursor.execute(
-        'INSERT INTO project (project_type_id,accn,name,description,url) VALUES (%s,%s,%s,%s,%s) RETURNING project_id',
-        [project_type_id, accn, title, description, homepage]
+        'INSERT INTO project (project_type_id,accn,name,description,url,datapackage_url) VALUES (%s,%s,%s,%s,%s,%s) RETURNING project_id',
+        [project_type_id, accn, title, description, homepage, datapackageUrl]
     )
     project_id = cursor.fetchone()[0]
     print("Added project", project_id)

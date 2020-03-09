@@ -17,6 +17,9 @@ def main(args=None):
     if not 'pm:projectType' in package.descriptor:
         print('PM error: missing pm:projectType in package')
 
+    if not 'pm:selfUrl' in package.descriptor:
+        print('PM error: missing pm:selfUrl in package')
+
     for rname in package.resource_names:
         if 'resource' in args and rname != args['resource']:
             continue
