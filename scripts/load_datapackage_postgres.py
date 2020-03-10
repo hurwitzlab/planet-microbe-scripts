@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Load Data Package schema and data into Postgres database
+Load Data Package into Postgres database
 
-load_datapackage_postgres2.py -d <database> -u <username> -p <password> datapackage.json
+load_datapackage_postgres.py -d <database> -u <username> -p <password> <path_to_datapackage.json>
 """
 
 import sys
@@ -17,11 +17,6 @@ from datapackage import Package, Resource
 from tableschema import Table
 from shapely.geometry import MultiPoint
 from shapely import wkb
-
-
-# from pint import UnitRegistry
-# ureg = UnitRegistry()
-# Q_ = ureg.Quantity
 
 
 CAMPAIGN_CRUISE_DB_SCHEMA = {
@@ -601,27 +596,6 @@ def validate_coords(coords):
                 return False
     return True
 
-# def convert_units(fieldPurl, unitPurl, val):
-#     # if unitRdfType == "http://purl.obolibrary.org/obo/UO_0000027":
-#     #     home = Q_(val, ureg.kelvin)
-#     #     print("convert: ", val, home.to('degC').magnitude)
-#     #     return home.to('degC').magnitude
-#
-#     # WARNING: unit mismatch for term http://purl.obolibrary.org/obo/ENVO_3100009 (concentration of chlorophyll b in water):
-#     # http://purl.obolibrary.org/obo/PMO_00000155 (nanogram per liter) != http://purl.obolibrary.org/obo/UO_0000301 (microgram per liter)
-#
-#     if unitPurl in unitMap:
-#         unitLabel = unitDef[unitPurl]
-#         preferredUnitPurl = unitMap[fieldPurl] # get preferred unit purl for field purl
-#         preferredUnitLabel = unitDef[preferredUnitPurl]
-#
-#         home = Q_(val, ureg.parse_expression(unitLabel))
-#         newVal = home.to(preferredUnitLabel).magnitude
-#         print('convert: ', val, newVal, unitLabel, preferredUnitLabel)
-#         return unitPurl, newVal
-#
-#     return unitPurl, val # no change
-
 
 def convert_units(unitMap, purl, sourceUnitPurl, val):
     unit = get_preferred_unit(unitMap, purl, sourceUnitPurl)
@@ -855,7 +829,6 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--dbname')
     parser.add_argument('-u', '--username')
     parser.add_argument('-p', '--password')
-    parser.add_argument('-r', '--resource')
     parser.add_argument('-x', '--deleteall', action='store_true')
     parser.add_argument('-i', '--irodspath')                      # optional IRODS path to store CTD and Niskin files
     parser.add_argument('--debug', action='store_true')           # show debug messages
