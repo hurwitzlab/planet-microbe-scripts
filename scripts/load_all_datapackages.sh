@@ -14,6 +14,7 @@ DATAPACKAGES="\
 ../../planet-microbe-datapackages/Amazon_continuum_metatranscriptomes_polyA \
 ../../planet-microbe-datapackages/Amazon_continuum_river \
 ../../planet-microbe-datapackages/Amazon_continuum_river_metatranscriptomes \
+../../planet-microbe-datapackages/BATS_Chisholm \
 ../../planet-microbe-datapackages/CDEBI_mid_range \
 ../../planet-microbe-datapackages/GOS_2009-10 \
 ../../planet-microbe-datapackages/HOT_DeLong_Timedepth_series \
