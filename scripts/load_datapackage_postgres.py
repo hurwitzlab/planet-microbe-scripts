@@ -135,16 +135,20 @@ def insert_campaign(db, tableName, obj):
         raise Exception("Missing campaign name")
     if not obj['deployment']:
         raise Exception("Missing campaign deployment")
-    if not obj['start_location']:
-        raise Exception("Missing campaign start_location")
-    if not obj['end_location']:
-        raise Exception("Missing campaign end_location")
     if not obj['start_time']:
         raise Exception("Missing campaign start_time")
     if not obj['end_time']:
         raise Exception("Missing campaign end_time")
     if not obj['urls'] or len(obj['urls']) == 0:
         raise Exception("Missing campaign urls")
+
+    # Allow for blank locations -- BATS_Chisholm has blank values
+    if not obj['start_location']:
+        logging.warning("Missing campaign start_location")
+        obj['start_location'] = ['']
+    if not obj['end_location']:
+        logging.warning("Missing campaign end_location")
+        obj['end_location'] = ['']
 
     cursor = db.cursor()
 
