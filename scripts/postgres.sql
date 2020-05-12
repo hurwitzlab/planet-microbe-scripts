@@ -148,20 +148,20 @@ CREATE TABLE project_to_file (
     UNIQUE(project_id, file_id)
 );
 
-CREATE TABLE taxonomy (
-  tax_id INTEGER UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL DEFAULT ''
-);
-
-CREATE TABLE centrifuge (
-  centrifuge_id SERIAL PRIMARY KEY,
-  run_id INTEGER NOT NULL REFERENCES run(run_id),
-  tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
-  num_reads INTEGER NOT NULL,
-  num_unique_reads INTEGER NOT NULL,
-  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
-  UNIQUE(run_id, tax_id)
-);
+--CREATE TABLE taxonomy (
+--  tax_id INTEGER UNIQUE NOT NULL,
+--  name VARCHAR(255) NOT NULL DEFAULT ''
+--);
+--
+--CREATE TABLE centrifuge (
+--  centrifuge_id SERIAL PRIMARY KEY,
+--  run_id INTEGER NOT NULL REFERENCES run(run_id),
+--  tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
+--  num_reads INTEGER NOT NULL,
+--  num_unique_reads INTEGER NOT NULL,
+--  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
+--  UNIQUE(run_id, tax_id)
+--);
 
 CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');
 
