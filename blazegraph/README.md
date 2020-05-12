@@ -19,7 +19,7 @@ reload_owl_files.sh
 ## Start Blazegraph
 Starts Blazegraph in the background.
 
-http://localhost:9999/blazegraph (console)
+http://localhost:9999/blazegraph (console)</br>
 http://localhost:9999/blazegraph/sparql (SPARQL endpoint)
 ```
 start_server.sh
@@ -28,5 +28,7 @@ start_server.sh
 ## Query SPARQL Endpoint
 Example:
 ```
-curl https://www.planetmicrobe.org/blazegraph/namespace/planetmicrobe/sparql --data-urlencode 'format=json' --data-urlencode 'query=select * where { <http://purl.obolibrary.org/obo/ENVO_3100031> ?p ?o }'
+curl https://www.planetmicrobe.org/blazegraph/namespace/planetmicrobe/sparql \
+    --data-urlencode 'format=json' --data-urlencode \
+    'query=select * where { <http://purl.obolibrary.org/obo/ENVO_3100031> ?p ?o }'
 ```
