@@ -197,12 +197,18 @@ CREATE TABLE app_run (
   params TEXT
 );
 
---CREATE TABLE app_result (
---  app_result_id SERIAL PRIMARY KEY,
---  app_id INTEGER NOT NULL REFERENCES app(app_id),
---  app_data_type_id INTEGER unsigned NOT NULL,
---  path VARCHAR(255) DEFAULT NULL
---);
+CREATE TABLE app_data_type (
+  app_data_type_id SERIAL PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  alias varchar(255) DEFAULT NULL
+);
+
+CREATE TABLE app_result (
+  app_result_id SERIAL PRIMARY KEY,
+  app_id INTEGER NOT NULL REFERENCES app(app_id),
+  app_data_type_id INTEGER NOT NULL REFERENCES app_data_type(app_data_type_id),
+  path VARCHAR(255) DEFAULT NULL
+);
 
 -- Add default apps
 INSERT INTO app (name,provider)
@@ -210,3 +216,12 @@ VALUES ('libra-1.0','plan-b'),
 ('centrifuge-1.0.4u2','plan-b'),
 ('ohana-blast-0.1.2u1','tacc-tapis'),
 ('mash-all-vs-all-0.0.6u1','tacc-tapis');
+
+INSERT INTO app_data_type (name)
+VALUES ('CENTRIFUGE'),('MATRIX'),('BLAST-TAB');
+
+INSERT INTO app_result (app_id,app_data_type_id,path)
+VALUES (1,2,'score/distance.matrix'),
+(2,1,'centrifuge-out/figures/bubble.csv'),
+(3,3,'ohana-hits/'),
+(4,2,'mash-out/figures/distance.txt');
