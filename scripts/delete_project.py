@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """
-Delete project
-
-delete_project.py -d <database> -u <username> -p <password> <project_id>
+Delete a project in the DB
 """
 
 import sys
@@ -84,7 +82,6 @@ def irmdir(path):
 
 def get_project_by_accn(db, accn):
     cursor = db.cursor()
-
     cursor.execute("SELECT project_id FROM project WHERE accn=%s", (accn,))
     return cursor.fetchone()[0]
 
