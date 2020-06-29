@@ -150,17 +150,45 @@ CREATE TABLE project_to_file (
 
 CREATE TABLE taxonomy (
   tax_id INTEGER UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL DEFAULT ''
+  name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE centrifuge (
-  centrifuge_id SERIAL PRIMARY KEY,
+CREATE TABLE run_to_taxonomy (
+  run_to_taxonomy_id SERIAL PRIMARY KEY,
   run_id INTEGER NOT NULL REFERENCES run(run_id),
   tax_id INTEGER NOT NULL REFERENCES taxonomy(tax_id),
   num_reads INTEGER NOT NULL,
   num_unique_reads INTEGER NOT NULL,
   abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
   UNIQUE(run_id, tax_id)
+);
+
+CREATE TABLE go (
+  go_id VARCHAR(20) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE run_to_go (
+  run_to_go_id SERIAL PRIMARY KEY,
+  run_id INTEGER NOT NULL REFERENCES run(run_id),
+  go_id VARCHAR(20) NOT NULL REFERENCES go(go_id),
+  num_reads INTEGER NOT NULL,
+  UNIQUE(run_id, go_id)
+);
+
+CREATE TABLE pfam (
+  pfam_id VARCHAR(20) UNIQUE NOT NULL,
+  name VARCHAR(255) NOT
+);
+
+CREATE TABLE run_to_pfam (
+  run_to_pfam_id SERIAL PRIMARY KEY,
+  run_id INTEGER NOT NULL REFERENCES run(run_id),
+  pfam_id VARCHAR(20) NOT NULL REFERENCES pfam(pfam_id),
+  num_reads INTEGER NOT NULL,
+  num_unique_reads INTEGER NOT NULL,
+  abundance DOUBLE PRECISION NOT NULL DEFAULT 0,
+  UNIQUE(run_id, pfam_id)
 );
 
 CREATE TYPE provider AS ENUM ('plan-b', 'tacc-tapis');

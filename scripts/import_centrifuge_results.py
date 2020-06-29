@@ -35,7 +35,7 @@ def insert_taxonomy(db, taxId, name):
 
 def insert_centrifuge(db, runId, taxId, numReads, numUniqueReads, abundance):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO centrifuge (run_id,tax_id,num_reads,num_unique_reads,abundance) VALUES (%s,%s,%s,%s,%s) RETURNING centrifuge_id", [runId, taxId, numReads, numUniqueReads, abundance])
+    cursor.execute("INSERT INTO run_to_taxonomy (run_id,tax_id,num_reads,num_unique_reads,abundance) VALUES (%s,%s,%s,%s,%s) RETURNING run_to_taxonomy_id", [runId, taxId, numReads, numUniqueReads, abundance])
     return cursor.fetchone()[0]
 
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--dbname', required=True)
     parser.add_argument('-u', '--username', required=True)
     parser.add_argument('-p', '--password', required=False, default='')
-    parser.add_argument('-i', '--inputdir', default='/iplant/home/shared/planetmicrobe/centrifuge')    # path to centrifuge results in Data Store
-    parser.add_argument('-a', '--accn')  # optional: run accn to load (for debugging)
+    parser.add_argument('-i', '--inputdir', default='/iplant/home/shared/planetmicrobe/centrifuge') # path to centrifuge results in Data Store
+    parser.add_argument('-a', '--accn')  # optional: accn of run to load (for debugging)
 
     main(args={k: v for k, v in vars(parser.parse_args()).items() if v})
