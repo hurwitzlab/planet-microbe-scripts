@@ -5,8 +5,6 @@ Read TSV data file and output Frictionless Data Table Schema JSON template (http
 
 import sys
 import json
-
-
 from tableschema import Table
 
 try:
@@ -14,7 +12,5 @@ try:
 except Exception as e:
     print(e)
 
-# print("Headers:", table.headers)
-# print(table.read(keyed=True))
 table.infer()
 print(json.dumps(table.schema.descriptor, indent=4))
