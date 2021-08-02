@@ -178,7 +178,7 @@ CREATE TABLE run_to_go (
 
 CREATE TABLE pfam (
   pfam_id VARCHAR(20) UNIQUE NOT NULL,
-  name VARCHAR(255) NOT
+  name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE run_to_pfam (
