@@ -1,7 +1,7 @@
 #purl	preferred unit	source unit	conversion factor	description
 
 # concentration of nitrate and nitrite in water
-http://purl.obolibrary.org/obo/PMO_00000018	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
+http://purl.obolibrary.org/obo/ENVO_03000123	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 
 # concentration of nitrate in liquid water
 http://purl.obolibrary.org/obo/ENVO_3100022	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
