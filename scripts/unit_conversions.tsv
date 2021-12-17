@@ -13,7 +13,7 @@ http://purl.obolibrary.org/obo/ENVO_3100026	http://purl.obolibrary.org/obo/UO_00
 http://purl.obolibrary.org/obo/ENVO_3100034	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 
 # concentration of oxygen in water
-http://purl.obolibrary.org/obo/ENVO_09200021	http://purl.obolibrary.org/obo/UO_0010004	http://purl.obolibrary.org/obo/UO_0000273	30.5306	mg/L to umol/kg
+http://purl.obolibrary.org/obo/ENVO_3100011	http://purl.obolibrary.org/obo/UO_0010004	http://purl.obolibrary.org/obo/UO_0000273	30.5306	mg/L to umol/kg
 
 # concentration of chlorophyll a in water
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	1000	ng/L to ug/L
