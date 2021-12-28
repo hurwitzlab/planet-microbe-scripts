@@ -1,7 +1,10 @@
 #purl	preferred unit	source unit	conversion factor	description
 				
 # concentration of nitrate and nitrite in water				
-http://purl.obolibrary.org/obo/PMO_00000018	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
+http://purl.obolibrary.org/obo/ENVO_03000123	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
+				
+# concentration of nitrate in liquid water				
+http://purl.obolibrary.org/obo/ENVO_3100022	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 				
 # concentration of phosphate in water				
 http://purl.obolibrary.org/obo/ENVO_3100026	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
@@ -10,29 +13,33 @@ http://purl.obolibrary.org/obo/ENVO_3100026	http://purl.obolibrary.org/obo/UO_00
 http://purl.obolibrary.org/obo/ENVO_3100034	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010004	1.0236	umol/kg to micromolar
 				
 # concentration of oxygen in water				
-http://purl.obolibrary.org/obo/ENVO_09200021	http://purl.obolibrary.org/obo/UO_0010004	http://purl.obolibrary.org/obo/UO_0000273	30.5306	mg/L to umol/kg
+http://purl.obolibrary.org/obo/ENVO_3100011	http://purl.obolibrary.org/obo/UO_0010004	http://purl.obolibrary.org/obo/UO_0000273	30.5306	mg/L to umol/kg
 				
 # concentration of chlorophyll a in water				
-http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	1000	ng/L to ug/L
+http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	0.001	ng/L to ug/L
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000132	1	mg/m^3 to _g/L
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0000064	893.5	micromolar to ug/L
 http://purl.obolibrary.org/obo/ENVO_3100008	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000178	0.0010236	nanogram per kilogram to microgram per liter
 				
-# concentration of 19'-butanoyloxyfucoxanthinhttp://purl.obolibrary.org/obo/UO_0000301				
+# concentration of 19'-butanoyloxyfucoxanthin				
 http://purl.obolibrary.org/obo/PMO_00000156	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.34E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/PMO_00000156	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.02E-03	ng/kg to micromolar
+http://purl.obolibrary.org/obo/PMO_00000156	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.34E-09	ug/L to micromolar
 				
 # concentration of fucoxanthin in water				
 http://purl.obolibrary.org/obo/ENVO_3100014	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.52E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/ENVO_3100014	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.55E-06	ng/kg to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100014	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.52E-09	ug/L to micromolar
 				
 # concentration of 19'-hexanoyloxyfucoxanthin in liquid water				
 http://purl.obolibrary.org/obo/PMO_00000157	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.29E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/PMO_00000157	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.32E-06	ng/kg to micromolar
+http://purl.obolibrary.org/obo/PMO_00000157	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.29E-09	ug/L to micromolar
 				
 # concentration of zeaxanthin in water				
 http://purl.obolibrary.org/obo/ENVO_3100029	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.76E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/ENVO_3100029	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.80E-06	ng/kg to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100029	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.76E-09	ug/L to micromolar
 				
 # concentration of chlorophyll b in water				
 http://purl.obolibrary.org/obo/ENVO_3100009	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	0.001	ng/L to ug/L
@@ -43,23 +50,27 @@ http://purl.obolibrary.org/obo/ENVO_3100009	http://purl.obolibrary.org/obo/UO_00
 # concentration of peridinin in water				
 http://purl.obolibrary.org/obo/ENVO_3100025	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.59E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/ENVO_3100025	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.62E-06	ng/kg to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100025	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.59E-09	ug/L to micromolar
 				
 # concentration of violaxanthin in water				
 http://purl.obolibrary.org/obo/ENVO_3100028	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.66E-06	ng/L to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100028	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.66E-09	ug/L to micromolar
 				
 # concentration of lutein in water				
 http://purl.obolibrary.org/obo/ENVO_3100019	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.76E-06	ng/L to micromolar
 http://purl.obolibrary.org/obo/ENVO_3100019	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	1.80E-06	nanogram per kilogram to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100019	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.76E-09	ug/L to micromolar
 				
 # concentration of divinyl chlorophyll a				
-http://purl.obolibrary.org/obo/ENVO_3100012	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.12E-06	ng/L to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100012	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000155	1.00E-03	ng/L to ug/L
 				
 # concentration of carotene in water				
 http://purl.obolibrary.org/obo/ENVO_3100007	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000155	1.86E-06	ng/L to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100007	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.86E-09	ug/L to micromolar
 				
 # alkalinity of water				
-http://purl.obolibrary.org/obo/pmo.owl/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/pmo.owl/PMO_00000141	0.0010236	microequivalent per kilogram to milliequivalent per liter
-http://purl.obolibrary.org/obo/pmo.owl/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/UO_0010004	0.0010236	micromole per kilogram to milliequivalent per liter
+http://purl.obolibrary.org/obo/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/PMO_00000141	0.0010236	microequivalent per kilogram to milliequivalent per liter
+http://purl.obolibrary.org/obo/PMO_00000139	http://purl.obolibrary.org/obo/PMO_00000177	http://purl.obolibrary.org/obo/UO_0010004	0.0010236	micromole per kilogram to milliequivalent per liter
 				
 # conductivity of water				
 http://purl.obolibrary.org/obo/ENVO_09200018	http://purl.obolibrary.org/obo/PMO_00000130	http://purl.obolibrary.org/obo/PMO_00000187	1.00E-03	microsiemens per centimeter in milisiemens per centimeter
@@ -73,15 +84,19 @@ http://purl.obolibrary.org/obo/ENVO_3100036	http://purl.obolibrary.org/obo/UO_00
 http://purl.obolibrary.org/obo/ENVO_3100036	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0000064	8.94E+02	micromolar to ug/L
 				
 # dissolved organic carbon				
-http://purl.obolibrary.org/obo/PMO_00000102	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0000064	12.011	_mol/L to _g/L
-http://purl.obolibrary.org/obo/PMO_00000102	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0010004	12.2832	_mol/kg to _g/L
+http://purl.obolibrary.org/obo/PMO_00000102	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0000064	12.011	umol/L to ug/L
+http://purl.obolibrary.org/obo/PMO_00000102	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0010004	12.2832	umol/kg to ug/L
 				
 # concentration of chlorophyllide a				
 http://purl.obolibrary.org/obo/ENVO_3100010	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/UO_0000064	615	micromolar to microgram per liter
 http://purl.obolibrary.org/obo/ENVO_3100010	http://purl.obolibrary.org/obo/UO_0000301	http://purl.obolibrary.org/obo/PMO_00000178	0.0010236	nanogram per kilogram to microgram per liter
 				
 # concentration of alloxanthine				
-http://purl.obolibrary.org/obo/ENVO_3100002	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	6.72934E-06	nanogram per kilogram to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100002	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/PMO_00000178	6.73E-06	nanogram per kilogram to micromolar
+http://purl.obolibrary.org/obo/ENVO_3100002	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	6.57E-03	ug/L to micromolar
+				
+# concentration of neoxanthin				
+http://purl.obolibrary.org/obo/ENVO_3100021	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0000301	1.66E-03	ug/L to micromolar
 				
 # for all terms				
 *	http://purl.obolibrary.org/obo/UO_0000064	http://purl.obolibrary.org/obo/UO_0010003	1	umol/L to micromolar (equivalent)
