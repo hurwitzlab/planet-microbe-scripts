@@ -23,19 +23,19 @@ CAMPAIGN_CRUISE_DB_SCHEMA = {
     "name": "http://purl.obolibrary.org/obo/PMO_00000060",
     "description": "",
     "deployment": "http://purl.obolibrary.org/obo/PMO_00000007",
-    "start_location": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000144",
-    "end_location": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000145",
-    "start_time": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000137",
-    "end_time": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000138",
+    "start_location": "http://purl.obolibrary.org/obo/PMO_00000144",
+    "end_location": "http://purl.obolibrary.org/obo/PMO_00000145",
+    "start_time": "http://purl.obolibrary.org/obo/PMO_00000137",
+    "end_time": "http://purl.obolibrary.org/obo/PMO_00000138",
     "urls": [
-        "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000133",
+        "http://purl.obolibrary.org/obo/PMO_00000133",
         "http://purl.obolibrary.org/obo/PMO_00000047"
     ]
 }
 
 SAMPLING_EVENT_DB_SCHEMA = {
     "sampling_event_id": "http://purl.obolibrary.org/obo/PMO_00000056",
-    "sampling_event_type": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000146",
+    "sampling_event_type": "http://purl.obolibrary.org/obo/PMO_00000146",
     "campaign_id": "http://purl.obolibrary.org/obo/PMO_00000060",
     "latitude": "http://purl.obolibrary.org/obo/OBI_0001620",
     "longitude": "http://purl.obolibrary.org/obo/OBI_0001621",
@@ -44,7 +44,7 @@ SAMPLING_EVENT_DB_SCHEMA = {
     "end_latitude": "http://purl.obolibrary.org/obo/PMO_00000079",
     "end_longitude": "http://purl.obolibrary.org/obo/PMO_00000078",
     "start_time": "http://purl.obolibrary.org/obo/PMO_00000008",
-    "station": "http://purl.obolibrary.org/obo/pmo.owl/PMO_00000149"
+    "station": "http://purl.obolibrary.org/obo/PMO_00000149"
 }
 
 SAMPLE_EVENT_ID_PURL = "http://purl.obolibrary.org/obo/PMO_00000056"
@@ -782,7 +782,7 @@ def delete_all(db):
         "TRUNCATE file CASCADE;"
         "TRUNCATE file_type CASCADE;"
         "TRUNCATE file_format CASCADE;"
-        "TRUNCATE centrifuge CASCADE;" 
+        # "TRUNCATE centrifuge CASCADE;" 
         "TRUNCATE taxonomy CASCADE;"
         "TRUNCATE run CASCADE;"
         "TRUNCATE library CASCADE;"
